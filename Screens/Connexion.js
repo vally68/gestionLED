@@ -9,7 +9,8 @@ export default class Connexion extends React.Component
         super(props);
         this.state = 
         {
-            
+            email:"",
+            password:""   
         };
     }
 

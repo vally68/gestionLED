@@ -9,7 +9,10 @@ export default class Inscription extends React.Component
         super(props);
         this.state = 
         {
-            
+            name: "",
+            firstnam: "",
+            email: "",
+            password: ""
         };
     }
 
