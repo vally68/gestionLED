@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity} from 'react-native';
 
 
 
@@ -20,6 +20,11 @@ export default class Home extends React.Component
         
     }
 
+    validateButton = () =>
+    {
+        this.props.navigation.navigate("Dashboard", {name: this.state.name, firstname: this.state.firstname, email: this.state.email, password: this.state.password})
+    }
+
     render() 
     {
         
@@ -30,7 +35,9 @@ export default class Home extends React.Component
                 <Text>
                     ACCUEIL
                 </Text>
-                
+                <Text>
+
+                </Text>
             </SafeAreaView>
         );
     }

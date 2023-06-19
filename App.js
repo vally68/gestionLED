@@ -10,19 +10,20 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const Tab = createBottomTabNavigator();
 
-const getIsLoginIn = () =>
+const getIsLogin = () =>
 {
   return false;
 }
 
-export default function App() 
+export default function App()
 {
-  const isLoginIn = getIsLoginIn()
-
-  return (
-    <NavigationContainer>
+  const isLogin = getIsLogin()
+    
+        return (
+    
+        <NavigationContainer>
       <Tab.Navigator screenOptions={{ headerShown: false }}>
-        { isLoginIn ? (
+        { isLogin ? (
           <>
         <Tab.Screen 
           name="Accueil" 
@@ -73,6 +74,7 @@ export default function App()
       </Tab.Navigator>
     </NavigationContainer>
   );
+    
 }
 
 const styles = StyleSheet.create({
@@ -83,3 +85,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
