@@ -2,7 +2,6 @@ import React from 'react';
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import MyButton from '../Components/MyButton';
 
-
 export default class Home extends React.Component 
 {
     constructor(props) 
