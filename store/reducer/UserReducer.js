@@ -1,30 +1,50 @@
-const initialState = {users: [],
-    currentUser:null}
+const initialState = {
+    users: [],
+    isLoggedIn: false
+};
 
-function userReducer(state = initialState, action) {
+export const addUser = (user) => ({
+    type: 'ADD_USER',
+    value: user
+});
 
-    let nextState
+export const loginSuccess = (isLoggedIn) => ({
+    type: 'LOGIN_SUCCESS',
+    value: isLoggedIn
+});
+
+export const logoutSuccess = (isLoggedIn) => ({
+    type: 'LOGOUT_SUCCESS',
+    value: isLoggedIn
+});
+
+function UserReducer(state = initialState, action) {
+    let nextState;
     switch (action.type) {
         case 'ADD_USER':
             nextState = {
                 ...state,
-                users:[...state.users, action.value]
-            }
-            return nextState
-        case'ADD_CURRENT_USER':
-            nextState={
+                users: [...state.users, action.value]
+            };
+            return nextState;
+
+        case 'LOGIN_SUCCESS':
+            nextState = {
                 ...state,
-                currentUser:action.value
-            }
-            return nextState
-        case 'DECONNEXION':
-            nextState ={
+                isLoggedIn: action.value
+            };
+            return nextState;
+
+        case 'LOGOUT_SUCCESS':
+            nextState = {
                 ...state,
-                currentUser: null
-            }
-            return nextState
+                isLoggedIn: action.value
+            };
+            return nextState;
+
         default:
-            return state
+            return state;
     }
 }
-export default userReducer
+
+export default UserReducer;

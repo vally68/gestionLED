@@ -28,17 +28,24 @@ class Inscription extends React.Component {
             console.log(this.props)
             const db = SQLite.openDatabase('database.db');
             db.transaction(tx => {
-                tx.executeSql("insert into user (nom, email, password) values ( ?, ?, ?)",[this.state.nom, this.state.email, this.state.password]);
-                console.log("test")
-            });
+                tx.executeSql(`
+                CREATE TABLE IF NOT EXISTS user (
+                  id INTEGER PRIMARY KEY AUTOINCREMENT,
+                  nom TEXT,
+                  email TEXT,
+                  password TEXT
+                );
+            `);
 
+                // Insert user data after creating table
+                tx.executeSql("insert into user (nom, email, password) values ( ?, ?, ?)", [this.state.nom, this.state.email, this.state.password]);
+            });
 
             console.log(this.props)
             this.props.navigation.navigate('Connexion');
-
-
         }
     }
+
 
     render() {
         return (
@@ -94,12 +101,11 @@ class Inscription extends React.Component {
                 <Button onPress={this.handleSubmit} style={styles.button} title="S'inscrire" />
                 <View style={styles.row}>
                     <View className={styles.view}></View>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Espacemembre')}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Connexion')}>
                         <Text style={styles.link}></Text>
                     </TouchableOpacity>
                 </View>
             </View>
-
         )
     }
 }
