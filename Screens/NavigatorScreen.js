@@ -4,6 +4,7 @@ import Home from './Home';
 import Inscription from './Inscription';
 import Connexion from './Connexion';
 import Dashboard from './Dashboard';
+import Details from './Details';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -36,7 +37,7 @@ class NavigationS extends React.Component
       <Tab.Navigator screenOptions={{ headerShown: false }}>
          {
          this.props.isLoggedIn ? (
-          
+          <>
           <Tab.Screen 
           name="Tableau" 
           component={Dashboard} 
@@ -47,6 +48,17 @@ class NavigationS extends React.Component
             )
         }}
           />
+          <Tab.Screen 
+          name="Détails" 
+          component={Details} 
+          options={{
+            tabBarLabel : 'Details',
+            tabBarIcon: () => (
+              <Ionicons name="hammer" color={"orange"} size={30} />
+            )
+        }}
+          />
+          </>
           ) : (
           <>
         <Tab.Screen 
