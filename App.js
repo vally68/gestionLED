@@ -6,31 +6,25 @@ import Dashboard from './Screens/Dashboard';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
+import { Provider } from 'react-redux'
+import Store from './Store/ConfigStore'
 
 const Tab = createBottomTabNavigator();
 
-const getIsLogin = () =>
-{
-  return false;
-}
-
 export default function App()
-{
-  const isLogin = getIsLogin()
-    
+{  
         return (
-    
+    <Provider store={Store}>
         <NavigationContainer>
       <Tab.Navigator screenOptions={{ headerShown: false }}>
-        { isLogin ? (
-          <>
+         
+          
         <Tab.Screen 
           name="Accueil" 
           component={Home} 
           options={{
             tabBarLabel : 'Home',
-            tabBarIcon: ({ color, size }) => (
+            tabBarIcon: () => (
               <Ionicons name="home" color={"red"} size={30} />
             )
         }}
@@ -40,20 +34,20 @@ export default function App()
           component={Dashboard} 
           options={{
             tabBarLabel : 'Dashboard',
-            tabBarIcon: ({ color, size }) => (
+            tabBarIcon: () => (
               <Ionicons name="book" color={"green"} size={30} />
             )
         }}
           />
-          </>
-        ) : (
-          <>
+          
+        
+          
         <Tab.Screen 
           name="Inscription" 
           component={Inscription} 
           options={{
             tabBarLabel : 'Inscription',
-            tabBarIcon: ({ color, size }) => (
+            tabBarIcon: () => (
               <Ionicons name="create" color={"black"} size={30} />
             )
         }}
@@ -63,16 +57,17 @@ export default function App()
           component={Connexion}
           options={{
             tabBarLabel : 'Connexion',
-            tabBarIcon: ({ color, size }) => (
+            tabBarIcon: () => (
               <Ionicons name="log-in" color={"blue"} size={30} />
             )
         }} 
           />
-        </>
-        )
-      }
+        
+        
+      
       </Tab.Navigator>
     </NavigationContainer>
+    </Provider>
   );
     
 }

@@ -1,8 +1,8 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity} from 'react-native';
-
-
-export default class Inscription extends React.Component 
+import { SafeAreaView, StyleSheet, Text, TextInput, Alert} from 'react-native';
+import MyButton from '../Components/MyButton';
+import { connect } from "react-redux";
+class Inscription extends React.Component 
 {
     constructor(props) 
     {
@@ -19,7 +19,32 @@ export default class Inscription extends React.Component
 
     validateButton = () =>
     {
-        this.props.navigation.navigate("Connexion", {name: this.state.name, firstname: this.state.firstname, email: this.state.email, password: this.state.password})
+        console.log("Props : " + this.props)
+        if(this.state.name == "" || this.state.firstname == "" || this.state.email == "" || this.state.password == "")
+        {
+            Alert.alert(
+                'Erreur',
+                'Veuillez remplir les champs !',
+                [
+                    {
+                        text: 'OK',
+                        onPress:() => console.log('Bouton OK pressé !')
+                    }
+                ],
+                {cancelable: false}
+            )
+        }
+        else
+        {
+            const action = 
+            { 
+                type: "ADD_USER", value: {name: this.state.name, firstname: this.state.firstname, email: this.state.email, password: this.state.password} 
+            }
+            this.props.dispatch(action)
+            console.log(this.props)
+            this.props.navigation.navigate("Connexion", {name: this.state.name, firstname: this.state.firstname, email: this.state.email, password: this.state.password, login: true})
+        }
+        
     }
 
     render() 
@@ -35,9 +60,10 @@ export default class Inscription extends React.Component
                 <TextInput value={this.state.email} onChangeText={text=> this.setState({email:text})}  placeholder="E-mail" keyboardType='email-address' />
                 <TextInput value={this.state.password} onChangeText={text=> this.setState({password:text})}  placeholder="Mot de passe" secureTextEntry={true} />
                 
-                <TouchableOpacity onPress={this.validateButton}>
-                    <Text>Valider</Text>
-                </TouchableOpacity>
+                <MyButton 
+                    onPress={this.validateButton} 
+                    val="Valider l'inscription"
+                />
 
                 <Text>Votre nom : {this.state.name}</Text>
                 <Text>Votre prénom : {this.state.firstname}</Text>
@@ -56,3 +82,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     }
 });
+
+const mapStateToProps = (state) => 
+{
+    return state
+}
+
+export default connect(mapStateToProps)(Inscription)

@@ -1,6 +1,6 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity} from 'react-native';
-
+import MyButton from '../Components/MyButton';
 
 
 export default class Home extends React.Component 
@@ -20,9 +20,14 @@ export default class Home extends React.Component
         
     }
 
-    validateButton = () =>
+    connexionButton = () =>
     {
-        this.props.navigation.navigate("Dashboard", {name: this.state.name, firstname: this.state.firstname, email: this.state.email, password: this.state.password})
+        this.props.navigation.navigate("Connexion")
+    }
+
+    inscriptionButton = () =>
+    {
+        this.props.navigation.navigate("Inscription")
     }
 
     render() 
@@ -35,9 +40,14 @@ export default class Home extends React.Component
                 <Text>
                     ACCUEIL
                 </Text>
-                <Text>
-
-                </Text>
+                <MyButton 
+                    onPress={this.connexionButton} 
+                    val="Connexion"
+                />
+                <MyButton 
+                    onPress={this.inscriptionButton} 
+                    val="Inscription"
+                />
             </SafeAreaView>
         );
     }

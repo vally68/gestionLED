@@ -1,6 +1,6 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text } from 'react-native';
-
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import MyButton from '../Components/MyButton';
 
 export default class Dashboard extends React.Component 
 {
@@ -17,6 +17,11 @@ export default class Dashboard extends React.Component
     componentDidMount()
     {
         
+    }
+
+    disconnectButton = () =>
+    {
+        this.props.navigation.navigate("Accueil", {login: true})
     }
 
     render() 
@@ -41,6 +46,10 @@ export default class Dashboard extends React.Component
                 <Text>
                     Gestion de détection
                 </Text>
+                <MyButton 
+                    onPress={this.disconnectButton} 
+                    val="Déconnexion"
+                />
                 
             </SafeAreaView>
         );
