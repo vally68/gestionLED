@@ -1,8 +1,8 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import MyButton from '../Components/MyButton';
-
-export default class Dashboard extends React.Component 
+import { connect } from "react-redux";
+class Dashboard extends React.Component 
 {
     constructor(props) 
     {
@@ -21,7 +21,10 @@ export default class Dashboard extends React.Component
 
     disconnectButton = () =>
     {
-        this.props.navigation.navigate("Accueil", {login: true})
+        const action = {type:"LOGOUT_SUCCESS", value:false}
+        this.props.dispatch(action)
+        console.log("IsLogddd : " + this.props.isLoggedIn)
+        this.props.navigation.navigate("Accueil")
     }
 
     render() 
@@ -64,3 +67,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     }
 });
+
+const mapStateToProps = (state) => 
+{
+    return state
+}
+
+export default connect(mapStateToProps)(Dashboard)

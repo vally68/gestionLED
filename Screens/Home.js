@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import { SafeAreaView, StyleSheet, Text, Alert} from 'react-native';
 import MyButton from '../Components/MyButton';
 
 export default class Home extends React.Component 
@@ -13,6 +13,7 @@ export default class Home extends React.Component
         };
     }
 
+    
 
     componentDidMount()
     {
@@ -47,6 +48,7 @@ export default class Home extends React.Component
                     onPress={this.inscriptionButton} 
                     val="Inscription"
                 />
+                
             </SafeAreaView>
         );
     }

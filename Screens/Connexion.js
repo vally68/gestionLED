@@ -42,12 +42,16 @@ class Connexion extends React.Component
         else
         {
             const {users} = this.props
-            var userConnect = false
+            var userConnect = this.props.isLoggedIn
+            console.log("IsLogd : " + userConnect)
             for(var i=0; i<users.length; i++)
             {
                 if(users[i].email == this.state.email && users[i].password == this.state.password)
                 {
                     userConnect = true
+                    const action = {type:"LOGIN_SUCCESS", value:userConnect}
+                    this.props.dispatch(action)
+                    console.log("IsLogddd : " + userConnect + " et " + this.props.isLoggedIn)
                     this.props.navigation.navigate("Tableau", {email: this.state.email, password: this.state.password})
                 }
             }
