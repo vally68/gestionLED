@@ -1,8 +1,15 @@
 import React from 'react';
 import { Button, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { validateForm } from './fonction/outils';
-import{connect} from "react-redux";
+import { connect } from "react-redux";
 import * as SQLite from 'expo-sqlite';
+import { ADD_USER } from '../store/reducer/UserReducer';
+
+const mapStateToProps = (state) => {
+    return {
+        // Mettez ici les propriétés du state que vous voulez passer en props
+    };
+};
 
 class Inscription extends React.Component {
     constructor(props) {
@@ -37,9 +44,10 @@ class Inscription extends React.Component {
                 );
             `);
 
-                // Insert user data after creating table
                 tx.executeSql("insert into user (nom, email, password) values ( ?, ?, ?)", [this.state.nom, this.state.email, this.state.password]);
             });
+
+            this.props.addUser({nom: this.state.nom, email: this.state.email, password: this.state.password});
 
             console.log(this.props)
             this.props.navigation.navigate('Connexion');
@@ -97,8 +105,10 @@ class Inscription extends React.Component {
                     }}
                 />
                 <Text style={styles.errorText}>{this.state.passwordError}</Text>
+
                 <View className={styles.view}></View>
                 <Button onPress={this.handleSubmit} style={styles.button} title="S'inscrire" />
+
                 <View style={styles.row}>
                     <View className={styles.view}></View>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('Connexion')}>
@@ -109,10 +119,12 @@ class Inscription extends React.Component {
         )
     }
 }
-const mapStateToProps = (state) =>{
-    return state
-}
-export default connect(mapStateToProps) (Inscription)
+
+const mapDispatchToProps = (dispatch) => ({
+    addUser: (user) => dispatch({ type: ADD_USER, value: user }),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Inscription);
 
 const styles = StyleSheet.create({
     header: {

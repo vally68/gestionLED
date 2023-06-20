@@ -13,27 +13,29 @@ import Dashboard from './gestionledi/Dashboard';
 import Event from './gestionledi/Event';
 import Config from './gestionledi/Config';
 
-const Tab = createBottomTabNavigator();
-const AuthContext = createContext();
+const AuthTab = createBottomTabNavigator();
+const AppTab = createBottomTabNavigator();
 
-function MyStack() {
-    const { isLoggedin } = useContext(AuthContext);
+import { AuthContext } from './gestionledi/AuthContext';
 
+
+
+function AuthNavigator() {
     return (
-        <Tab.Navigator initialRouteName="Inscription" >
-            {!isLoggedin ? (
-                <>
-                    <Tab.Screen name="Inscription" component={Inscription} />
-                    <Tab.Screen name="Connexion" component={Connexion} />
-                </>
-            ) : (
-                <>
-                    <Tab.Screen name="Dashboard" component={Dashboard} />
-                    <Tab.Screen name="Event" component={Event} />
-                    <Tab.Screen name="Config" component={Config} />
-                </>
-            )}
-        </Tab.Navigator>
+        <AuthTab.Navigator initialRouteName="Inscription">
+            <AuthTab.Screen name="Inscription" component={Inscription} />
+            <AuthTab.Screen name="Connexion" component={Connexion} />
+        </AuthTab.Navigator>
+    );
+}
+
+function AppNavigator() {
+    return (
+        <AppTab.Navigator initialRouteName="Dashboard">
+            <AppTab.Screen name="Dashboard" component={Dashboard} />
+            <AppTab.Screen name="Event" component={Event} />
+            <AppTab.Screen name="Config" component={Config} />
+        </AppTab.Navigator>
     );
 }
 
@@ -55,7 +57,7 @@ export default function App() {
         <Provider store={Store}>
             <AuthContext.Provider value={{ isLoggedin, setIsLoggedin }}>
                 <NavigationContainer>
-                    <MyStack />
+                    {isLoggedin ? <AppNavigator /> : <AuthNavigator />}
                 </NavigationContainer>
                 <View style={styles.container}>
                     <Image source={require('./assets/mei.png')} />
