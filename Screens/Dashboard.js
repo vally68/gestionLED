@@ -9,7 +9,10 @@ class Dashboard extends React.Component
         super(props);
         this.state = 
         {
-            
+            name:"",
+            firstname:"",
+            email:"",
+            password:"",    
         };
     }
 

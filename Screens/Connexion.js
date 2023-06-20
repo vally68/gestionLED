@@ -21,7 +21,7 @@ class Connexion extends React.Component
         
     }
 
-    validateButton = () =>
+    validateConnexionButton()
     {
        
 
@@ -52,7 +52,7 @@ class Connexion extends React.Component
                     const action = {type:"LOGIN_SUCCESS", value:userConnect}
                     this.props.dispatch(action)
                     console.log("IsLogddd : " + userConnect + " et " + this.props.isLoggedIn)
-                    this.props.navigation.navigate("Tableau", {email: this.state.email, password: this.state.password})
+                    this.props.navigation.navigate("Tableau", {name: users[i].name, firstname: users[i].firstname, email: users[i].email, password: users[i].password})
                 }
             }
             if(userConnect == false)
@@ -83,7 +83,7 @@ class Connexion extends React.Component
                 <TextInput value={this.state.email} onChangeText={text=> this.setState({email:text})}  placeholder="E-mail" keyboardType='email-address' />
                 <TextInput value={this.state.password} onChangeText={text=> this.setState({password:text})}  placeholder="Mot de passe" secureTextEntry={true} />
                 <MyButton 
-                    onPress={this.validateButton} 
+                    onPress={() => this.validateConnexionButton()} 
                     val="Valider la connexion"
                 />
             </SafeAreaView>

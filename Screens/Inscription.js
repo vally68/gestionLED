@@ -41,6 +41,11 @@ class Inscription extends React.Component
                 type: "ADD_USER", value: {name: this.state.name, firstname: this.state.firstname, email: this.state.email, password: this.state.password} 
             }
             this.props.dispatch(action)
+            const action2 =
+            {
+                type: "ADD_ID"
+            }
+            this.props.dispatch(action2)
             console.log(this.props)
             this.props.navigation.navigate("Connexion", {name: this.state.name, firstname: this.state.firstname, email: this.state.email, password: this.state.password, login: true})
         }
