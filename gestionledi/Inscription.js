@@ -59,7 +59,6 @@ class Inscription extends React.Component {
         return (
             <View>
                 <Text style={styles.header}>S'inscrire</Text>
-                <Text>Inscription</Text>
 
                 <TextInput
                     placeholder="nom"
@@ -144,4 +143,5 @@ const styles = StyleSheet.create({
         position: "absolute",
         margin: 155,
     },
+background:{},
 });

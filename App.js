@@ -6,7 +6,7 @@ import Store from './store/configStore';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import Home from './gestionledi/Home';
 import Inscription from './gestionledi/Inscription';
 import Connexion from './gestionledi/Connexion';
 import Dashboard from './gestionledi/Dashboard';
@@ -22,11 +22,16 @@ import { AuthContext } from './gestionledi/AuthContext';
 
 function AuthNavigator() {
     return (
-        <AuthTab.Navigator initialRouteName="Inscription">
+        <AuthTab.Navigator initialRouteName="Home">
             <AuthTab.Screen name="Inscription" component={Inscription} options={{tabBarIcon:
                     () => (<Image source={require('./assets/inscription.png')} style={styles.icon}/>
                     ),
             }} />
+            <AuthTab.Screen name="Home" component={Home} options={{tabBarIcon:
+                    () => (<Image source={require('./assets/connexion.png')} style={styles.icon}/>
+                    ),
+            }}
+            />
 
             <AuthTab.Screen name="Connexion" component={Connexion} options={{tabBarIcon:
                     () => (<Image source={require('./assets/connexion.png')} style={styles.icon}/>
@@ -79,8 +84,7 @@ export default function App() {
                 </NavigationContainer>
                 <View style={styles.container}>
 
-                    <Image source={require('./assets/mei.png')} />
-                    <Text>Val, c'est quand la suite de l'histoire ?</Text>
+
                     <StatusBar style="auto" />
                 </View>
             </AuthContext.Provider>
@@ -90,14 +94,14 @@ export default function App() {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 0.25,
+        flex: 0.05,
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
     },
     icon: {
-        width: 24,
-        height: 24,
-        marginBottom: 10,
+        width: 40  ,
+        height: 40,
+        marginBottom: 1,
     },
 });
