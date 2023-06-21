@@ -21,12 +21,12 @@ function UserReducer(state=initialState,action){
             return nextState;
 
         case 'LOGOUT_SUCCESS':
-            nextState =
-                {
-                    ...state,
-                    isLoggedIn: action.value
-                };
+            nextState = {
+                ...state,
+                isLoggedIn: false
+            };
             return nextState;
+
 
         case 'ADD_ID':
             nextState =
@@ -53,3 +53,10 @@ export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 
 export class ADD_USER {
 }
+
+export const logoutSuccess = (value) => {
+    return {
+        type: 'LOGOUT_SUCCESS',
+        value: value,
+    };
+};

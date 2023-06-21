@@ -23,18 +23,36 @@ import { AuthContext } from './gestionledi/AuthContext';
 function AuthNavigator() {
     return (
         <AuthTab.Navigator initialRouteName="Inscription">
-            <AuthTab.Screen name="Inscription" component={Inscription} />
-            <AuthTab.Screen name="Connexion" component={Connexion} />
+            <AuthTab.Screen name="Inscription" component={Inscription} options={{tabBarIcon:
+                    () => (<Image source={require('./assets/inscription.png')} style={styles.icon}/>
+                    ),
+            }} />
+
+            <AuthTab.Screen name="Connexion" component={Connexion} options={{tabBarIcon:
+                    () => (<Image source={require('./assets/connexion.png')} style={styles.icon}/>
+                    ),
+                }}
+            />
         </AuthTab.Navigator>
     );
 }
 
+
 function AppNavigator() {
     return (
         <AppTab.Navigator initialRouteName="Dashboard">
-            <AppTab.Screen name="Dashboard" component={Dashboard} />
-            <AppTab.Screen name="Event" component={Event} />
-            <AppTab.Screen name="Config" component={Config} />
+            <AppTab.Screen name="Dashboard" component={Dashboard}  options={{tabBarIcon:
+                    () => (<Image source={require('./assets/dashboard.png')} style={styles.icon}/>
+                    ),
+            }}/>
+            <AppTab.Screen name="Event" component={Event} options={{tabBarIcon:
+                    () => (<Image source={require('./assets/event.png')} style={styles.icon}/>
+                    ),
+            }}/>
+            <AppTab.Screen name="Config" component={Config} options={{tabBarIcon:
+                    () => (<Image source={require('./assets/config.png')} style={styles.icon}/>
+                    ),
+            }}/>
         </AppTab.Navigator>
     );
 }
@@ -60,6 +78,7 @@ export default function App() {
                     {isLoggedin ? <AppNavigator /> : <AuthNavigator />}
                 </NavigationContainer>
                 <View style={styles.container}>
+
                     <Image source={require('./assets/mei.png')} />
                     <Text>Val, c'est quand la suite de l'histoire ?</Text>
                     <StatusBar style="auto" />
@@ -75,5 +94,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    icon: {
+        width: 24,
+        height: 24,
+        marginBottom: 10,
     },
 });
