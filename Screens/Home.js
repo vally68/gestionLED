@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, Alert } from 'react-native';
 import MyButton from '../Components/MyButton';
 import NetInfo from "@react-native-community/netinfo";
 import * as Location from 'expo-location'
@@ -17,13 +17,9 @@ export default class Home extends React.Component
 
     componentDidMount()
     {
-        this.useEffect()    
+            
     }
 
-    async useEffect()
-    {
-        await Location.requestPermissionsAsync();
-    }
 
     connexionButton = () =>
     {
@@ -35,7 +31,7 @@ export default class Home extends React.Component
         this.props.navigation.navigate("Inscription")
     }
 
-    wifiButton = () =>
+    wifiButton = async () =>
     {
         /*
         NetInfo.fetch().then(state => 
@@ -47,6 +43,7 @@ export default class Home extends React.Component
                 );
         });
         */
+        await Location.requestPermissionsAsync();
         NetInfo.fetch("wifi").then(state => 
             {
             console.log("SSID", state.details.ssid);
@@ -56,6 +53,34 @@ export default class Home extends React.Component
                     connectionInfo: state, 
                 }
             );
+            if(state != null)
+            {
+                Alert.alert(
+                    'Succès',
+                    `Info SSID : ${state.details.ssid}`,
+                    [
+                        {
+                            text: 'OK',
+                            onPress:() => console.log('Bouton OK pressé !')
+                        }
+                    ],
+                    {cancelable: false}
+                )
+            }
+            else
+            {
+                Alert.alert(
+                    'Erreur',
+                    'Pas de WIFI !',
+                    [
+                        {
+                            text: 'OK',
+                            onPress:() => console.log('Bouton OK pressé !')
+                        }
+                    ],
+                    {cancelable: false}
+                )
+            }
             });
     }
 
