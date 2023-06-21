@@ -1,7 +1,8 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, Switch } from 'react-native';
 import MyButton from '../Components/MyButton';
 import { connect } from "react-redux";
+import MySlider from '../Components/MySlider';
 class Dashboard extends React.Component 
 {
     constructor(props) 
@@ -12,7 +13,10 @@ class Dashboard extends React.Component
             name:"",
             firstname:"",
             email:"",
-            password:"",    
+            password:"",
+            isEnabledColor: false,
+            isEnabledDetection: false,
+            value: "test"     
         };
     }
 
@@ -30,6 +34,8 @@ class Dashboard extends React.Component
         this.props.navigation.navigate("Accueil")
     }
 
+    
+
     render() 
     {
         
@@ -41,17 +47,47 @@ class Dashboard extends React.Component
                     TABLEAU DE BORD
                 </Text>
                 <Text>
-                    Statut de l'installation
+                    Statut de l'installation(en cours, terminé, arrêté)
                 </Text>
-                <Text>
+                <Text >
                     Gestion de couleur
                 </Text>
+                <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center'}}>
+                    <Text >
+                        Fixée à la couleur blanche
+                    </Text>
+                    <Switch
+                        trackColor={{false: '#767577', true: '#81b0ff'}}
+                        thumbColor={this.state.isEnabledColor ? '#f5dd4b' : '#f4f3f4'}
+                        onValueChange={() => this.setState({isEnabledColor: !this.state.isEnabledColor})}
+                        value={this.state.isEnabledColor}
+                    />
+                    <Text >
+                        Par la température
+                    </Text>
+                </View>
                 <Text>
                     Gestion du seuil de déclenchement de la luminosité
                 </Text>
+                <MySlider />
+
                 <Text>
                     Gestion de détection
                 </Text>
+                <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center'}}>
+                    <Text >
+                        OFF
+                    </Text>
+                    <Switch
+                        trackColor={{false: '#767577', true: '#81b0ff'}}
+                        thumbColor={this.state.isEnabledDetection ? '#f5dd4b' : '#f4f3f4'}
+                        onValueChange={() => this.setState({isEnabledDetection: !this.state.isEnabledDetection})}
+                        value={this.state.isEnabledDetection}
+                    />
+                    <Text >
+                        ON
+                    </Text>
+                </View>
                 <MyButton 
                     onPress={this.disconnectButton} 
                     val="Déconnexion"

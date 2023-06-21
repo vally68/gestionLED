@@ -1,6 +1,8 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, Alert} from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import MyButton from '../Components/MyButton';
+import NetInfo from "@react-native-community/netinfo";
+import * as Location from 'expo-location'
 
 export default class Home extends React.Component 
 {
@@ -9,15 +11,18 @@ export default class Home extends React.Component
         super(props);
         this.state = 
         {
-            
+            connectionInfo: null,    
         };
     }
 
-    
-
     componentDidMount()
     {
-        
+        this.useEffect()    
+    }
+
+    async useEffect()
+    {
+        await Location.requestPermissionsAsync();
     }
 
     connexionButton = () =>
@@ -30,10 +35,33 @@ export default class Home extends React.Component
         this.props.navigation.navigate("Inscription")
     }
 
+    wifiButton = () =>
+    {
+        /*
+        NetInfo.fetch().then(state => 
+            {
+                this.setState(
+                    {
+                    connectionInfo: state, 
+                    }
+                );
+        });
+        */
+        NetInfo.fetch("wifi").then(state => 
+            {
+            console.log("SSID", state.details.ssid);
+            console.log("Is connected?", state.isConnected);
+            this.setState(
+                {
+                    connectionInfo: state, 
+                }
+            );
+            });
+    }
+
     render() 
     {
-        
-       
+        const { connectionInfo } = this.state;
 
         return (
             <SafeAreaView style={styles.container}>
@@ -48,7 +76,24 @@ export default class Home extends React.Component
                     onPress={this.inscriptionButton} 
                     val="Inscription"
                 />
-                
+                <MyButton 
+                    onPress={this.wifiButton} 
+                    val="WIFI"
+                />
+            {connectionInfo && (
+                <>
+                <View>
+                    <Text>Type de connexion : {connectionInfo.type}</Text>
+                    <Text>Connecté : {connectionInfo.isConnected ? 'Oui' : 'Non'}</Text>
+                    {
+                        connectionInfo.type === 'wifi' && 
+                        <Text>Nom du réseau (SSID) : {connectionInfo.details.ssid}</Text>
+                    }
+                </View>
+                       
+                </>
+                )
+            }    
             </SafeAreaView>
         );
     }
