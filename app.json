@@ -1,5 +1,14 @@
 {
   "expo": {
+    "plugins": [
+[
+  "react-native-wifi-reborn",
+  {
+    "fineLocationPermission": false
+  }
+]
+],
+
     "name": "gestionLED",
     "slug": "gestionLED",
     "version": "1.0.0",
@@ -10,7 +19,9 @@
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
+
     },
+
     "assetBundlePatterns": [
       "**/*"
     ],
