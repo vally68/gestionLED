@@ -1,7 +1,7 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, Alert, FlatList, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, Alert, View } from 'react-native';
 import MyButton from '../Components/MyButton';
-import WiFiReborn from 'react-native-wifi-reborn';
+import NetInfo from "@react-native-community/netinfo";
 
 export default class Home extends React.Component 
 {
@@ -10,8 +10,10 @@ export default class Home extends React.Component
         super(props);
         this.state = 
         {
-            wifiList: [],
-            showWifiList: false
+            connectionInfo: null,
+           
+            
+
         };
     }
 
@@ -25,23 +27,22 @@ export default class Home extends React.Component
         this.props.navigation.navigate("Inscription")
     }
 
-    loadWifiList = () => 
+    loadConnectionInfo = () => 
     {
-        WiFiReborn.loadWifiList((wifiStringList) => {
-            var wifiArray = JSON.parse(wifiStringList);
+        NetInfo.fetch().then(state => {
             this.setState({
-                wifiList: wifiArray,
-                showWifiList: true
+                connectionInfo: state, 
+                 
+               
             });
-        }, 
-        (error) => {
-            console.log(error);
+           
         });
+
     }
 
     render() 
     {
-        const { showWifiList, wifiList } = this.state;
+        const { connectionInfo, ssidString, isConnected } = this.state;
 
         return (
             <SafeAreaView style={styles.container}>
@@ -58,16 +59,19 @@ export default class Home extends React.Component
                         val="Inscription"
                     />
                     <MyButton 
-                        onPress={this.loadWifiList} 
-                        val="Afficher les réseaux WiFi"
+                        onPress={this.loadConnectionInfo} 
+                        val="Afficher les informations de connexion"
                     />
                 </View>
-                {showWifiList && (
-                    <FlatList
-                        data={wifiList}
-                        keyExtractor={(item, index) => index.toString()}
-                        renderItem={({item}) => <Text>{item.SSID}</Text>}
-                    />
+                {connectionInfo && (
+                    <>
+                        <View>
+                            <Text>Type de connexion : {connectionInfo.type}</Text>
+                            <Text>Connecté : {connectionInfo.isConnected ? 'Oui' : 'Non'}</Text>
+                            {connectionInfo.type === 'wifi' && <Text>Nom du réseau (SSID) : {connectionInfo.details.ssid}</Text>}
+                        </View>
+                       
+                    </>
                 )}
             </SafeAreaView>
         );
