@@ -5,6 +5,7 @@ import Inscription from './Inscription';
 import Connexion from './Connexion';
 import Dashboard from './Dashboard';
 import Details from './Details';
+import PlageFonction from './PlageFonction';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -58,6 +59,16 @@ class NavigationS extends React.Component
             )
         }}
           />
+          <Tab.Screen 
+        name="PlageFonction" 
+        component={PlageFonction} 
+        options={{
+            tabBarLabel : 'Config Plage',
+            tabBarIcon: () => (
+                <Ionicons name="settings" color={"grey"} size={30} />
+            )
+        }}
+        />
           </>
           ) : (
           <>
@@ -81,6 +92,7 @@ class NavigationS extends React.Component
             )
         }} 
           />
+          
          <Tab.Screen 
           name="Inscription" 
           component={Inscription} 

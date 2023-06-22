@@ -34,7 +34,10 @@ class Dashboard extends React.Component
         this.props.navigation.navigate("Accueil")
     }
 
-    
+    configPlageButton = () =>
+    {
+        this.props.navigation.navigate("PlageFonction")
+    }
 
     render() 
     {
@@ -92,7 +95,11 @@ class Dashboard extends React.Component
                     onPress={this.disconnectButton} 
                     val="Déconnexion"
                 />
-                
+                <MyButton 
+                    onPress={this.configPlageButton} 
+                    val="Config Plage"
+                />
+                                
             </SafeAreaView>
         );
     }
