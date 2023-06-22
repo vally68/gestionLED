@@ -1,8 +1,7 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, Alert, View } from 'react-native';
 import MyButton from '../Components/MyButton';
 import NetInfo from "@react-native-community/netinfo";
-import * as Location from 'expo-location';
 
 export default class Home extends React.Component
 {
@@ -12,17 +11,10 @@ export default class Home extends React.Component
         this.state =
             {
                 connectionInfo: null,
+
+
+
             };
-    }
-
-    async componentDidMount()
-    {
-        await this.requestPermissions();
-    }
-
-    async requestPermissions()
-    {
-        await Location.requestForegroundPermissionsAsync();
     }
 
     connexionButton = () =>
@@ -35,58 +27,52 @@ export default class Home extends React.Component
         this.props.navigation.navigate("Inscription")
     }
 
-    wifiButton = () =>
+    loadConnectionInfo = () =>
     {
-        NetInfo.fetch().then(state =>
-        {
-            if (state.type === 'wifi') {
-                console.log("SSID", state.details.ssid);
-            }
-            console.log("Is connected?", state.isConnected);
-            this.setState(
-                {
-                    connectionInfo: state,
-                }
-            );
-        });
-    }
+        NetInfo.fetch().then(state => {
+            this.setState({
+                connectionInfo: state,
 
+
+            });
+
+        });
+
+    }
 
     render()
     {
-        const { connectionInfo } = this.state;
+        const { connectionInfo, ssidString, isConnected } = this.state;
 
         return (
             <SafeAreaView style={styles.container}>
                 <Text>
                     ACCUEIL
                 </Text>
-                <MyButton
-                    onPress={this.connexionButton}
-                    val="Connexion"
-                />
-                <MyButton
-                    onPress={this.inscriptionButton}
-                    val="Inscription"
-                />
-                <MyButton
-                    onPress={this.wifiButton}
-                    val="WIFI"
-                />
+                <View style={styles.buttonContainer}>
+                    <MyButton
+                        onPress={this.connexionButton}
+                        val="Connexion"
+                    />
+                    <MyButton
+                        onPress={this.inscriptionButton}
+                        val="Inscription"
+                    />
+                    <MyButton
+                        onPress={this.loadConnectionInfo}
+                        val="Afficher les informations de connexion"
+                    />
+                </View>
                 {connectionInfo && (
                     <>
                         <View>
                             <Text>Type de connexion : {connectionInfo.type}</Text>
                             <Text>Connecté : {connectionInfo.isConnected ? 'Oui' : 'Non'}</Text>
-                            {
-                                connectionInfo.type === 'wifi' &&
-                                <Text>Nom du réseau (SSID) : {connectionInfo.details.ssid}</Text>
-                            }
+                            {connectionInfo.type === 'wifi' && <Text>Nom du réseau (SSID) : {connectionInfo.details.ssid}</Text>}
                         </View>
 
                     </>
-                )
-                }
+                )}
             </SafeAreaView>
         );
     }
@@ -98,5 +84,11 @@ const styles = StyleSheet.create({
             flex: 1,
             alignItems: 'center',
             justifyContent: 'center',
-        }
+        },
+    buttonContainer: {
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 20,
+    }
 });
