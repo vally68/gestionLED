@@ -3,7 +3,7 @@ import { SafeAreaView, StyleSheet, Text, View, Alert, PermissionsAndroid } from 
 import MyButton from '../Components/MyButton';
 import NetInfo from "@react-native-community/netinfo";
 import * as Location from 'expo-location'
-
+import { express } from 'express';
 export default class Home extends React.Component 
 {
     constructor(props) 
@@ -20,6 +20,7 @@ export default class Home extends React.Component
         this.useEffect()
     }
 
+
     async useEffect()
     {
         const { status } = await Location.requestForegroundPermissionsAsync();
@@ -29,6 +30,39 @@ export default class Home extends React.Component
       }
       const location = await Location.getCurrentPositionAsync({});
       console.log('Location permission granted', location);
+
+      const connection = mysql.createPool({
+        host     : '10.31.201.113:3306', // Your connection adress (localhost).
+        user     : 'serfa_etudiants',     // Your database's username.
+        password : '0123456789',        // Your database's password.
+        database : 'Projet_Led'   // Your database's name.
+      });
+      
+      // Starting our app.
+      const app = express();
+      
+      // Creating a GET route that returns data from the 'users' table.
+      app.get('/users', function (req, res) {
+          // Connecting to the database.
+          connection.getConnection(function (err, connection) {
+      
+          // Executing the MySQL query (select all data from the 'users' table).
+          connection.query('SELECT * FROM users', function (error, results, fields) {
+            // If some error occurs, we throw an error.
+            if (error) throw error;
+      
+            // Getting the 'response' from the database and sending it to our route. This is were the data is.
+            res.send(results)
+          });
+        });
+      });
+      
+      // Starting our server.
+      app.listen(3000, () => {
+       console.log('Go to http://l10.31.201.113:3306/users so you can see the data.');
+      });
+
+      fetch('http://l10.31.201.113:3306/users').then(response => response.json()).then(data => console.log(data))
     }
 
     connexionButton = () =>
@@ -121,6 +155,7 @@ export default class Home extends React.Component
             
         }
     }
+
 
     render() 
     {
