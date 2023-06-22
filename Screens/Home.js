@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, View, Alert } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, Alert, PermissionsAndroid } from 'react-native';
 import MyButton from '../Components/MyButton';
 import NetInfo from "@react-native-community/netinfo";
 import * as Location from 'expo-location'
@@ -17,9 +17,19 @@ export default class Home extends React.Component
 
     componentDidMount()
     {
-            
+        this.useEffect()
     }
 
+    async useEffect()
+    {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        console.log('Permission to access location was denied');
+        return;
+      }
+      const location = await Location.getCurrentPositionAsync({});
+      console.log('Location permission granted', location);
+    }
 
     connexionButton = () =>
     {
@@ -43,11 +53,23 @@ export default class Home extends React.Component
                 );
         });
         */
-        await Location.requestPermissionsAsync();
-        NetInfo.fetch("wifi").then(state => 
+       const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
             {
-            console.log("SSID", state.details.ssid);
-            console.log("Is connected?", state.isConnected);
+                title: 'Location Permission',
+                message:'Permission',
+                buttonNeutral: 'Après',
+                buttonNegative: 'Annuler',
+                buttonPositive: 'OK',
+            }
+            )
+        //await Location.requestForegroundPermissionsAsync();
+        if(granted === PermissionsAndroid.RESULTS.GRANTED)
+        {
+            NetInfo.fetch("wifi").then(state => 
+            {
+            console.log("SSID : ", state.details.ssid);
+            console.log("Is connected? : ", state.isConnected);
             this.setState(
                 {
                     connectionInfo: state, 
@@ -82,6 +104,22 @@ export default class Home extends React.Component
                 )
             }
             });
+        }
+        else
+        {
+            Alert.alert(
+                    'Erreur',
+                    'PERMISSION ANNULÉE !',
+                    [
+                        {
+                            text: 'OK',
+                            onPress:() => console.log('Bouton OK pressé !')
+                        }
+                    ],
+                    {cancelable: false}
+                )
+            
+        }
     }
 
     render() 
