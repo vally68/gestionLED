@@ -11,13 +11,13 @@ const MySlider = () =>
     
       <View>
 
-        <Text style={{color: 'black'}}>Valeur du slider : {sliderValue}</Text>
+        <Text style={{color: '#FFFFFF'}}>Valeur du slider : {sliderValue}</Text>
 
         <Slider
           maximumValue={100}
           minimumValue={0}
           minimumTrackTintColor="#307ecc"
-          maximumTrackTintColor="#000000"
+          maximumTrackTintColor="#FFFFFF"
           step={1}
           value={sliderValue}
           onValueChange={(sliderValue) => setSliderValue(sliderValue)}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, TextInput, Alert} from 'react-native';
+import { SafeAreaView, StyleSheet, Text, TextInput, Alert, View} from 'react-native';
 import MyButton from '../Components/MyButton';
 import { connect } from "react-redux";
 class Inscription extends React.Component 
@@ -9,9 +9,9 @@ class Inscription extends React.Component
         super(props);
         this.state = 
         {
-            name: "test",
-            firstname: "test",
-            email: "test@test.com",
+            name: "nom",
+            firstname: "prenom",
+            email: "nom.prenom@mail.com",
             password: "1234"
         };
     }
@@ -59,21 +59,25 @@ class Inscription extends React.Component
 
         return (
             <SafeAreaView style={styles.container}>
-                <Text>INSCRIPTION</Text>
-                <TextInput value={this.state.name} onChangeText={text=> this.setState({name:text})}  placeholder="Nom" />
-                <TextInput value={this.state.firstname} onChangeText={text=> this.setState({firstname:text})}  placeholder="Prénom" />
-                <TextInput value={this.state.email} onChangeText={text=> this.setState({email:text})}  placeholder="E-mail" keyboardType='email-address' />
-                <TextInput value={this.state.password} onChangeText={text=> this.setState({password:text})}  placeholder="Mot de passe" secureTextEntry={true} />
-                
+            <View style={styles.bloctext}>
+                <Text style={styles.texttitle}>INSCRIPTION</Text>
+                <TextInput value={this.state.name} style={styles.textenter} onChangeText={text=> this.setState({name:text})}  placeholder="Nom" />
+                <TextInput value={this.state.firstname} style={styles.textenter} onChangeText={text=> this.setState({firstname:text})}  placeholder="Prénom" />
+                <TextInput value={this.state.email} style={styles.textenter} onChangeText={text=> this.setState({email:text})}  placeholder="E-mail" keyboardType='email-address' />
+                <TextInput value={this.state.password} style={styles.textenter} onChangeText={text=> this.setState({password:text})}  placeholder="Mot de passe" secureTextEntry={true} />
+            </View>
+
+
                 <MyButton 
                     onPress={this.validateButton} 
                     val="Valider l'inscription"
                 />
-
-                <Text>Votre nom : {this.state.name}</Text>
-                <Text>Votre prénom : {this.state.firstname}</Text>
-                <Text>Votre mail : {this.state.email}</Text>
-                <Text>Votre mot de passe : {this.state.password}</Text>
+            <View style={styles.blocinfo}>
+                <Text style={styles.textinfo}>Votre nom : {this.state.name}</Text>
+                <Text style={styles.textinfo}>Votre prénom : {this.state.firstname}</Text>
+                <Text style={styles.textinfo}>Votre mail : {this.state.email}</Text>
+                <Text style={styles.textinfo}>Votre mot de passe : {this.state.password}</Text>
+            </View>
             </SafeAreaView>
         );
     }
@@ -85,7 +89,44 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-    }
+        backgroundColor: '#1F1E42',
+    },
+
+    texttitle:
+    {
+        color: "#FFFFFF",
+        fontWeight: 'bold',
+        fontSize: 20,
+        marginBottom: 10,
+        textAlign: 'center',
+    },
+
+    bloctext:
+    {
+        marginBottom: 20,
+    },
+
+    textenter:
+    {
+        color: '#FFFFFF',
+        height: 40,
+        width: 200,
+        marginBottom: 10,
+        borderWidth: 1,
+        borderColor: '#FFFFFF',
+        textAlign :'justify',
+    },
+
+    textinfo:
+    {
+        color: '#FFFFFF',
+        marginBottom: 10,
+    },
+
+    blocinfo:
+    {
+        marginTop: 20,
+    },
 });
 
 const mapStateToProps = (state) => 

@@ -1,12 +1,11 @@
-import React from 'react';
-import { View, Text, Button, FlatList, Alert } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import React, { Component } from 'react';
+import { View, Text, Button, FlatList, Alert, TouchableOpacity } from 'react-native';
+import MyButton from '../Components/MyButton';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-class PlageFonction extends React.Component {
+class PlageFonction extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       selectedDay: 'Lundi',
       startTime: new Date(),
@@ -25,78 +24,130 @@ class PlageFonction extends React.Component {
     return hours.substr(-2) + ':' + minutes.substr(-2);
   }
 
-  setStartTime = (event, selectedDate) => {
-    const currentDate = selectedDate || this.state.startTime;
-    this.setState({ startTime: currentDate, showStartPicker: false });
-  };
-
-  setEndTime = (event, selectedDate) => {
-    const currentDate = selectedDate || this.state.endTime;
-    this.setState({ endTime: currentDate, showEndPicker: false });
-  };
-
   addPlage = () => {
-    if(this.state.endTime <= this.state.startTime){
-      Alert.alert("Erreur","L'heure de fin doit être après l'heure de début !");
+    const { endTime, startTime, selectedDay, plages } = this.state;
+    if (endTime <= startTime) {
+      Alert.alert("Erreur", "L'heure de fin doit être après l'heure de début !");
       return;
     }
 
+    const newPlage = {
+      id: Math.random().toString(),
+      day: selectedDay,
+      startTime: startTime,
+      endTime: endTime,
+    };
+
     this.setState(prevState => ({
-      plages: [...prevState.plages, {
-        id: Math.random().toString(),
-        day: prevState.selectedDay,
-        startTime: prevState.startTime,
-        endTime: prevState.endTime,
-      }],
+      plages: [...prevState.plages, newPlage],
       startTime: new Date(),
       endTime: new Date(),
-    }))
+    }));
   }
 
   renderPlage = ({ item }) => (
-    <Button
+    <TouchableOpacity
       onPress={() => this.setState({ selectedPlage: item })}
-      title={item.day + ' ' + this.formatTime(item.startTime) + ' - ' + this.formatTime(item.endTime)}
-    />
+      style={{
+        backgroundColor: this.state.selectedPlage && this.state.selectedPlage.id === item.id ? '#615197' : '#FFFFFF',
+        borderRadius: 20,
+        padding: 10,
+        marginBottom: 10,
+        alignItems: 'center',
+      }}>
+      <Text style={{ color: this.state.selectedPlage && this.state.selectedPlage.id === item.id ? '#FFFFFF' : '#615197' }}>
+        {item.day + ' ' + this.formatTime(item.startTime) + ' - ' + this.formatTime(item.endTime)}
+      </Text>
+    </TouchableOpacity>
   );
 
+  daysOfWeek = ['Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa', 'Di'];
+
+  handleStartPickerChange = (event, selectedDate) => {
+    this.setState({ showStartPicker: false });
+
+    if (selectedDate) {
+      this.setState({ startTime: selectedDate });
+    }
+  }
+
+  handleEndPickerChange = (event, selectedDate) => {
+    this.setState({ showEndPicker: false });
+
+    if (selectedDate) {
+      this.setState({ endTime: selectedDate });
+    }
+  }
+
   render() {
-    const daysOfWeek = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
-
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Picker
-          selectedValue={this.state.selectedDay}
-          style={{ height: 50, width: 150 }}
-          onValueChange={(itemValue, itemIndex) => this.setState({ selectedDay: itemValue })}>
-          {daysOfWeek.map((day, index) =>
-            <Picker.Item key={index} label={day} value={day} />
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#1F1E42' }}>
+        <View style={{ flexDirection: 'row', marginBottom: 20, marginTop: 40 }}>
+          <View style={{ flex: 1, marginLeft: 25, marginRight: 10 }}>
+            <View
+              style={{
+                borderBottomWidth: 2,
+                borderBottomColor: '#615197',
+                width: '100%',
+                alignSelf: 'center',
+              }}
+            />
+          </View>
+          {this.daysOfWeek.map((day, index) => (
+            <TouchableOpacity
+              key={index}
+              onPress={() => this.setState({ selectedDay: day })}
+              style={{
+                backgroundColor: this.state.selectedDay === day ? '#615197' : '#FFFFFF',
+                borderRadius: 100,
+                paddingVertical: 10,
+                paddingHorizontal: 10,
+                marginRight: 5,
+                marginLeft: 5,
+                alignItems: 'center',
+              }}>
+              <Text style={{ color: this.state.selectedDay === day ? '#FFFFFF' : '#615197' }}>
+                {day}
+              </Text>
+            </TouchableOpacity>
+          ))}
+          <View style={{ flex: 1, justifyContent: 'center', marginLeft: 20, marginRight: 20 }}>
+            <View
+              style={{
+                borderBottomWidth: 2,
+                borderBottomColor: '#615197',
+                width: '100%',
+                alignSelf: 'center',
+              }}
+            />
+          </View>
+        </View>
+
+        <View style={{ alignContent: 'center', justifyContent: 'center', marginBottom: 20 }}>
+          <MyButton onPress={() => this.setState({ showStartPicker: true })} val="Heure de démarrage" />
+          {this.state.showStartPicker && (
+            <DateTimePicker
+              value={this.state.startTime}
+              mode={'time'}
+              is24Hour={true}
+              display="default"
+              onChange={this.handleStartPickerChange}
+            />
           )}
-        </Picker>
 
-        <Button onPress={() => this.setState({ showStartPicker: true })} title="Select heure demarrage" />
-        {this.state.showStartPicker && (
-          <DateTimePicker
-            value={this.state.startTime}
-            mode={'time'}
-            is24Hour={true}
-            display="default"
-            onChange={this.setStartTime}
-          />
-        )}
+          <MyButton onPress={() => this.setState({ showEndPicker: true })} val="Heure de fin" />
+          {this.state.showEndPicker && (
+            <DateTimePicker
+              value={this.state.endTime}
+              mode={'time'}
+              is24Hour={true}
+              display="default"
+              onChange={this.handleEndPickerChange}
+            />
+          )}
 
-        <Button onPress={() => this.setState({ showEndPicker: true })} title="Select heure fin" />
-        {this.state.showEndPicker && (
-          <DateTimePicker
-            value={this.state.endTime}
-            mode={'time'}
-            is24Hour={true}
-            display="default"
-            onChange={this.setEndTime}
-          />
-        )}
-
-        <Button title="Ajouter nouvelle plage" onPress={this.addPlage} />
+          <MyButton val="Ajouter plage" onPress={this.addPlage} />
+        </View>
 
         <FlatList
           data={this.state.plages}
@@ -105,10 +156,12 @@ class PlageFonction extends React.Component {
         />
 
         {this.state.selectedPlage &&
-          <Text>Plage sélectionnée: {this.state.selectedPlage.day + ' ' + this.formatTime(this.state.selectedPlage.startTime) + ' - ' + this.formatTime(this.state.selectedPlage.endTime)}</Text>
+          <Text style={{ backgroundColor: '#FFFFFF', color: '#615197' }}>
+            Plage sélectionnée: {this.state.selectedPlage.day + ' ' + this.formatTime(this.state.selectedPlage.startTime) + ' - ' + this.formatTime(this.state.selectedPlage.endTime)}
+          </Text>
         }
 
-        <Button title="Démarrer" onPress={() => alert('Démarrage du programme')} />
+        <MyButton val="Démarrer" onPress={() => alert('Démarrage du programme')} />
       </View>
     );
   }

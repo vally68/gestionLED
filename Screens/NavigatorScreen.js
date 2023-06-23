@@ -34,8 +34,9 @@ class NavigationS extends React.Component
   {
       return (
     
-        <NavigationContainer>
+        <NavigationContainer style={styles.container}>
       <Tab.Navigator screenOptions={{ headerShown: false }}>
+
          {
          this.props.isLoggedIn ? (
           <>
@@ -45,7 +46,7 @@ class NavigationS extends React.Component
           options={{
             tabBarLabel : 'Dashboard',
             tabBarIcon: () => (
-              <Ionicons name="book" color={"green"} size={30} />
+              <Ionicons name="book" color={"black"} size={30} />
             )
         }}
           />
@@ -55,17 +56,18 @@ class NavigationS extends React.Component
           options={{
             tabBarLabel : 'Details',
             tabBarIcon: () => (
-              <Ionicons name="hammer" color={"orange"} size={30} />
+              <Ionicons name="hammer" color={"black"} size={30} />
             )
         }}
           />
-          <Tab.Screen 
+
+      <Tab.Screen 
         name="PlageFonction" 
         component={PlageFonction} 
         options={{
             tabBarLabel : 'Config Plage',
             tabBarIcon: () => (
-                <Ionicons name="settings" color={"grey"} size={30} />
+                <Ionicons name="settings" color={"black"} size={30} />
             )
         }}
         />
@@ -78,7 +80,7 @@ class NavigationS extends React.Component
           options={{
             tabBarLabel : 'Home',
             tabBarIcon: () => (
-              <Ionicons name="home" color={"red"} size={30} />
+              <Ionicons name="home" color={"black"} size={30} />
             )
         }}
         />
@@ -88,11 +90,10 @@ class NavigationS extends React.Component
           options={{
             tabBarLabel : 'Connexion',
             tabBarIcon: () => (
-              <Ionicons name="log-in" color={"blue"} size={30} />
+              <Ionicons name="log-in" color={"black"} size={30} />
             )
         }} 
           />
-          
          <Tab.Screen 
           name="Inscription" 
           component={Inscription} 
@@ -114,12 +115,15 @@ class NavigationS extends React.Component
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+  container: 
+  {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: '#1F1E42',
   },
+
+
 });
 
 const mapStateToProps = (state) => 

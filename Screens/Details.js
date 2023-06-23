@@ -26,7 +26,7 @@ export default class Details extends React.Component
 
         return (
             <SafeAreaView style={styles.container}>
-                <Text>
+                <Text style={styles.color}>
                     Details
                 </Text>
             </SafeAreaView>
@@ -40,5 +40,11 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-    }
+        backgroundColor: '#1F1E42',
+    },
+
+    color: 
+    {
+        color: "#FFFFFF",
+    },
 });

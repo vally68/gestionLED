@@ -10,8 +10,8 @@ class Connexion extends React.Component
         super(props);
         this.state = 
         {
-            email:"",
-            password:""   
+            email:"nom.prenom@mail.com",
+            password:"1234"   
         };
     }
 
@@ -79,9 +79,9 @@ class Connexion extends React.Component
 
         return (
             <SafeAreaView style={styles.container}>
-                <Text>Page Connexion</Text>
-                <TextInput value={this.state.email} onChangeText={text=> this.setState({email:text})}  placeholder="E-mail" keyboardType='email-address' />
-                <TextInput value={this.state.password} onChangeText={text=> this.setState({password:text})}  placeholder="Mot de passe" secureTextEntry={true} />
+                <Text style={styles.texttitle}>Page Connexion</Text>
+                <TextInput value={this.state.email} style={styles.textinfo} onChangeText={text=> this.setState({email:text})} keyboardType='email-address' placeholder='E-mail'/>
+                <TextInput value={this.state.password} style={styles.textinfo} onChangeText={text=> this.setState({password:text})} secureTextEntry={true} placeholder="Mot de passe"/>
                 <MyButton 
                     onPress={() => this.validateConnexionButton()} 
                     val="Valider la connexion"
@@ -97,7 +97,27 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-    }
+        backgroundColor: '#1F1E42',
+    },
+
+    texttitle:
+    {
+        color: '#FFFFFF',
+        fontWeight: 'bold',
+        fontSize: 20,
+        marginBottom: 10,
+    },
+
+    textinfo:
+    {
+        height: 40,
+        width: 200,
+        margin: 12,
+        borderWidth: 1,
+        borderColor: '#FFFFFF',
+        color: '#FFFFFF',
+        padding: 10,
+    },
 });
 
 const mapStateToProps = (state) => 

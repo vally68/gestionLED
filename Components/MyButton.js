@@ -9,10 +9,10 @@ export default class MyButton extends React.Component
 
     render()
     {
-        const {val} = this.props;
+        const {val, style} = this.props;
         return (
             <View>
-                <TouchableOpacity onPress={this.props.onPress} style={styles.button}>
+                <TouchableOpacity onPress={this.props.onPress} style={[style]}>
                     <Text style={styles.buttonText}>{val}</Text>
                 </TouchableOpacity>
             </View>
@@ -20,22 +20,9 @@ export default class MyButton extends React.Component
     }
 }
 
-
 const styles = StyleSheet.create({
-button: {
-    backgroundColor: '#615197',
-    padding: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginBottom:10,
-    width:150,
-    borderWidth:3,
-  },
-  buttonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
+    buttonText: {
+        fontSize: 18,
+        color: '#000',
+    }
 });
-
-
