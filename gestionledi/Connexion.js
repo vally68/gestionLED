@@ -1,13 +1,11 @@
-import React, {useState, useEffect, useContext} from "react";
-import { Button,  StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import React, { useState, useEffect, useContext } from "react";
+import { Alert, Button, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from "react-native";
 import { validateForm, validateLoginForm } from "./fonction/outils";
 import { LOGIN_SUCCESS } from '../store/reducer/UserReducer';
-import * as SQLite from "expo-sqlite";
 import { useDispatch } from 'react-redux';
-
+import MyButton from "../Components/MyButton";
 import { AuthContext } from './AuthContext';
-
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Connexion({ navigation }) {
     const [email, setEmail] = useState("");
@@ -20,59 +18,52 @@ export default function Connexion({ navigation }) {
 
     const dispatch = useDispatch();
 
-    const { setIsLoggedin } = useContext(AuthContext); // Déplacer le hook useContext ici
+    const { setIsLoggedin } = useContext(AuthContext);
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const { emailError, passwordError } = validateLoginForm(email, password);
         if (emailError || passwordError) {
             setEmailError(emailError);
             setPasswordError(passwordError);
         } else {
-            const db = SQLite.openDatabase("database.db");
-            console.log("je suis là");
-            db.transaction((tx) => {
-                tx.executeSql(
-                    "select * from user where email = ? and password = ?",
-                    [email, password],
-                    (_, { rows: { _array } }) => {
-                        console.log(_array);  // <-- Correction ici
-                        console.log("ici aussi");
-                        if (_array.length > 0) {
-                            setIsLoggedin(true); // Utiliser le setIsLoggedin ici
-                        } else {
-                            setEmailError("Email incorrect");
-                            setPasswordError("Mot de passe incorrect");
-                        }
-                    },
-                    (_, err) => {
-                        console.error(err);
-                    }
-                );
+            const response = await fetch('https://cramoisy-nature.000webhostapp.com/getusers.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({email, password}),
             });
+
+            const data = await response.json();
+
+            console.log(data);  // Afficher le contenu de 'data' pour le débogage
+
+            if (response.ok && data.token) {
+                await AsyncStorage.setItem('userToken', data.token);
+                setIsLoggedin(true);
+            } else {
+                Alert.alert('Erreur', data.message);
+            }
         }
     };
 
-    useEffect(() => {
-        const db = SQLite.openDatabase("database.db");
-        db.transaction((tx) => {
-            tx.executeSql("select * from user", [], (_, { rows: { _array } }) =>
-                console.log(_array)
-            );
-        });
-    }, []);
 
     return (
-        <View>
-            <Text style={styles.header}>Se connecter</Text>
+        <SafeAreaView style={styles.container}>
+            <Image
+                source={require('../assets/logo.png')}
+                style={styles.image}
+            />
+            <Text style={styles.texttitle}>Page Connexion</Text>
             <TextInput
                 placeholder="Email"
                 returnKeyType="next"
                 value={email}
                 onChangeText={setEmail}
-                style={{ height: 40, borderColor: "gray", borderWidth: 1, margin: 10 }}
+                style={styles.textinfo}
                 autoCompleteType="email"
                 onBlur={() => {
-                    const { emailError } = validateForm("", email, "");
+                    const { emailError } = validateLoginForm(email, '');
                     setEmailError(emailError);
                 }}
             />
@@ -83,20 +74,18 @@ export default function Connexion({ navigation }) {
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
-                style={{ height: 40, borderColor: "gray", borderWidth: 1, margin: 10 }}
+                style={styles.textinfo}
                 autoCompleteType="password"
                 onBlur={() => {
-                    const { passwordError } = validateForm("", "", password);
+                    const { passwordError } = validateLoginForm('', password);
                     setPasswordError(passwordError);
                 }}
             />
             <Text style={styles.errorText}>{passwordError}</Text>
-            <Button
-                onPress={handleSubmit} // Retirer navigation
-                style={styles.button}
-                title="Connexion"
+            <MyButton
+                onPress={handleSubmit}
+                val="Connexion"
             />
-
             <View style={styles.row}>
                 <TouchableOpacity
                     onPress={() =>
@@ -111,9 +100,10 @@ export default function Connexion({ navigation }) {
                     <Text style={styles.link}>Mot de passe oublié?</Text>
                 </TouchableOpacity>
             </View>
-        </View>
+        </SafeAreaView>
     );
 }
+
 
 const styles = StyleSheet.create({
     header: {
@@ -133,4 +123,36 @@ const styles = StyleSheet.create({
         color: "red",
         marginHorizontal: 10,
     },
+    container:
+        {
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#1F1E42',
+        },
+
+    texttitle:
+        {
+            color: '#FFFFFF',
+            fontWeight: 'bold',
+            fontSize: 20,
+            marginBottom: 10,
+        },
+
+    textinfo:
+        {
+            height: 40,
+            width: 200,
+            margin: 12,
+            borderWidth: 1,
+            borderColor: '#FFFFFF',
+            color: '#FFFFFF',
+            padding: 10,
+        },
+    image: {
+        width: 200,
+        height: 200,
+        marginBottom: 20,
+    },
+
 });
