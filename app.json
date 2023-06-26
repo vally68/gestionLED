@@ -1,5 +1,13 @@
 {
   "expo": {
+    "plugins": [
+      [
+        "react-native-wifi-reborn",
+        {
+          "fineLocationPermission": false
+        }
+      ]
+    ],
     "name": "gestionLED",
     "slug": "gestionLED",
     "version": "1.0.0",
@@ -7,7 +15,7 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -15,25 +23,22 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.yourcompany.yourappname",
-      "buildNumber": "1.0.0"
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff",
-        "package": "com.yourcompany.yourappname",
-        "versionCode": 1
+        "backgroundColor": "#ffffff"
       },
-      "package": "com.yourcompany.yourappname"
+      "permissions": [],
+      "package": "com.vally068.gestionLED"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "fec9703d-3c57-4dde-98d9-0d91410d2202"
+        "projectId": "4a7b4b6e-3bfb-46bb-82bb-cbdba37498b8"
       }
     }
   }
