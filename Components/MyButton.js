@@ -22,18 +22,22 @@ export default class MyButton extends React.Component
 
 
 const styles = StyleSheet.create({
-    button: {
-        backgroundColor: '#615197',
-        padding: 10,
-        borderRadius: 5,
-        alignItems: 'center',
-        marginBottom:10,
-        width:150,
-        borderWidth:3,
-    },
-    buttonText: {
-        color: '#FFFFFF',
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
+button: {
+    backgroundColor: '#FFFFFF',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginBottom:10,
+    width:150,
+    borderWidth:3
+  },
+
+  buttonText: {
+    color: '#615197',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
 });
+
+

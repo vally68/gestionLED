@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, Image } from 'react-native';
 import MyButton from '../Components/MyButton';
 import NetInfo from "@react-native-community/netinfo";
 import * as Location from 'expo-location'
@@ -48,9 +48,33 @@ export default class Home extends React.Component
 
         return (
             <SafeAreaView style={styles.container}>
-                <Text>
+
+            <Image
+                source={require('../assets/logo.png')}
+                style={styles.image}
+            />
+
+                <Text style={styles.title}>
                     ACCUEIL
                 </Text>
+
+
+                {connectionInfo && (
+                    <>
+                        <View style={styles.textposition}>
+                            <Text style={styles.textinfo}>Type de connexion : {connectionInfo.type}</Text>
+                            <Text style={styles.textinfo}>Connecté : {connectionInfo.isConnected ? 'Oui' : 'Non'}</Text>
+                            {
+                                connectionInfo.type === 'wifi' &&
+                                <Text style={styles.textinfo}>Nom du réseau (SSID) : {connectionInfo.details.ssid}</Text>
+                            }
+                        </View>
+
+                    </>
+                )
+                }
+
+                
                 <MyButton
                     onPress={this.connexionButton}
                     val="Connexion"
@@ -63,30 +87,44 @@ export default class Home extends React.Component
                     onPress={this.wifiButton}
                     val="WIFI"
                 />
-                {connectionInfo && (
-                    <>
-                        <View>
-                            <Text>Type de connexion : {connectionInfo.type}</Text>
-                            <Text>Connecté : {connectionInfo.isConnected ? 'Oui' : 'Non'}</Text>
-                            {
-                                connectionInfo.type === 'wifi' &&
-                                <Text>Nom du réseau (SSID) : {connectionInfo.details.ssid}</Text>
-                            }
-                        </View>
-
-                    </>
-                )
-                }
             </SafeAreaView>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    container:
-        {
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'center',
-        }
+    container: 
+    {
+        flex: 2,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#1F1E42',
+        marginTop: 35,
+    },
+
+    image: {
+        width: 180,
+        height: 180,
+        marginBottom: 20,
+    },
+
+    title:
+    {
+        color: '#FFFFFF',
+        fontWeight: 'bold',
+        fontSize: 20,
+        marginBottom: 15,
+    },
+
+    textposition:
+    {
+        marginTop: 20,
+        marginBottom: 20,
+    },
+
+    textinfo:
+    {
+        color: '#FFFFFF',
+        textAlign: 'center',
+    },
 });
