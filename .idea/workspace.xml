@@ -5,28 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ed02f101-b7cd-4ac6-8c88-5e15e55fa28d" name="Changes" comment="test">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gestionLED.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gestionLED.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/MyButton.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/MyButton.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components/MySlider.js" beforeDir="false" afterPath="$PROJECT_DIR$/Components/MySlider.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Store/ConfigStore.js" beforeDir="false" afterPath="$PROJECT_DIR$/Store/ConfigStore.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Store/Reducer/UserReducer.js" beforeDir="false" afterPath="$PROJECT_DIR$/Store/Reducer/UserReducer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/babel.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/babel.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gestionledi/AuthContext.js" beforeDir="false" afterPath="$PROJECT_DIR$/gestionledi/AuthContext.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gestionledi/Config.js" beforeDir="false" afterPath="$PROJECT_DIR$/gestionledi/Config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gestionledi/Connexion.js" beforeDir="false" afterPath="$PROJECT_DIR$/gestionledi/Connexion.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gestionledi/Dashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/gestionledi/Dashboard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gestionledi/Event.js" beforeDir="false" afterPath="$PROJECT_DIR$/gestionledi/Event.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gestionledi/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/gestionledi/Home.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gestionledi/Inscription.js" beforeDir="false" afterPath="$PROJECT_DIR$/gestionledi/Inscription.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gestionledi/WifiManager.js" beforeDir="false" afterPath="$PROJECT_DIR$/gestionledi/WifiManager.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gestionledi/fonction/outils.js" beforeDir="false" afterPath="$PROJECT_DIR$/gestionledi/fonction/outils.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
@@ -145,6 +127,17 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />

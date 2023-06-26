@@ -3,12 +3,16 @@ import { View, Text, Button, FlatList, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import MyButton from "../Components/MyButton";
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
-class Config extends React.Component {
-    constructor(props) {
+class Config extends React.Component 
+{
+    constructor(props) 
+    {
         super(props);
 
-        this.state = {
+        this.state = 
+        {
             selectedDay: 'Lundi',
             startTime: new Date(),
             endTime: new Date(),
@@ -19,25 +23,30 @@ class Config extends React.Component {
         };
     }
 
-    formatTime = (date) => {
+    formatTime = (date) => 
+    {
         const hours = "0" + date.getHours();
         const minutes = "0" + date.getMinutes();
 
         return hours.substr(-2) + ':' + minutes.substr(-2);
     }
 
-    setStartTime = (event, selectedDate) => {
+    setStartTime = (selectedDate) => 
+    {
         const currentDate = selectedDate || this.state.startTime;
         this.setState({ startTime: currentDate, showStartPicker: false });
     };
 
-    setEndTime = (event, selectedDate) => {
+    setEndTime = (selectedDate) => 
+    {
         const currentDate = selectedDate || this.state.endTime;
         this.setState({ endTime: currentDate, showEndPicker: false });
     };
 
-    addPlage = () => {
-        if(this.state.endTime <= this.state.startTime){
+    addPlage = () => 
+    {
+        if(this.state.endTime <= this.state.startTime)
+        {
             Alert.alert("Erreur","L'heure de fin doit être après l'heure de début !");
             return;
         }
@@ -111,6 +120,7 @@ class Config extends React.Component {
                 {this.state.selectedPlage &&
                     <Text  style={{backgroundColor: '#FFFFFF', color: '#615197',}}>Plage sélectionnée: {this.state.selectedPlage.day + ' ' + this.formatTime(this.state.selectedPlage.startTime) + ' - ' + this.formatTime(this.state.selectedPlage.endTime)}</Text>
                 }
+
 
                 <MyButton val="Démarrer" onPress={() => alert('Démarrage du programme')} />
             </View>

@@ -1,21 +1,25 @@
 import React from 'react';
-import { Button, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { validateForm } from './fonction/outils';
 import { connect } from "react-redux";
-import * as SQLite from 'expo-sqlite';
 import { ADD_USER } from '../store/reducer/UserReducer';
 import MyButton from "../Components/MyButton";
 
-const mapStateToProps = (state) => {
-    return {
+const mapStateToProps = (state) => 
+{
+    return 
+    {
         // Mettez ici les propriétés du state que vous voulez passer en props
     };
 };
 
-class Inscription extends React.Component {
-    constructor(props) {
+class Inscription extends React.Component 
+{
+    constructor(props) 
+    {
         super(props);
-        this.state = {
+        this.state = 
+        {
             nom: '',
             prenom:'',
             email: '',
@@ -26,41 +30,49 @@ class Inscription extends React.Component {
         };
     }
 
-    handleSubmit = () => {
+    handleSubmit = () => 
+    {
         const formData = new FormData();
         formData.append("nom", this.state.nom);
         formData.append("prenom", this.state.prenom);
         formData.append("email", this.state.email);
         formData.append("password", this.state.password);
 
-        fetch('https://cramoisy-nature.000webhostapp.com/registeruser.php', {
+        fetch('https://cramoisy-nature.000webhostapp.com/registeruser.php', 
+        {
             method: 'POST',
             body: formData,
             headers: {
                 "Content-Type": "multipart/form-data" // Utilisez "Content-Type" au lieu de "content-type"
             }
         })
-            .then(response => response.json())
-            .then(json => {
-                if (json === false) {
-                    Alert.alert(
-                        'Erreur',
-                        'L\'e-mail saisi existe déjà. Veuillez saisir une autre adresse mail ou récupérer votre mdp',
-                        [
-                            { text: 'OK', onPress: () => console.log('OK Pressed') },
-                        ],
+        .then(response => response.json())
+        .then(json => 
+        {
+            if (json === false) 
+             {
+                Alert.alert(
+                    'Erreur',
+                    'L\'e-mail saisi existe déjà. Veuillez saisir une autre adresse mail ou récupérer votre mdp',
+                    [
+                        { text: 'OK', onPress: () => console.log('OK Pressed') },
+                    ],
                         { cancelable: false }
                     );
-                } else {
+                } 
+                else 
+                {
                     this.props.navigation.navigate('Connexion', { username: this.state.name });
                 }
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        })
+        .catch(error => 
+        {
+            console.error(error);
+        });
     }
 
-    render() {
+    render() 
+    {
         return (
             <View>
                 <Text style={styles.header}>S'inscrire</Text>
@@ -139,11 +151,15 @@ class Inscription extends React.Component {
     }
 }
 
-const mapDispatchToProps = (dispatch) => ({
+
+const mapDispatchToProps = (dispatch) => (
+{
     addUser: (user) => dispatch({ type: ADD_USER, value: user }),
 });
 
+
 export default connect(mapStateToProps, mapDispatchToProps)(Inscription);
+
 
 const styles = StyleSheet.create({
     header: {
