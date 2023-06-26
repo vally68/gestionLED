@@ -1,4 +1,4 @@
-export function validateForm(nom, email, password) {
+export function validateForm(nom, prenom, email, password) {
     const validateName = (name) => {
         if (name.length <= 0) {
             return 'Le nom ne peut être vide.';
@@ -22,10 +22,11 @@ export function validateForm(nom, email, password) {
     };
 
     const nomError = validateName(nom);
+    const prenomError = validateName(prenom);
     const emailError = validateEmail(email);
     const passwordError = validatePassword(password);
 
-    return { nomError, emailError, passwordError };
+    return { nomError,prenomError, emailError, passwordError };
 }
 
 export function validateLoginForm(email, password) {

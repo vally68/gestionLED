@@ -4,6 +4,7 @@ import { validateForm } from './fonction/outils';
 import { connect } from "react-redux";
 import * as SQLite from 'expo-sqlite';
 import { ADD_USER } from '../store/reducer/UserReducer';
+import MyButton from "../Components/MyButton";
 
 const mapStateToProps = (state) => {
     return {
@@ -16,6 +17,7 @@ class Inscription extends React.Component {
         super(props);
         this.state = {
             nom: '',
+            prenom:'',
             email: '',
             password: '',
             nomError: '',
@@ -25,35 +27,38 @@ class Inscription extends React.Component {
     }
 
     handleSubmit = () => {
-        console.log("click")
+        const formData = new FormData();
+        formData.append("nom", this.state.nom);
+        formData.append("prenom", this.state.prenom);
+        formData.append("email", this.state.email);
+        formData.append("password", this.state.password);
 
-        const { nomError, emailError, passwordError } = validateForm(this.state.nom, this.state.email, this.state.password);
-
-        if (nomError || emailError || passwordError) {
-            this.setState({ nomError, emailError, passwordError });
-        } else {
-            console.log(this.props)
-            const db = SQLite.openDatabase('database.db');
-            db.transaction(tx => {
-                tx.executeSql(`
-                CREATE TABLE IF NOT EXISTS user (
-                  id INTEGER PRIMARY KEY AUTOINCREMENT,
-                  nom TEXT,
-                  email TEXT,
-                  password TEXT
-                );
-            `);
-
-                tx.executeSql("insert into user (nom, email, password) values ( ?, ?, ?)", [this.state.nom, this.state.email, this.state.password]);
+        fetch('https://cramoisy-nature.000webhostapp.com/registeruser.php', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                "Content-Type": "multipart/form-data" // Utilisez "Content-Type" au lieu de "content-type"
+            }
+        })
+            .then(response => response.json())
+            .then(json => {
+                if (json === false) {
+                    Alert.alert(
+                        'Erreur',
+                        'L\'e-mail saisi existe déjà. Veuillez saisir une autre adresse mail ou récupérer votre mdp',
+                        [
+                            { text: 'OK', onPress: () => console.log('OK Pressed') },
+                        ],
+                        { cancelable: false }
+                    );
+                } else {
+                    this.props.navigation.navigate('Connexion', { username: this.state.name });
+                }
+            })
+            .catch(error => {
+                console.error(error);
             });
-
-            this.props.addUser({nom: this.state.nom, email: this.state.email, password: this.state.password});
-
-            console.log(this.props)
-            this.props.navigation.navigate('Connexion');
-        }
     }
-
 
     render() {
         return (
@@ -68,11 +73,26 @@ class Inscription extends React.Component {
                     style={{height: 40, borderColor: 'gray', borderWidth: 1, margin: 10}}
                     autoCompleteType="nom"
                     onBlur={() => {
-                        const { nomError } = validateForm(this.state.nom, '', '');
+                        const { nomError } = validateForm(this.state.nom, '', '','');
                         this.setState({ nomError });
                     }}
                 />
                 <Text style={styles.errorText}>{this.state.nomError}</Text>
+
+
+                <TextInput
+                    placeholder="Prénom"
+                    returnKeyType="next"
+                    value={this.state.prenom}
+                    onChangeText={text => this.setState({prenom: text})}
+                    style={{height: 40, borderColor: 'gray', borderWidth: 1, margin: 10}}
+                    autoCompleteType="prenom"
+                    onBlur={() => {
+                        const { prenomError } = validateForm('',this.state.prenom, '','',);
+                        this.setState({ prenomError });
+                    }}
+                />
+                <Text style={styles.errorText}>{this.state.prenomError}</Text>
 
                 <View className={styles.view}></View>
                 <TextInput
@@ -83,7 +103,7 @@ class Inscription extends React.Component {
                     style={{height: 40, borderColor: 'gray', borderWidth: 1, margin: 10}}
                     autoCompleteType="email"
                     onBlur={() => {
-                        const { emailError } = validateForm('', this.state.email, '');
+                        const { emailError } = validateForm('','', this.state.email, '');
                         this.setState({ emailError });
                     }}
                 />
@@ -99,14 +119,14 @@ class Inscription extends React.Component {
                     autoCompleteType="password"
                     secureTextEntry
                     onBlur={() => {
-                        const { passwordError } = validateForm('', '', this.state.password);
+                        const { passwordError } = validateForm('', '', '',this.state.password);
                         this.setState({ passwordError });
                     }}
                 />
                 <Text style={styles.errorText}>{this.state.passwordError}</Text>
 
                 <View className={styles.view}></View>
-                <Button onPress={this.handleSubmit} style={styles.button} title="S'inscrire" />
+                <MyButton onPress={this.handleSubmit}  val="Valider l'inscription" />
 
                 <View style={styles.row}>
                     <View className={styles.view}></View>
@@ -143,5 +163,5 @@ const styles = StyleSheet.create({
         position: "absolute",
         margin: 155,
     },
-background:{},
+    background:{},
 });
