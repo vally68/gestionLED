@@ -20,7 +20,9 @@ export default function Connexion({ navigation }) {
 
     const { setIsLoggedin } = useContext(AuthContext);
 
+
     const handleSubmit = async () => {
+
         const { emailError, passwordError } = validateLoginForm(email, password);
         if (emailError || passwordError) {
             setEmailError(emailError);

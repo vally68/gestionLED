@@ -22,7 +22,7 @@ import { AuthContext } from './gestionledi/AuthContext';
 
 function AuthNavigator() {
     return (
-        <AuthTab.Navigator initialRouteName="Home">
+        <AuthTab.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
             <AuthTab.Screen name="Inscription" component={Inscription} options={{tabBarIcon:
                     () => (<Image source={require('./assets/inscription.png')} style={styles.icon}/>
                     ),
@@ -36,16 +36,15 @@ function AuthNavigator() {
             <AuthTab.Screen name="Connexion" component={Connexion} options={{tabBarIcon:
                     () => (<Image source={require('./assets/connexion.png')} style={styles.icon}/>
                     ),
-                }}
+            }}
             />
         </AuthTab.Navigator>
     );
 }
 
-
 function AppNavigator() {
     return (
-        <AppTab.Navigator initialRouteName="Dashboard">
+        <AppTab.Navigator initialRouteName="Dashboard" screenOptions={{ headerShown: false }}>
             <AppTab.Screen name="Dashboard" component={Dashboard}  options={{tabBarIcon:
                     () => (<Image source={require('./assets/dashboard.png')} style={styles.icon}/>
                     ),
