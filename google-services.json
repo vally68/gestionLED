@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "77322766358",
+    "project_id": "detect-led",
+    "storage_bucket": "detect-led.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:77322766358:android:fcb2082a86c788cb0fcd37",
+        "android_client_info": {
+          "package_name": "com.vally068.gestionLED"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "77322766358-8q09neiu450p1sdini04fi8evb37l1v6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcjYL9i_De6a98hZiopO4pV7i3TYM5r3o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "77322766358-8q09neiu450p1sdini04fi8evb37l1v6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

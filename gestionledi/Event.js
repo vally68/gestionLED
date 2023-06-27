@@ -1,8 +1,8 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text } from 'react-native';
+import { Text, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 
-export default class Details extends React.Component 
-{
+
+class Event extends React.Component{
     constructor(props) 
     {
         super(props);
@@ -11,7 +11,6 @@ export default class Details extends React.Component
             
         };
     }
-
     
 
     componentDidMount()
@@ -21,14 +20,13 @@ export default class Details extends React.Component
 
     render() 
     {
-        
-       
-
         return (
             <SafeAreaView style={styles.container}>
-                <Text style={styles.color}>
-                    Details
-                </Text>
+                <ScrollView contentContainerStyle={styles.scrollContainer}>
+                    <Text style={styles.color}>
+                        Details
+                    </Text>
+                </ScrollView>
             </SafeAreaView>
         );
     }
@@ -41,6 +39,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#1F1E42',
+        marginTop: 35,
+    },
+
+    scrollContainer: {
+        flexGrow: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 
     color: 
@@ -48,3 +53,5 @@ const styles = StyleSheet.create({
         color: "#FFFFFF",
     },
 });
+
+export default Event;

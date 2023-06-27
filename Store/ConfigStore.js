@@ -1,4 +1,4 @@
 import {legacy_createStore as createStore} from 'redux';
-import UserReducer from './Reducer/UserReducer';
+import UserReducer from './reducer/UserReducer';
 
-export default createStore(UserReducer);
+export default createStore(UserReducer)
