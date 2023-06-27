@@ -55,7 +55,7 @@ export default class Home extends React.Component
             />
 
                 <Text style={styles.title}>
-                    ACCUEIL
+                    HOME
                 </Text>
 
 
@@ -74,7 +74,7 @@ export default class Home extends React.Component
                 )
                 }
 
-                
+
                 <MyButton
                     onPress={this.connexionButton}
                     val="Connexion"
@@ -93,7 +93,7 @@ export default class Home extends React.Component
 }
 
 const styles = StyleSheet.create({
-    container: 
+    container:
     {
         flex: 2,
         alignItems: 'center',

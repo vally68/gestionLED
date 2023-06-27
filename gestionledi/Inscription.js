@@ -44,7 +44,8 @@ class Inscription extends React.Component {
         if (json === false) {
           Alert.alert(
             'Erreur',
-            'L\'e-mail saisi existe déjà. Veuillez saisir une autre adresse mail ou récupérer votre mdp',
+            'L\'e-mail saisi existe déjà.',
+            ' Veuillez saisir une autre adresse mail ou récupérer votre mot de passe',
             [
               { text: 'OK', onPress: () => console.log('OK Pressed') },
             ],
@@ -133,12 +134,13 @@ class Inscription extends React.Component {
             <Text style={styles.errorText}>{this.state.passwordError}</Text>
         </View>
 
+        <View style={styles.button}>
             <MyButton
               onPress={this.handleSubmit}
               val="Valider l'inscription"
             />
+        </View>
 
-          
         </ScrollView>
       </SafeAreaView>
     );
@@ -206,6 +208,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     textDecorationLine: 'underline',
   },
+
+button:{
+marginBottom: 20,
+}
 });
 
 const mapDispatchToProps = (dispatch) => ({
