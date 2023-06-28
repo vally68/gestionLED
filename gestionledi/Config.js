@@ -16,35 +16,35 @@ class Config extends React.Component {
         selectedPlage: null,
       };
     }
-  
+
     formatTime = (date) => {
       const hours = "0" + date.getHours();
       const minutes = "0" + date.getMinutes();
-  
+
       return hours.substr(-2) + ':' + minutes.substr(-2);
     }
-  
+
     addPlage = () => {
       const { endTime, startTime, selectedDay, plages } = this.state;
       if (endTime <= startTime) {
         Alert.alert("Erreur", "L'heure de fin doit être après l'heure de début !");
         return;
       }
-  
+
       const newPlage = {
         id: Math.random().toString(),
         day: selectedDay,
         startTime: startTime,
         endTime: endTime,
       };
-  
+
       this.setState(prevState => ({
         plages: [...prevState.plages, newPlage],
         startTime: new Date(),
         endTime: new Date(),
       }));
     }
-  
+
     renderPlage = ({ item }) => (
       <TouchableOpacity
         onPress={() => this.setState({ selectedPlage: item })}
@@ -64,25 +64,25 @@ class Config extends React.Component {
         </Text>
       </TouchableOpacity>
     );
-  
+
     daysOfWeek = ['Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa', 'Di'];
-  
+
     handleStartPickerChange = (event, selectedDate) => {
       this.setState({ showStartPicker: false });
-  
+
       if (selectedDate) {
         this.setState({ startTime: selectedDate });
       }
     }
-  
+
     handleEndPickerChange = (event, selectedDate) => {
       this.setState({ showEndPicker: false });
-  
+
       if (selectedDate) {
         this.setState({ endTime: selectedDate });
       }
     }
-  
+
     render() {
       return (
         <View style={styles.container}>
@@ -110,7 +110,7 @@ class Config extends React.Component {
             ))}
             <View style={styles.separator} />
           </View>
-  
+
           <View style={styles.timePickerContainer}>
             <MyButton onPress={() => this.setState({ showStartPicker: true })} val="Heure de démarrage" />
             {this.state.showStartPicker && (
@@ -122,7 +122,7 @@ class Config extends React.Component {
                 onChange={this.handleStartPickerChange}
               />
             )}
-  
+
             <MyButton onPress={() => this.setState({ showEndPicker: true })} val="Heure de fin" />
             {this.state.showEndPicker && (
               <DateTimePicker
@@ -133,29 +133,29 @@ class Config extends React.Component {
                 onChange={this.handleEndPickerChange}
               />
             )}
-  
+
             <MyButton val="Ajouter plage" onPress={this.addPlage} />
           </View>
-  
+
           <FlatList
             data={this.state.plages}
             renderItem={this.renderPlage}
             keyExtractor={item => item.id}
           />
-  
+
           {this.state.selectedPlage &&
             <Text style={styles.selectedPlageText}>
               Plage sélectionnée: {this.state.selectedPlage.day + ' ' + this.formatTime(this.state.selectedPlage.startTime) + ' - ' + this.formatTime(this.state.selectedPlage.endTime)}
             </Text>
           }
-  
+
           <MyButton val="Démarrer" onPress={() => alert('Démarrage du programme')} />
-          
+
         </View>
       );
     }
   }
-  
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -206,6 +206,5 @@ class Config extends React.Component {
       color: '#615197',
     },
   });
-  
+
   export default Config;
-  

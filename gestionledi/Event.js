@@ -3,22 +3,22 @@ import { Text, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 
 
 class Event extends React.Component{
-    constructor(props) 
+    constructor(props)
     {
         super(props);
-        this.state = 
+        this.state =
         {
-            
+
         };
     }
-    
+
 
     componentDidMount()
     {
-        
+
     }
 
-    render() 
+    render()
     {
         return (
             <SafeAreaView style={styles.container}>
@@ -33,7 +33,7 @@ class Event extends React.Component{
 }
 
 const styles = StyleSheet.create({
-    container: 
+    container:
     {
         flex: 1,
         alignItems: 'center',
@@ -46,9 +46,11 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         alignItems: 'center',
         justifyContent: 'center',
+        paddingLeft: 100,
+        paddingRight: 100,
     },
 
-    color: 
+    color:
     {
         color: "#FFFFFF",
     },

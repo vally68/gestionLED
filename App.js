@@ -44,7 +44,7 @@ function AuthNavigator() {
             tabBarIcon: () => (
               <Ionicons name="log-in" color={"black"} size={30} />
             )
-        }} 
+        }}
             />
         </AuthTab.Navigator>
     );
@@ -105,7 +105,7 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-    container: 
+    container:
     {
         flex: 0,
         alignItems: 'center',
