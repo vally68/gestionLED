@@ -86,7 +86,119 @@ function Dashboard({ dispatch, isLoggedIn }) {
               Sélection de couleur
             </Text>
             <View style={styles.colorButtonsContainer}>
-              {/* Vos boutons de couleur ici */}
+              <View style={styles.colorButton}>
+                <Button
+                  title=""
+                  onPress={() => handleColorButtonPress('#000080')}
+                  color="#000080"
+                />
+              </View>
+              <View style={styles.colorButton}>
+                <Button
+                  title=""
+                  onPress={() => handleColorButtonPress('#0000FF')}
+                  color="#0000FF"
+                />
+              </View>
+              <View style={styles.colorButton}>
+                <Button
+                  title=""
+                  onPress={() => handleColorButtonPress('#00FFFF')}
+                  color="#00FFFF"
+                />
+              </View>
+              <View style={styles.colorButton}>
+                <Button
+                  title=""
+                  onPress={() => handleColorButtonPress('#008080')}
+                  color="#008080"
+                />
+              </View>
+              <View style={styles.colorButton}>
+                <Button
+                  title=""
+                  onPress={() => handleColorButtonPress('#008000')}
+                  color="#008000"
+                />
+              </View>
+              <View style={styles.colorButton}>
+                <Button
+                  title=""
+                  onPress={() => handleColorButtonPress('#00FF7F')}
+                  color="#00FF7F"
+                />
+              </View>
+              <View style={styles.colorButton}>
+                <Button
+                  title=""
+                  onPress={() => handleColorButtonPress('#32CD32')}
+                  color="#32CD32"
+                />
+            </View>
+
+              <View style={styles.colorButton}>
+                <Button
+                  title=""
+                  onPress={() => handleColorButtonPress('#00FF00')}
+                  color="#00FF00"
+                />
+              </View>
+              <View style={styles.colorButton}>
+                <Button
+                  title=""
+                  onPress={() => handleColorButtonPress('#800080')}
+                  color="#800080"
+                />
+              </View>
+              <View style={styles.colorButton}>
+                <Button
+                  title=""
+                  onPress={() => handleColorButtonPress('#FF00FF')}
+                  color="#FF00FF"
+                />
+              </View>
+              <View style={styles.colorButton}>
+                <Button
+                  title=""
+                  onPress={() => handleColorButtonPress('#FF1493')}
+                  color="#FF1493"
+                />
+              </View>
+              <View style={styles.colorButton}>
+                <Button
+                  title=""
+                  onPress={() => handleColorButtonPress('#FF69B4')}
+                  color="#FF69B4"
+                />
+              </View>
+              <View style={styles.colorButton}>
+                <Button
+                  title=""
+                  onPress={() => handleColorButtonPress('#FF0000')}
+                  color="#FF0000"
+                />
+              </View>
+              <View style={styles.colorButton}>
+                <Button
+                  title=""
+                  onPress={() => handleColorButtonPress('#FF6347')}
+                  color="#FF6347"
+                />
+              </View>
+              <View style={styles.colorButton}>
+                <Button
+                  title=""
+                  onPress={() => handleColorButtonPress('#FFA500')}
+                  color="#FFA500"
+                />
+              </View>
+              <View style={styles.colorButton}>
+                <Button
+                  title=""
+                  onPress={() => handleColorButtonPress('#FFFF00')}
+                  color="#FFFF00"
+                />
+              </View>
             </View>
             <View style={[styles.selectedColorIndicator, { backgroundColor: selectedColor }]} />
             <View style={styles.colorButton}>
