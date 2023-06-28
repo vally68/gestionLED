@@ -5,17 +5,20 @@ import { AuthContext } from './AuthContext';
 import { logoutSuccess } from '../store/reducer/UserReducer';
 import MySlider from '../Components/MySlider';
 import MyButton from "../Components/MyButton";
+import Icon from 'react-native-vector-icons/Ionicons';
 
 function Dashboard({ dispatch, isLoggedIn }) {
   const { setIsLoggedin } = useContext(AuthContext);
   const [isEnabledColor, setIsEnabledColor] = useState(false);
   const [isEnabledDetection, setIsEnabledDetection] = useState(false);
+  const [isInstallationOn, setIsInstallationOn] = useState(false);
   const [selectedColor, setSelectedColor] = useState('#FFFFFF');
+  const [peopleCount, setPeopleCount] = useState('1');
 
   const handleLogout = () => {
     setIsLoggedin(false); 
     dispatch(logoutSuccess(false));
-};
+  };
 
   const handleColorButtonPress = (color) => {
     setSelectedColor(color);
@@ -28,6 +31,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
   const handleResetAll = () => {
     setIsEnabledColor(false);
     setIsEnabledDetection(false);
+    setIsInstallationOn(false);
     setSelectedColor('#FFFFFF');
   };
 
@@ -39,6 +43,23 @@ function Dashboard({ dispatch, isLoggedIn }) {
         </Text>
         <Text style={styles.textdashboards}>
           Statut de l'installation (en cours, terminé, arrêté)
+        </Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+          <Text style={styles.textdashboards}>
+            OFF
+          </Text>
+          <Switch
+            trackColor={{ false: '#767577', true: '#81b0ff' }}
+            thumbColor={isInstallationOn ? '#28B463' : '#EAFAF1'}
+            onValueChange={() => setIsInstallationOn(!isInstallationOn)}
+            value={isInstallationOn}
+          />
+          <Text style={styles.textdashboards}>
+            ON
+          </Text>
+        </View>
+        <Text style={styles.textdashboards}>
+          {isInstallationOn ? 'Démarrer' : 'Arrêter'}
         </Text>
         <View style={styles.colormode}>
           <Text style={styles.textcolormode}>
@@ -65,119 +86,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
               Sélection de couleur
             </Text>
             <View style={styles.colorButtonsContainer}>
-              <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#000080')}
-                  color="#000080"
-                />
-              </View>
-              <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#0000FF')}
-                  color="#0000FF"
-                />
-              </View>
-              <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#00FFFF')}
-                  color="#00FFFF"
-                />
-              </View>
-              <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#008080')}
-                  color="#008080"
-                />
-              </View>
-              <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#008000')}
-                  color="#008000"
-                />
-              </View>
-              <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#00FF7F')}
-                  color="#00FF7F"
-                />
-              </View>
-              <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#32CD32')}
-                  color="#32CD32"
-                />
-            </View>
-
-              <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#00FF00')}
-                  color="#00FF00"
-                />
-              </View>
-              <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#800080')}
-                  color="#800080"
-                />
-              </View>
-              <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#FF00FF')}
-                  color="#FF00FF"
-                />
-              </View>
-              <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#FF1493')}
-                  color="#FF1493"
-                />
-              </View>
-              <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#FF69B4')}
-                  color="#FF69B4"
-                />
-              </View>
-              <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#FF0000')}
-                  color="#FF0000"
-                />
-              </View>
-              <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#FF6347')}
-                  color="#FF6347"
-                />
-              </View>
-              <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#FFA500')}
-                  color="#FFA500"
-                />
-              </View>
-              <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#FFFF00')}
-                  color="#FFFF00"
-                />
-              </View>
+              {/* Vos boutons de couleur ici */}
             </View>
             <View style={[styles.selectedColorIndicator, { backgroundColor: selectedColor }]} />
             <View style={styles.colorButton}>
@@ -196,15 +105,14 @@ function Dashboard({ dispatch, isLoggedIn }) {
         </View>
         <View style={styles.detectgestion}>
           <Text style={styles.textdetectgestion}>
-            Gestion de détection
+            Détection
           </Text>
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
             <Text style={styles.textdashboards}>
               OFF
             </Text>
-
             <Switch
-              trackColor={{ false: '#767577', true: '#81b0ff' }}
+              trackColor={{ false: '#767577', true: '#FFFFFF' }}
               thumbColor={isEnabledDetection ? '#28B463' : '#EAFAF1'}
               onValueChange={() => setIsEnabledDetection(!isEnabledDetection)}
               value={isEnabledDetection}
@@ -213,23 +121,40 @@ function Dashboard({ dispatch, isLoggedIn }) {
               ON
             </Text>
           </View>
+          {isEnabledDetection && (
+            <View style={styles.peopleSelectionContainer}>
+              <Icon
+                name='person-outline'
+                size={30}
+                color={peopleCount === '1' ? 'blue' : 'grey'}
+                onPress={() => setPeopleCount('1')}
+              />
+              <Icon
+                name='people-outline'
+                size={30}
+                color={peopleCount === '2' ? 'blue' : 'grey'}
+                onPress={() => setPeopleCount('2')}
+              />
+            </View>
+          )}
         </View>
-
-        <MyButton
-        val="Déconnexion"
-        onPress={handleLogout} />
-        {isLoggedIn && <Button title="Déconnexion"
-        onPress={handleLogout} />}
-
-        <MyButton
+        <View style={styles.resetallButton}>
+          <MyButton
             val="Réinitialiser tout"
             onPress={handleResetAll}
           />
-
+        </View>
+        <View style={styles.logoutButton}>
+          <MyButton
+            val="Déconnexion"
+            onPress={handleLogout}
+          />
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -329,6 +254,12 @@ const styles = StyleSheet.create({
   colorButton: {
     width: '20%',
     margin: 4,
+  },
+
+  peopleSelectionContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 20,
   },
 
 

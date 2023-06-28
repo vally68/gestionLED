@@ -55,7 +55,7 @@ export default class Home extends React.Component
             />
 
                 <Text style={styles.title}>
-                    ACCUEIL
+                   
                 </Text>
 
 
