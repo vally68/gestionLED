@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef } from 'react';
 import { Text, Button, SafeAreaView, StyleSheet, View, Switch, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { AuthContext } from './AuthContext';
@@ -7,13 +7,15 @@ import MySlider from '../Components/MySlider';
 import MyButton from "../Components/MyButton";
 
 function Dashboard({ dispatch, isLoggedIn }) {
-  const { setIsLoggedIn } = useContext(AuthContext);
+  const { setIsLoggedin } = useContext(AuthContext);
   const [isEnabledColor, setIsEnabledColor] = useState(false);
+  const [isInstallationOn, setIsInstallationOn] = useState(false);
   const [isEnabledDetection, setIsEnabledDetection] = useState(false);
   const [selectedColor, setSelectedColor] = useState('#FFFFFF');
+  const sliderRef = useRef();
 
   const handleLogout = () => {
-    setIsLoggedIn(false);
+    setIsLoggedin(false);
     dispatch(logoutSuccess(false));
   };
 
@@ -29,6 +31,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
     setIsEnabledColor(false);
     setIsEnabledDetection(false);
     setSelectedColor('#FFFFFF');
+    sliderRef.current.resetSliderValue();
   };
 
   return (
@@ -39,6 +42,23 @@ function Dashboard({ dispatch, isLoggedIn }) {
         </Text>
         <Text style={styles.textdashboards}>
           Statut de l'installation (en cours, terminé, arrêté)
+        </Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+          <Text style={styles.textdashboards}>
+            OFF
+          </Text>
+          <Switch
+            trackColor={{ false: '#767577', true: '#FFFFFF' }}
+            thumbColor={isInstallationOn ? '#28B463' : '#EAFAF1'}
+            onValueChange={() => setIsInstallationOn(!isInstallationOn)}
+            value={isInstallationOn}
+          />
+          <Text style={styles.textdashboards}>
+            ON
+          </Text>
+        </View>
+        <Text style={styles.textdashboards}>
+          {isInstallationOn ? 'Démarrer' : 'Arrêter'}
         </Text>
         <View style={styles.colormode}>
           <Text style={styles.textcolormode}>
@@ -113,8 +133,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
                   onPress={() => handleColorButtonPress('#32CD32')}
                   color="#32CD32"
                 />
-            </View>
-
+              </View>
               <View style={styles.colorButton}>
                 <Button
                   title=""
@@ -192,7 +211,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
           <Text style={styles.textdeclanchlum}>
             Gestion du seuil de déclenchement de la luminosité
           </Text>
-          <MySlider />
+          <MySlider ref={sliderRef} />
         </View>
         <View style={styles.detectgestion}>
           <Text style={styles.textdetectgestion}>
@@ -202,7 +221,6 @@ function Dashboard({ dispatch, isLoggedIn }) {
             <Text style={styles.textdashboards}>
               OFF
             </Text>
-
             <Switch
               trackColor={{ false: '#767577', true: '#81b0ff' }}
               thumbColor={isEnabledDetection ? '#28B463' : '#EAFAF1'}
@@ -216,15 +234,20 @@ function Dashboard({ dispatch, isLoggedIn }) {
         </View>
 
         <MyButton
-        val="Déconnexion"
-        onPress={handleLogout} />
-        {isLoggedIn && <Button title="Déconnexion"
-        onPress={handleLogout} />}
+          val="Déconnexion"
+          onPress={handleLogout}
+        />
+        {isLoggedIn && (
+          <Button
+            title="Déconnexion"
+            onPress={handleLogout}
+          />
+        )}
 
         <MyButton
-            val="Réinitialiser tout"
-            onPress={handleResetAll}
-          />
+          val="Réinitialiser tout"
+          onPress={handleResetAll}
+        />
 
       </ScrollView>
     </SafeAreaView>
@@ -240,7 +263,6 @@ const styles = StyleSheet.create({
     marginTop: 35,
   },
 
-
   scrollContainer: {
     flexGrow: 1,
     alignItems: 'center',
@@ -249,16 +271,14 @@ const styles = StyleSheet.create({
     paddingRight: 100,
   },
 
-
   texttitle: {
     textAlign: 'center',
-    marginTop:20,
+    marginTop: 20,
     marginBottom: 10,
     color: '#FFFFFF',
     fontWeight: 'bold',
     fontSize: 20,
   },
-
 
   textdashboards: {
     textAlign: 'center',
@@ -267,13 +287,11 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 
-
   colormode: {
     marginBottom: 30,
     marginTop: 30,
     fontSize: 15,
   },
-
 
   textcolormode: {
     textAlign: 'center',
@@ -282,12 +300,10 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
 
-
   declanchluminosity: {
     marginBottom: 30,
     marginTop: 30,
   },
-
 
   textdeclanchlum: {
     textAlign: 'center',
@@ -297,12 +313,10 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
 
-
   detectgestion: {
     marginBottom: 30,
     marginTop: 30,
   },
-
 
   textdetectgestion: {
     textAlign: 'center',
@@ -311,12 +325,10 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
 
-
   colorSelectionContainer: {
     alignItems: 'center',
     marginTop: -20,
   },
-
 
   colorButtonsContainer: {
     flexDirection: 'row',
@@ -325,12 +337,10 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
 
-
   colorButton: {
     width: '20%',
     margin: 4,
   },
-
 
   selectedColorIndicator: {
     width: 60,

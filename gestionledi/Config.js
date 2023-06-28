@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, FlatList, Alert, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, Alert, StyleSheet, TouchableOpacity, Switch, SafeAreaView } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import MyButton from "../Components/MyButton";
 
@@ -14,6 +14,12 @@ class Config extends React.Component {
         showEndPicker: false,
         plages: [],
         selectedPlage: null,
+        isSwitchOn: false,
+        startAbsentDate: new Date(),
+        endAbsentDate: new Date(),
+        isVisible: true,
+        showStartAbsentPicker: false,
+        showEndAbsentPicker: false,
       };
     }
 
@@ -24,26 +30,84 @@ class Config extends React.Component {
       return hours.substr(-2) + ':' + minutes.substr(-2);
     }
 
-    addPlage = () => {
-      const { endTime, startTime, selectedDay, plages } = this.state;
-      if (endTime <= startTime) {
-        Alert.alert("Erreur", "L'heure de fin doit être après l'heure de début !");
-        return;
-      }
 
-      const newPlage = {
-        id: Math.random().toString(),
-        day: selectedDay,
-        startTime: startTime,
-        endTime: endTime,
+
+      setEndTime = (event, selectedDate) =>
+      {
+          const currentDate = selectedDate;
+          this.setState({ endTime: currentDate, showEndPicker: false });
       };
 
-      this.setState(prevState => ({
-        plages: [...prevState.plages, newPlage],
-        startTime: new Date(),
-        endTime: new Date(),
-      }));
+      setStartAbsentDate = (event, selectedDate) =>
+      {
+          const currentDate = selectedDate || this.state.startAbsentDate;
+          this.setState({ startAbsentDate: currentDate, showStartAbsentPicker: false });
+      };
+
+      setEndAbsentDate = (event, selectedDate) =>
+      {
+          const currentDate = selectedDate;
+          this.setState({ endAbsentDate: currentDate, showEndAbsentPicker: false });
+      };
+
+      ddPlage = () =>
+    {
+        if(this.state.endTime.getTime() <= this.state.startTime.getTime())
+        {
+            Alert.alert("Erreur","L'heure de fin doit être après l'heure de début !");
+            return;
+        }
+
+        const a = this.state.plages
+        console.log("start exists : " + a.some(s => (s.startTime.getHours() === this.state.startTime.getHours() && s.startTime.getMinutes() === this.state.startTime.getMinutes())))
+        console.log("end exists : " + a.some(s => (s.endTime.getHours() === this.state.endTime.getHours() && s.endTime.getMinutes() === this.state.endTime.getMinutes())))
+        console.log("day exists : " + a.some(d => d.day === this.state.selectedDay))
+        let da = a.some(d => d.day === this.state.selectedDay)
+        let st = a.some(s => (s.startTime.getHours() === this.state.startTime.getHours() && s.startTime.getMinutes() === this.state.startTime.getMinutes()))
+        let en = a.some(s => (s.endTime.getHours() === this.state.endTime.getHours() && s.endTime.getMinutes() === this.state.endTime.getMinutes()))
+        if(da && st && en)
+        {
+            Alert.alert("Erreur", "Les données existent déjà dans la plage de fonctionnement !");
+            return;
+        }
+        if(da && a.some(s=> (this.state.startTime <= s.endTime)))
+        {
+
+            console.log("std : " + this.state.startTime.getHours())
+            console.log("f : " + this.state.endTime.getHours())
+            Alert.alert("Erreur","L'heure de début est compris entre 2 !");
+            return;
+        }
+
+
+
+        this.setState(prevState => ({
+            plages: [...prevState.plages, {
+                id: Math.random().toString(),
+                day: prevState.selectedDay,
+                startTime: prevState.startTime,
+                endTime: prevState.endTime,
+            }],
+            startTime: new Date(),
+            endTime: new Date(),
+        }))
     }
+
+    deletePlage = (item) =>
+    {
+        console.log(item.id)
+        Alert.alert("Effacer", "Êtes-vous sûr ?",
+        [{
+        text:"Yes",
+        onPress: () => this.setState({plages:this.state.plages.filter((i) => i.id != item.id)}),
+        },
+        {text: "Non"}
+        ]
+      )
+
+    }
+
+
 
     renderPlage = ({ item }) => (
       <TouchableOpacity
@@ -85,7 +149,7 @@ class Config extends React.Component {
 
     render() {
       return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
           <View style={styles.dayOfWeekContainer}>
             <View style={styles.separator} />
             {this.daysOfWeek.map((day, index) => (
@@ -143,15 +207,102 @@ class Config extends React.Component {
             keyExtractor={item => item.id}
           />
 
-          {this.state.selectedPlage &&
-            <Text style={styles.selectedPlageText}>
-              Plage sélectionnée: {this.state.selectedPlage.day + ' ' + this.formatTime(this.state.selectedPlage.startTime) + ' - ' + this.formatTime(this.state.selectedPlage.endTime)}
-            </Text>
-          }
+<Text style={{color : 'white'}}>Jour sélectionné : {this.state.selectedDay}</Text>
+                <Text style={{color : 'white'}}>Heure de début sélectionnée : {this.state.startTime.toLocaleString()}</Text>
+                <Text style={{color : 'white'}}>Heure de fin sélectionnée : {this.state.endTime.toLocaleString()}</Text>
 
-          <MyButton val="Démarrer" onPress={() => alert('Démarrage du programme')} />
+                <Text style={{color : 'white'}}>Mode absent</Text>
+                <Switch
+                    value={this.state.isSwitchOn}
+                    onValueChange={() => this.setState({isSwitchOn: !this.state.isSwitchOn})}
+                />
+                {
+                    this.state.isSwitchOn &&
+                    <MyButton
+                        onPress={() =>
+                            {
+                                Alert.alert(
+                                    'Informations',
+                                    'Date de début : ' + this.state.startAbsentDate + ' et date de fin : ' + this.state.endAbsentDate,
+                                    [
+                                        {
+                                            text: 'Annuler',
+                                            onPress: () =>
+                                            {
+                                                console.log('Bouton Annuler pressé');
+                                            },
+                                            style: 'cancel',
+                                        },
+                                        {
+                                            text: 'Modifier date de fin',
+                                            onPress: () =>
+                                            {
+                                                if(this.state.endAbsentDate.getTime() <= this.state.startAbsentDate.getTime())
+                                                {
+                                                    this.setState({showEndAbsentPicker: true})
+                                                }
+                                                else
+                                                {
+                                                    Alert.alert("Erreur","L'heure de fin est avant l'heure de début !");
+                                                }
 
-        </View>
+                                            }
+                                        },
+                                        {
+                                            text: 'Modifier date de début',
+                                            onPress: () =>
+                                            {
+                                                if(this.state.startAbsentDate.getTime() <= this.state.endAbsentDate.getTime())
+                                                {
+                                                    this.setState({showStartAbsentPicker: true})
+                                                }
+                                                else
+                                                {
+                                                    Alert.alert("Erreur","L'heure de début est avant l'heure de fin !");
+                                                }
+                                            }
+                                        },
+
+                                    ]);
+                            }
+                        }
+
+                        val="Informations"
+                    />
+
+                }
+                {this.state.showStartAbsentPicker && this.state.isSwitchOn && (
+
+
+                        <DateTimePicker
+                            value={this.state.startAbsentDate}
+                            mode={'date'}
+                            is24Hour={true}
+                            display="inline"
+                            onChange={this.setStartAbsentDate}
+                        />
+
+                        )
+                }
+                {this.state.showEndAbsentPicker && this.state.isSwitchOn && (
+
+
+                    <DateTimePicker
+                        value={this.state.endAbsentDate}
+                        mode={'date'}
+                        is24Hour={true}
+                        display="inline"
+                        onChange={this.setEndAbsentDate}
+                    />
+
+                    )
+                }
+                {this.state.isSwitchOn && (
+                    <Text style={{color : 'red'}}>Vous avez sélectionné la date d'absence de début: {this.state.startAbsentDate.toLocaleString()} et date de fin : {this.state.endAbsentDate.toLocaleString()}</Text>
+                )
+                }
+                <MyButton val="Démarrer" onPress={() => alert('Démarrage du programme')} />
+            </SafeAreaView>
       );
     }
   }
