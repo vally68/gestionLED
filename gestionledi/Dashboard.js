@@ -7,15 +7,15 @@ import MySlider from '../Components/MySlider';
 import MyButton from "../Components/MyButton";
 
 function Dashboard({ dispatch, isLoggedIn }) {
-  const { setIsLoggedIn } = useContext(AuthContext);
+  const { setIsLoggedin } = useContext(AuthContext);
   const [isEnabledColor, setIsEnabledColor] = useState(false);
   const [isEnabledDetection, setIsEnabledDetection] = useState(false);
   const [selectedColor, setSelectedColor] = useState('#FFFFFF');
 
   const handleLogout = () => {
-    setIsLoggedIn(false);
+    setIsLoggedin(false); 
     dispatch(logoutSuccess(false));
-  };
+};
 
   const handleColorButtonPress = (color) => {
     setSelectedColor(color);
