@@ -5,41 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ed02f101-b7cd-4ac6-8c88-5e15e55fa28d" name="Changes" comment="test">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/gestionLED.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Components/MyButton.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Components/MySlider.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/alice.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/config.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/connexion.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/dashboard.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/deconnexion.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/event.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/icons8-mesure-de-l&amp;#39;ordinateur-portable-50.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/icons8-pile-32.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/inscription.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/logo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/mei.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/pierre.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/vamplate.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/yolerap.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/zeluko.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/eas.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gestionledi/AuthContext.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gestionledi/Config.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gestionledi/Connexion.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gestionledi/Dashboard.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gestionledi/Event.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gestionledi/Home.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gestionledi/Inscription.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gestionledi/WifiManager.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gestionledi/fonction/outils.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/store/configStore.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/store/reducer/UserReducer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
@@ -97,6 +63,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\WebStorm 2022.3.3\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -117,6 +84,8 @@
       <workItem from="1687329160711" duration="3987000" />
       <workItem from="1687342935459" duration="10402000" />
       <workItem from="1687415890428" duration="59000" />
+      <workItem from="1687865242291" duration="3313000" />
+      <workItem from="1687934360311" duration="625000" />
     </task>
     <task id="LOCAL-00001" summary="test">
       <created>1687173651793</created>
