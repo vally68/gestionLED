@@ -202,12 +202,19 @@ class Config extends React.Component {
           </View>
 
           <FlatList
-            data={this.state.plages}
-            renderItem={this.renderPlage}
-            keyExtractor={item => item.id}
-          />
+                    data={this.state.plages}
+                    renderItem={({ item }) => (
+                      <MyButton
+                          onPress={() => {this.setState({ selectedPlage: item }); this.deletePlage(item)}}
+                          title={item.day + ' ' + this.formatTime(item.startTime) + ' - ' + this.formatTime(item.endTime)}
+                      />
+                  )}
+                    keyExtractor={(item, index) => index}
+/>
 
-<Text style={{color : 'white'}}>Jour sélectionné : {this.state.selectedDay}</Text>
+
+
+                <Text style={{color : 'white'}}>Jour sélectionné : {this.state.selectedDay}</Text>
                 <Text style={{color : 'white'}}>Heure de début sélectionnée : {this.state.startTime.toLocaleString()}</Text>
                 <Text style={{color : 'white'}}>Heure de fin sélectionnée : {this.state.endTime.toLocaleString()}</Text>
 
@@ -281,7 +288,6 @@ class Config extends React.Component {
                             display="inline"
                             onChange={this.setStartAbsentDate}
                         />
-
                         )
                 }
                 {this.state.showEndAbsentPicker && this.state.isSwitchOn && (
@@ -298,7 +304,7 @@ class Config extends React.Component {
                     )
                 }
                 {this.state.isSwitchOn && (
-                    <Text style={{color : 'red'}}>Vous avez sélectionné la date d'absence de début: {this.state.startAbsentDate.toLocaleString()} et date de fin : {this.state.endAbsentDate.toLocaleString()}</Text>
+                    <Text style={styles.absence}>Vous avez sélectionné la date d'absence de début: {this.state.startAbsentDate.toLocaleString()} et date de fin : {this.state.endAbsentDate.toLocaleString()}</Text>
                 )
                 }
                 <MyButton val="Démarrer" onPress={() => alert('Démarrage du programme')} />
@@ -315,16 +321,19 @@ class Config extends React.Component {
       backgroundColor: '#1F1E42',
       marginTop: 35,
     },
+
     dayOfWeekContainer: {
       flexDirection: 'row',
       marginBottom: 20,
       marginTop: 40,
     },
+
     separator: {
       flex: 1,
       marginLeft: 25,
       marginRight: 10,
     },
+
     dayOfWeekButton: {
       backgroundColor: '#FFFFFF',
       borderRadius: 100,
@@ -334,14 +343,17 @@ class Config extends React.Component {
       marginLeft: 5,
       alignItems: 'center',
     },
+
     dayOfWeekText: {
       color: '#615197',
     },
+
     timePickerContainer: {
       alignContent: 'center',
       justifyContent: 'center',
       marginBottom: 20,
     },
+
     plageItem: {
       backgroundColor: '#FFFFFF',
       borderRadius: 20,
@@ -349,12 +361,19 @@ class Config extends React.Component {
       marginBottom: 10,
       alignItems: 'center',
     },
+
     plageText: {
       color: '#615197',
     },
+
     selectedPlageText: {
       backgroundColor: '#FFFFFF',
       color: '#615197',
+    },
+
+    absence:{
+      color:'red',
+      textAlign: 'center',
     },
   });
 
