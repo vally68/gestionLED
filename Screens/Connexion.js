@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Alert, Button, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, Image, ScrollView } from "react-native";
-import { validateForm, validateLoginForm } from "./fonction/outils";
-import { LOGIN_SUCCESS } from '../store/reducer/UserReducer';
+import { validateForm, validateLoginForm } from "../fonction/outils";
+import { LOGIN_SUCCESS } from '../reducer/UserReducer';
 import { useDispatch } from 'react-redux';
 import MyButton from "../Components/MyButton";
-import { AuthContext } from './AuthContext';
+import { AuthContext } from '../fonction/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Connexion({ navigation }) {

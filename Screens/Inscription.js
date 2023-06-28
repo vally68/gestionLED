@@ -1,8 +1,8 @@
 import React from 'react';
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, SafeAreaView, ScrollView } from 'react-native';
-import { validateForm } from './fonction/outils';
+import { validateForm } from '../fonction/outils';
 import { connect } from "react-redux";
-import { ADD_USER } from '../store/reducer/UserReducer';
+import { ADD_USER } from '../reducer/UserReducer';
 import MyButton from "../Components/MyButton";
 
 const mapStateToProps = (state) => {
@@ -69,7 +69,7 @@ class Inscription extends React.Component {
           />
 
           <View>
-            <Text style={styles.texttitle}>S'INSCRIRE</Text>
+            <Text style={styles.texttitle}>INSCRIPTION</Text>
 
             <TextInput
               placeholder="nom"
@@ -135,7 +135,7 @@ class Inscription extends React.Component {
 
             <MyButton
               onPress={this.handleSubmit}
-              val="Valider l'inscription"
+              val="Valider"
             />
 
           

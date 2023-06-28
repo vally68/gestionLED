@@ -1,8 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { Text, Button, SafeAreaView, StyleSheet, View, Switch, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
-import { AuthContext } from './AuthContext';
-import { logoutSuccess } from '../store/reducer/UserReducer';
+import { AuthContext } from '../fonction/AuthContext';
+import { logoutSuccess } from '../reducer/UserReducer';
 import MySlider from '../Components/MySlider';
 import MyButton from "../Components/MyButton";
 import Icon from 'react-native-vector-icons/Ionicons';
