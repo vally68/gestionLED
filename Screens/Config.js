@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, Text, Button, FlatList, Alert, Modal } from 'react-native';
+import { View, Text, Button, FlatList, Alert, Modal,StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import MyButton from "../Components/MyButton";
 import { Switch } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 class Config extends React.Component 
 {
@@ -140,7 +141,12 @@ class Config extends React.Component
                 </Picker>
 
                 <View style={{ alignContent: 'center', justifyContent: 'center', marginBottom: 20 }}>
-                    <MyButton onPress={() => this.setState({ showStartPicker: true })} val="Heure de demarrage" />
+                   <MyButton
+                      onPress={() => this.setState({ showStartPicker: true })}
+                      val="Heure de début"
+                      icon={<Icon name="time-outline" size={20} color="black" />}
+                    />
+
                     {this.state.showStartPicker && (
                         <DateTimePicker
                             value={this.state.startTime}
@@ -151,7 +157,11 @@ class Config extends React.Component
                         />
                     )}
 
-                    <MyButton onPress={() => this.setState({ showEndPicker: true })} val="Heure de fin" />
+                    <MyButton
+                      onPress={() => this.setState({ showEndPicker: true })}
+                      val="Heure de fin"
+                      icon={<Icon name="time-outline" size={20} color="black" />}
+                    />
                     {this.state.showEndPicker && (
                         <DateTimePicker
                             value={this.state.endTime}
@@ -162,7 +172,11 @@ class Config extends React.Component
                         />
                     )}
 
-                    <MyButton val="Ajouter plage" onPress={this.addPlage} />
+                    <MyButton
+                      val="Ajouter plage"
+                      onPress={this.addPlage}
+                      icon={<Icon name="add-outline" size={20} color="black" />}
+                    />
                 </View>
 
                 <FlatList
@@ -192,7 +206,7 @@ class Config extends React.Component
                             { 
                                 Alert.alert(
                                     'Informations', 
-                                    'Date de début : ' + this.state.startAbsentDate + ' et date de fin : ' + this.state.endAbsentDate, 
+                                    'Date de début : ' + this.state.startAbsentDate.toLocaleString() + '\nDate de fin : ' + this.state.endAbsentDate.toLocaleString(), 
                                     [
                                         {
                                             text: 'Annuler',
@@ -206,9 +220,10 @@ class Config extends React.Component
                                             text: 'Modifier date de fin', 
                                             onPress: () => 
                                             {
-                                                if(this.state.endAbsentDate.getTime() <= this.state.startAbsentDate.getTime())
+                                                if(this.state.endAbsentDate.getTime() <= this.state.endAbsentDate.getTime())
                                                 {
                                                     this.setState({showEndAbsentPicker: true})
+                                                    Alert.alert("Date de fin","Vous venez de sélectionner la date de fin ! ");
                                                 }
                                                 else
                                                 {
@@ -221,9 +236,12 @@ class Config extends React.Component
                                             text: 'Modifier date de début', 
                                             onPress: () => 
                                             {
+                                                console.log("st : " + this.state.startAbsentDate.getTime())
+                                                console.log("ar : " + this.state.endAbsentDate.getTime())
                                                 if(this.state.startAbsentDate.getTime() <= this.state.endAbsentDate.getTime())
                                                 {
                                                     this.setState({showStartAbsentPicker: true})
+                                                    Alert.alert("Date de début","Vous venez de sélectionner la date de début ! "); 
                                                 }
                                                 else
                                                 {
@@ -247,8 +265,9 @@ class Config extends React.Component
                             value={this.state.startAbsentDate}
                             mode={'date'}
                             is24Hour={true}
-                            display="inline"
+                            display="default"
                             onChange={this.setStartAbsentDate}
+                            dateFormat="dayofweek day month year"
                         />
                       
                         )
@@ -260,20 +279,38 @@ class Config extends React.Component
                         value={this.state.endAbsentDate}
                         mode={'date'}
                         is24Hour={true}
-                        display="inline"
+                        display="default"
                         onChange={this.setEndAbsentDate}
+                        dateFormat="dayofweek day month year"
                     />
                   
                     )
                 }
                 {this.state.isSwitchOn && (
-                    <Text style={{color : 'red'}}>Vous avez sélectionné la date d'absence de début: {this.state.startAbsentDate.toLocaleString()} et date de fin : {this.state.endAbsentDate.toLocaleString()}</Text>
+                    <>
+                    <Text style={{color : 'red'}}>Vous avez sélectionné les dates suivantes : </Text>
+                    <Text style={{color : 'red'}}>Date d'absence de début: {this.state.startAbsentDate.toLocaleDateString()} </Text>
+                    <Text style={{color : 'red'}}>Date de fin : {this.state.endAbsentDate.toLocaleDateString()}</Text>
+                    </>
                 )
                 }
-                <MyButton val="Démarrer" onPress={() => alert('Démarrage du programme')} />
+                <MyButton
+                  val="Démarrer"
+                  onPress={() => alert('Démarrage du programme')}
+                  icon={<Icon name="play-outline" size={20} color="black" />}
+                />
             </View>
         );
     }
 }
-
+const styles = StyleSheet.create({
+    container:
+        {
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#13043a',
+            marginTop: 35,
+        },
+});
 export default Config;

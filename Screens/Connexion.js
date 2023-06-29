@@ -6,6 +6,8 @@ import { useDispatch } from 'react-redux';
 import MyButton from "../Components/MyButton";
 import { AuthContext } from '../fonction/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Icon from 'react-native-vector-icons/Ionicons';
+
 
 export default function Connexion({ navigation }) {
     const [email, setEmail] = useState("");
@@ -90,8 +92,9 @@ export default function Connexion({ navigation }) {
                 <Text style={styles.errorText}>{passwordError}</Text>
 
                 <MyButton
-                    onPress={handleSubmit}
-                    val="Connexion"
+                  onPress={handleSubmit}
+                  val="Connexion"
+                  icon={<Icon name="log-in-outline" size={20} color="black" />}
                 />
                 <View style={styles.row}>
                     <TouchableOpacity
@@ -119,7 +122,7 @@ const styles = StyleSheet.create({
             flex: 1,
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: '#1F1E42',
+            backgroundColor: '#13043a',
             marginTop: 35,
         },
 

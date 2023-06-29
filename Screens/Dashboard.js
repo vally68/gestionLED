@@ -1,11 +1,13 @@
 import React, { useState, useContext } from 'react';
-import { Text, Button, SafeAreaView, StyleSheet, View, Switch, ScrollView } from 'react-native';
+import { Text, Button, SafeAreaView, StyleSheet, View, Switch, ScrollView, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import { AuthContext } from '../fonction/AuthContext';
 import { logoutSuccess } from '../reducer/UserReducer';
 import MySlider from '../Components/MySlider';
 import MyButton from "../Components/MyButton";
 import Icon from 'react-native-vector-icons/Ionicons';
+
+  const { width } = Dimensions.get('window');
 
 function Dashboard({ dispatch, isLoggedIn }) {
   const { setIsLoggedin } = useContext(AuthContext);
@@ -38,11 +40,9 @@ function Dashboard({ dispatch, isLoggedIn }) {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Text style={styles.texttitle}>
-          TABLEAU DE BORD
-        </Text>
+        
         <Text style={styles.textdashboards}>
-          Statut de l'installation (en cours, terminé, arrêté)
+        Installation
         </Text>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
           <Text style={styles.textdashboards}>
@@ -211,7 +211,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
         )}
         <View style={styles.declanchluminosity}>
           <Text style={styles.textdeclanchlum}>
-            Gestion du seuil de déclenchement de la luminosité
+            Seuil de déclenchement de la luminosité
           </Text>
           <MySlider />
         </View>
@@ -250,33 +250,35 @@ function Dashboard({ dispatch, isLoggedIn }) {
             </View>
           )}
         </View>
-        <View style={styles.resetallButton}>
-          <MyButton
-            val="Réinitialiser tout"
-            onPress={handleResetAll}
-          />
-        </View>
-        <View style={styles.logoutButton}>
-          <MyButton
-            val="Déconnexion"
-            onPress={handleLogout}
-          />
-        </View>
-      </ScrollView>
+       <View style={styles.resetallButton}>
+        <MyButton
+          val="Réinitialiser"
+          onPress={handleResetAll}
+          icon={<Icon name="refresh-outline" size={20} color="black" />}
+        />
+      </View>
+      <View style={styles.logoutButton}>
+        <MyButton
+          val="Déconnexion"
+          onPress={handleLogout}
+          icon={<Icon name="log-out-outline" size={20} color="black" />}
+        />
+      </View>
+    </ScrollView>
     </SafeAreaView>
   );
 }
 
 
-const styles = StyleSheet.create({
+ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#1F1E42',
+    backgroundColor: '#13043a',
     marginTop: 35,
+    paddingLeft: 10,
   },
-
 
   scrollContainer: {
     flexGrow: 1,
@@ -286,20 +288,10 @@ const styles = StyleSheet.create({
     paddingRight: 100,
   },
 
-
-  texttitle: {
-    textAlign: 'center',
-    marginTop:20,
-    marginBottom: 10,
-    color: '#FFFFFF',
-    fontWeight: 'bold',
-    fontSize: 20,
-  },
-
-
   textdashboards: {
     textAlign: 'center',
     fontWeight: 'bold',
+    fontSize: 15,
     marginBottom: 10,
     color: '#FFFFFF',
   },
@@ -363,9 +355,9 @@ const styles = StyleSheet.create({
   },
 
 
-  colorButton: {
-    width: '20%',
-    margin: 4,
+   colorButton: {
+    width: width * 0.2, 
+    margin: width * 0.01, 
   },
 
   peopleSelectionContainer: {
@@ -382,6 +374,16 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     borderWidth: 1,
     borderColor: 'gray',
+  },
+
+  resetallButton: {
+    marginBottom: 20,
+    width: '80%', // pour le design responsive
+  },
+
+  logoutButton: {
+    marginBottom: 40,
+    width: '80%', // pour le design responsive
   },
 });
 

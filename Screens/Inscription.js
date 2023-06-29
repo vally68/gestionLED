@@ -4,6 +4,7 @@ import { validateForm } from '../fonction/outils';
 import { connect } from "react-redux";
 import { ADD_USER } from '../reducer/UserReducer';
 import MyButton from "../Components/MyButton";
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const mapStateToProps = (state) => {
   return {
@@ -136,6 +137,7 @@ class Inscription extends React.Component {
             <MyButton
               onPress={this.handleSubmit}
               val="Valider"
+              icon={<Icon name="checkmark-outline" size={20} color="black" />}
             />
 
           
@@ -150,7 +152,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#1F1E42',
+    backgroundColor: '#13043a',
     marginTop: 35,
   },
 
