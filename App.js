@@ -52,19 +52,19 @@ function AppNavigator() {
     return (
         <AppTab.Navigator initialRouteName="Dashboard" screenOptions={{ headerShown: false }}>
             <AppTab.Screen name="Dashboard" component={Dashboard} options={{
-            tabBarLabel : 'Dashboard',
+            tabBarLabel : 'Gestion',
             tabBarIcon: () => (
               <Ionicons name="book" color={"black"} size={30} />
             )
         }}/>
             <AppTab.Screen name="Event" component={Event} options={{
-            tabBarLabel : 'Event',
+            tabBarLabel : 'Contrôle',
             tabBarIcon: () => (
               <Ionicons name="hammer" color={"black"} size={30} />
             )
         }}/>
             <AppTab.Screen name="Config" component={Config} options={{
-            tabBarLabel : 'Config',
+            tabBarLabel : 'Plages',
             tabBarIcon: () => (
                 <Ionicons name="settings" color={"black"} size={30} />
             )
