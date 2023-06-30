@@ -1,130 +1,106 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, View, Image } from 'react-native';
 import MyButton from '../Components/MyButton';
 import NetInfo from "@react-native-community/netinfo";
-import * as Location from 'expo-location'
+import { MaterialIcons } from '@expo/vector-icons';
+import * as Location from 'expo-location';
 
-export default class Home extends React.Component
-{
-    constructor(props)
-    {
-        super(props);
-        this.state =
-            {
-                connectionInfo: null,
-            };
-    }
+const Home = ({ navigation }) => {
+    const [connectionInfo, setConnectionInfo] = useState(null);
 
-    connexionButton = () =>
-    {
-        this.props.navigation.navigate("Connexion")
-    }
+    const handleConnexionButton = () => {
+        navigation.navigate("Connexion");
+    };
 
-    inscriptionButton = () =>
-    {
-        this.props.navigation.navigate("Inscription")
-    }
+    const handleInscriptionButton = () => {
+        navigation.navigate("Inscription");
+    };
 
-    wifiButton = async () =>
-    {
+    const checkWifiStatus = async () => {
         // Request location permission
         await Location.requestForegroundPermissionsAsync();
 
-        NetInfo.fetch("wifi").then(state =>
-        {
+        NetInfo.fetch("wifi").then(state => {
             console.log("SSID", state.details.ssid);
             console.log("Is connected?", state.isConnected);
-            this.setState(
-                {
-                    connectionInfo: state,
-                }
-            );
+            setConnectionInfo(state);
         });
-    }
+    };
 
-    render()
-    {
-        const { connectionInfo } = this.state;
+    useEffect(() => {
+        const intervalId = setInterval(checkWifiStatus, 10000);  // 10000 milliseconds = 10 seconds
 
-        return (
-            <SafeAreaView style={styles.container}>
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, []);
 
-            <Image
-                source={require('../assets/logo.png')}
-                style={styles.image}
-            />
-
-                <Text style={styles.title}>
-                    HOME
-                </Text>
-
-
-                {connectionInfo && (
-                    <>
-                        <View style={styles.textposition}>
-                            <Text style={styles.textinfo}>Type de connexion : {connectionInfo.type}</Text>
-                            <Text style={styles.textinfo}>Connecté : {connectionInfo.isConnected ? 'Oui' : 'Non'}</Text>
-                            {
-                                connectionInfo.type === 'wifi' &&
-                                <Text style={styles.textinfo}>Nom du réseau (SSID) : {connectionInfo.details.ssid}</Text>
-                            }
-                        </View>
-
-                    </>
-                )
-                }
-
-
-                <MyButton
-                    onPress={this.connexionButton}
-                    val="Connexion"
-                />
-                <MyButton
-                    onPress={this.inscriptionButton}
-                    val="Inscription"
-                />
-                <MyButton
-                    onPress={this.wifiButton}
-                    val="WIFI"
-                />
-            </SafeAreaView>
-        );
-    }
-}
+    return (
+        <SafeAreaView style={styles.container}>
+             <Image
+            source={require('../assets/logo.png')}
+            style={styles.image}
+            resizeMode="cover"  // Ajout de cette ligne
+        />
+            {connectionInfo && (
+                <View style={styles.connectionInfoContainer}>
+                    <Text style={styles.connectionInfoText}>
+                        <MaterialIcons name="network-wifi" size={24} color="white" /> Nom du réseau (SSID) : {connectionInfo.details.ssid}
+                    </Text>
+                    <Text style={styles.connectionInfoText}>
+                        <MaterialIcons name="network-check" size={24} color="white" /> Type de connexion : {connectionInfo.type}
+                    </Text>
+                    {connectionInfo.type === 'wifi' && (
+                        <Text style={styles.connectionInfoText}>
+                            <MaterialIcons name="wifi-tethering" size={24} color={connectionInfo.isConnected ? 'green' : 'red'} /> Connecté : {connectionInfo.isConnected ? 'Oui' : 'Non'}
+                        </Text>
+                    )}
+                </View>
+            )}
+        </SafeAreaView>
+    );
+};
 
 const styles = StyleSheet.create({
-    container:
-    {
-        flex: 2,
+    container: {
+        flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#1F1E42',
+        backgroundColor: '#13043a',
+        paddingTop: 35,
+        paddingHorizontal: 20,
         marginTop: 35,
     },
-
     image: {
-        width: 180,
-        height: 180,
-        marginBottom: 20,
+        position: 'absolute',
+        top: 150,
+        right: -10,
+        bottom: 0,
+        left: 0,
+        width: null, // Ajout de cette ligne
+        height: null, // Ajout de cette ligne
     },
-
-    title:
-    {
-        color: '#FFFFFF',
-        fontWeight: 'bold',
-        fontSize: 20,
-        marginBottom: 15,
+    connectionInfoContainer: {
+        marginTop: -530,
+        marginBottom: 0,
+        backgroundColor: 'transparent', // Couleur de fond avec opacité
+        padding: 0,  // Réduisez le padding ici
+        borderRadius: 15,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.3,
+        shadowRadius: 2,
+        elevation: 4,
     },
-
-    textposition:
-    {
-        marginTop: 20,
-        marginBottom: 20,
-    },
-
-    textinfo:
-    {
+    connectionInfoText: {
         color: '#FFFFFF',
         textAlign: 'center',
+        fontSize: 14,
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 10,
+        lineHeight: 25,
     },
 });
+
+export default Home;

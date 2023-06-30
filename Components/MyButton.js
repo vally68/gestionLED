@@ -10,10 +10,11 @@ export default class MyButton extends React.Component
     render()
     {
         const {val} = this.props;
+        const {title} = this.props;
         return (
             <View>
                 <TouchableOpacity onPress={this.props.onPress} style={styles.button}>
-                    <Text style={styles.buttonText}>{val}</Text>
+                    <Text style={styles.buttonText}>{val}{title}</Text>
                 </TouchableOpacity>
             </View>
         )

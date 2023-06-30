@@ -40,8 +40,9 @@ function Dashboard({ dispatch, isLoggedIn }) {
         <Text style={styles.texttitle}>
           TABLEAU DE BORD
         </Text>
-        <Text style={styles.textdashboards}>
-          Statut de l'installation (en cours, terminé, arrêté)
+          <Text style={styles.textdashboards}>
+          Statut :
+
         </Text>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
           <Text style={styles.textdashboards}>
@@ -60,31 +61,42 @@ function Dashboard({ dispatch, isLoggedIn }) {
         <Text style={styles.textdashboards}>
           {isInstallationOn ? 'Démarrer' : 'Arrêter'}
         </Text>
+
         <View style={styles.colormode}>
+
           <Text style={styles.textcolormode}>
             Mode de couleur
           </Text>
+
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+
             <Text style={styles.textdashboards}>
               Température
             </Text>
+
             <Switch
               trackColor={{ false: '#767577', true: '#FFFFFF' }}
               thumbColor={isEnabledColor ? '#28B463' : '#EAFAF1'}
               onValueChange={() => setIsEnabledColor(!isEnabledColor)}
               value={isEnabledColor}
             />
+
             <Text style={styles.textdashboards}>
               Couleur
             </Text>
+
           </View>
         </View>
+
         {isEnabledColor && (
           <View style={styles.colorSelectionContainer}>
+
             <Text style={styles.textcolormode}>
               Sélection de couleur
             </Text>
+
             <View style={styles.colorButtonsContainer}>
+
               <View style={styles.colorButton}>
                 <Button
                   title=""
@@ -92,6 +104,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
                   color="#000080"
                 />
               </View>
+
               <View style={styles.colorButton}>
                 <Button
                   title=""
@@ -99,6 +112,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
                   color="#0000FF"
                 />
               </View>
+
               <View style={styles.colorButton}>
                 <Button
                   title=""
@@ -106,6 +120,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
                   color="#00FFFF"
                 />
               </View>
+
               <View style={styles.colorButton}>
                 <Button
                   title=""
@@ -113,6 +128,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
                   color="#008080"
                 />
               </View>
+
               <View style={styles.colorButton}>
                 <Button
                   title=""
@@ -120,6 +136,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
                   color="#008000"
                 />
               </View>
+
               <View style={styles.colorButton}>
                 <Button
                   title=""
@@ -127,6 +144,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
                   color="#00FF7F"
                 />
               </View>
+
               <View style={styles.colorButton}>
                 <Button
                   title=""
@@ -134,6 +152,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
                   color="#32CD32"
                 />
               </View>
+
               <View style={styles.colorButton}>
                 <Button
                   title=""
@@ -141,6 +160,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
                   color="#00FF00"
                 />
               </View>
+
               <View style={styles.colorButton}>
                 <Button
                   title=""
@@ -148,6 +168,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
                   color="#800080"
                 />
               </View>
+
               <View style={styles.colorButton}>
                 <Button
                   title=""
@@ -155,6 +176,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
                   color="#FF00FF"
                 />
               </View>
+
               <View style={styles.colorButton}>
                 <Button
                   title=""
@@ -162,6 +184,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
                   color="#FF1493"
                 />
               </View>
+
               <View style={styles.colorButton}>
                 <Button
                   title=""
@@ -169,6 +192,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
                   color="#FF69B4"
                 />
               </View>
+
               <View style={styles.colorButton}>
                 <Button
                   title=""
@@ -176,6 +200,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
                   color="#FF0000"
                 />
               </View>
+
               <View style={styles.colorButton}>
                 <Button
                   title=""
@@ -183,6 +208,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
                   color="#FF6347"
                 />
               </View>
+
               <View style={styles.colorButton}>
                 <Button
                   title=""
@@ -190,6 +216,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
                   color="#FFA500"
                 />
               </View>
+
               <View style={styles.colorButton}>
                 <Button
                   title=""
@@ -197,6 +224,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
                   color="#FFFF00"
                 />
               </View>
+
             </View>
             <View style={[styles.selectedColorIndicator, { backgroundColor: selectedColor }]} />
             <View style={styles.colorButton}>
@@ -207,31 +235,49 @@ function Dashboard({ dispatch, isLoggedIn }) {
             </View>
           </View>
         )}
+
+
         <View style={styles.declanchluminosity}>
+
           <Text style={styles.textdeclanchlum}>
             Gestion du seuil de déclenchement de la luminosité
           </Text>
+
           <MySlider ref={sliderRef} />
+
         </View>
+
+
         <View style={styles.detectgestion}>
+
           <Text style={styles.textdetectgestion}>
             Gestion de détection
           </Text>
+
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+
             <Text style={styles.textdashboards}>
               OFF
             </Text>
+
             <Switch
-              trackColor={{ false: '#767577', true: '#81b0ff' }}
+              trackColor={{ false: '#767577', true: '#FFFFFF' }}
               thumbColor={isEnabledDetection ? '#28B463' : '#EAFAF1'}
               onValueChange={() => setIsEnabledDetection(!isEnabledDetection)}
               value={isEnabledDetection}
             />
+
             <Text style={styles.textdashboards}>
               ON
             </Text>
+
           </View>
         </View>
+
+        <MyButton
+          val="Réinitialiser tout"
+          onPress={handleResetAll}
+        />
 
         <MyButton
           val="Déconnexion"
@@ -244,10 +290,6 @@ function Dashboard({ dispatch, isLoggedIn }) {
           />
         )}
 
-        <MyButton
-          val="Réinitialiser tout"
-          onPress={handleResetAll}
-        />
 
       </ScrollView>
     </SafeAreaView>
