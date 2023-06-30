@@ -121,20 +121,42 @@ class Config extends React.Component {
     }));
   };
 
+  toggleSelectedPlage(item) {
+    if (item === this.state.selectedPlage) {
+      this.setState({ selectedPlage: null });
+    } else {
+      this.setState({ selectedPlage: item });
+    }
+  }
+
+
   renderPlage = ({ item }) => (
-    <View style={[styles.plageContainer, item === this.state.selectedPlage && styles.selectedPlage]}>
-      <TouchableOpacity
-        onPress={() => this.setState({ selectedPlage: item })}
-        style={[styles.button, item === this.state.selectedPlage && styles.selectedButton]}
-      >
-        <Text style={styles.buttonText}>{`${item.day} ${this.formatTime(item.startTime)} - ${this.formatTime(item.endTime)}`}</Text>
-      </TouchableOpacity>
+    <View
+  style={[
+    styles.plageContainer,
+    item === this.state.selectedPlage ? styles.selectedPlage : null,
+  ]}
+>
+  <TouchableOpacity
+    onPress={() => this.toggleSelectedPlage(item)}
+    style={[
+      styles.button,
+      item === this.state.selectedPlage ? styles.selectedButton : null,
+    ]}
+  >
+    <Text style={styles.buttonText}>{`${item.day} ${this.formatTime(
+      item.startTime
+    )} - ${this.formatTime(item.endTime)}`}</Text>
+  </TouchableOpacity>
       <TouchableOpacity
         onPress={() => this.toggleFavorite(item)}
-        style={styles.button}
-      >
-        <Text style={[styles.buttonText, item.isFavorite && styles.favoriteButtonText]}>
-          {item.isFavorite ? "Retirer" : "favoris"}
+        style={[
+            styles.button,
+            { backgroundColor: item.isFavorite ? 'purple' : '#615197' },
+          ]}
+        >
+        <Text style={styles.buttonText}>
+          {item.isFavorite ? 'Retirer' : 'Favoris'}
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
@@ -342,8 +364,8 @@ const styles = StyleSheet.create({
   dayOfWeekButton: {
     backgroundColor: '#FFFFFF',
     borderRadius: 100,
-    paddingVertical: 10,
-    paddingHorizontal: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 9,
     marginRight: 5,
     marginLeft: 5,
     alignItems: 'center',
@@ -357,12 +379,20 @@ const styles = StyleSheet.create({
   timePickerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop:5,
+    paddingBottom: 5,
     marginBottom: 10,
+    borderRadius: 50,
+    backgroundColor:'#FFFFFF',
+
   },
 
   label: {
     marginRight: 10,
-    color: 'white',
+    color: '#615197',
+    textAlign: 'center'
   },
 
   flatlist: {
