@@ -26,7 +26,7 @@ export default function Connexion({ navigation }) {
             setEmailError(emailError);
             setPasswordError(passwordError);
         } else {
-            const response = await fetch('https://cramoisy-nature.000webhostapp.com/getusers.php', {
+            const response = await fetch('http://10.31.201.113/api/recup.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
