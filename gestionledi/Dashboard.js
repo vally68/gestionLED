@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef } from 'react';
 import { Text, Button, SafeAreaView, StyleSheet, View, Switch, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { AuthContext } from './AuthContext';
@@ -7,13 +7,15 @@ import MySlider from '../Components/MySlider';
 import MyButton from "../Components/MyButton";
 
 function Dashboard({ dispatch, isLoggedIn }) {
-  const { setIsLoggedIn } = useContext(AuthContext);
+  const { setIsLoggedin } = useContext(AuthContext);
   const [isEnabledColor, setIsEnabledColor] = useState(false);
+  const [isInstallationOn, setIsInstallationOn] = useState(false);
   const [isEnabledDetection, setIsEnabledDetection] = useState(false);
   const [selectedColor, setSelectedColor] = useState('#FFFFFF');
+  const sliderRef = useRef();
 
   const handleLogout = () => {
-    setIsLoggedIn(false);
+    setIsLoggedin(false);
     dispatch(logoutSuccess(false));
   };
 
@@ -29,6 +31,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
     setIsEnabledColor(false);
     setIsEnabledDetection(false);
     setSelectedColor('#FFFFFF');
+    sliderRef.current.resetSliderValue();
   };
 
   return (
@@ -37,34 +40,63 @@ function Dashboard({ dispatch, isLoggedIn }) {
         <Text style={styles.texttitle}>
           TABLEAU DE BORD
         </Text>
-        <Text style={styles.textdashboards}>
-          Statut de l'installation (en cours, terminé, arrêté)
+          <Text style={styles.textdashboards}>
+          Statut :
+
         </Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+          <Text style={styles.textdashboards}>
+            OFF
+          </Text>
+          <Switch
+            trackColor={{ false: '#767577', true: '#FFFFFF' }}
+            thumbColor={isInstallationOn ? '#28B463' : '#EAFAF1'}
+            onValueChange={() => setIsInstallationOn(!isInstallationOn)}
+            value={isInstallationOn}
+          />
+          <Text style={styles.textdashboards}>
+            ON
+          </Text>
+        </View>
+        <Text style={styles.textdashboards}>
+          {isInstallationOn ? 'Démarrer' : 'Arrêter'}
+        </Text>
+
         <View style={styles.colormode}>
+
           <Text style={styles.textcolormode}>
             Mode de couleur
           </Text>
+
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+
             <Text style={styles.textdashboards}>
               Température
             </Text>
+
             <Switch
               trackColor={{ false: '#767577', true: '#FFFFFF' }}
               thumbColor={isEnabledColor ? '#28B463' : '#EAFAF1'}
               onValueChange={() => setIsEnabledColor(!isEnabledColor)}
               value={isEnabledColor}
             />
+
             <Text style={styles.textdashboards}>
               Couleur
             </Text>
+
           </View>
         </View>
+
         {isEnabledColor && (
           <View style={styles.colorSelectionContainer}>
+
             <Text style={styles.textcolormode}>
               Sélection de couleur
             </Text>
+
             <View style={styles.colorButtonsContainer}>
+
               <View style={styles.colorButton}>
                 <Button
                   title=""
@@ -72,6 +104,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
                   color="#000080"
                 />
               </View>
+
               <View style={styles.colorButton}>
                 <Button
                   title=""
@@ -79,6 +112,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
                   color="#0000FF"
                 />
               </View>
+
               <View style={styles.colorButton}>
                 <Button
                   title=""
@@ -86,6 +120,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
                   color="#00FFFF"
                 />
               </View>
+
               <View style={styles.colorButton}>
                 <Button
                   title=""
@@ -93,6 +128,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
                   color="#008080"
                 />
               </View>
+
               <View style={styles.colorButton}>
                 <Button
                   title=""
@@ -100,6 +136,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
                   color="#008000"
                 />
               </View>
+
               <View style={styles.colorButton}>
                 <Button
                   title=""
@@ -107,13 +144,14 @@ function Dashboard({ dispatch, isLoggedIn }) {
                   color="#00FF7F"
                 />
               </View>
+
               <View style={styles.colorButton}>
                 <Button
                   title=""
                   onPress={() => handleColorButtonPress('#32CD32')}
                   color="#32CD32"
                 />
-            </View>
+              </View>
 
               <View style={styles.colorButton}>
                 <Button
@@ -122,6 +160,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
                   color="#00FF00"
                 />
               </View>
+
               <View style={styles.colorButton}>
                 <Button
                   title=""
@@ -129,6 +168,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
                   color="#800080"
                 />
               </View>
+
               <View style={styles.colorButton}>
                 <Button
                   title=""
@@ -136,6 +176,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
                   color="#FF00FF"
                 />
               </View>
+
               <View style={styles.colorButton}>
                 <Button
                   title=""
@@ -143,6 +184,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
                   color="#FF1493"
                 />
               </View>
+
               <View style={styles.colorButton}>
                 <Button
                   title=""
@@ -150,6 +192,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
                   color="#FF69B4"
                 />
               </View>
+
               <View style={styles.colorButton}>
                 <Button
                   title=""
@@ -157,6 +200,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
                   color="#FF0000"
                 />
               </View>
+
               <View style={styles.colorButton}>
                 <Button
                   title=""
@@ -164,6 +208,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
                   color="#FF6347"
                 />
               </View>
+
               <View style={styles.colorButton}>
                 <Button
                   title=""
@@ -171,6 +216,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
                   color="#FFA500"
                 />
               </View>
+
               <View style={styles.colorButton}>
                 <Button
                   title=""
@@ -178,6 +224,7 @@ function Dashboard({ dispatch, isLoggedIn }) {
                   color="#FFFF00"
                 />
               </View>
+
             </View>
             <View style={[styles.selectedColorIndicator, { backgroundColor: selectedColor }]} />
             <View style={styles.colorButton}>
@@ -188,43 +235,61 @@ function Dashboard({ dispatch, isLoggedIn }) {
             </View>
           </View>
         )}
+
+
         <View style={styles.declanchluminosity}>
+
           <Text style={styles.textdeclanchlum}>
             Gestion du seuil de déclenchement de la luminosité
           </Text>
-          <MySlider />
+
+          <MySlider ref={sliderRef} />
+
         </View>
+
+
         <View style={styles.detectgestion}>
+
           <Text style={styles.textdetectgestion}>
             Gestion de détection
           </Text>
+
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+
             <Text style={styles.textdashboards}>
               OFF
             </Text>
 
             <Switch
-              trackColor={{ false: '#767577', true: '#81b0ff' }}
+              trackColor={{ false: '#767577', true: '#FFFFFF' }}
               thumbColor={isEnabledDetection ? '#28B463' : '#EAFAF1'}
               onValueChange={() => setIsEnabledDetection(!isEnabledDetection)}
               value={isEnabledDetection}
             />
+
             <Text style={styles.textdashboards}>
               ON
             </Text>
+
           </View>
         </View>
 
         <MyButton
-        val="Déconnexion"
-        onPress={handleLogout} />
-        {isLoggedIn && <Button title="Déconnexion"
-        onPress={handleLogout} />}
+          val="Réinitialiser tout"
+          onPress={handleResetAll}
+        />
 
         <MyButton
-            val="Réinitialiser tout"
-            onPress={handleResetAll}
+          val="Déconnexion"
+          onPress={handleLogout}
+        />
+        {isLoggedIn && (
+          <Button
+            title="Déconnexion"
+            onPress={handleLogout}
           />
+        )}
+
 
       </ScrollView>
     </SafeAreaView>
@@ -240,7 +305,6 @@ const styles = StyleSheet.create({
     marginTop: 35,
   },
 
-
   scrollContainer: {
     flexGrow: 1,
     alignItems: 'center',
@@ -249,16 +313,14 @@ const styles = StyleSheet.create({
     paddingRight: 100,
   },
 
-
   texttitle: {
     textAlign: 'center',
-    marginTop:20,
+    marginTop: 20,
     marginBottom: 10,
     color: '#FFFFFF',
     fontWeight: 'bold',
     fontSize: 20,
   },
-
 
   textdashboards: {
     textAlign: 'center',
@@ -267,13 +329,11 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 
-
   colormode: {
     marginBottom: 30,
     marginTop: 30,
     fontSize: 15,
   },
-
 
   textcolormode: {
     textAlign: 'center',
@@ -282,12 +342,10 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
 
-
   declanchluminosity: {
     marginBottom: 30,
     marginTop: 30,
   },
-
 
   textdeclanchlum: {
     textAlign: 'center',
@@ -297,12 +355,10 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
 
-
   detectgestion: {
     marginBottom: 30,
     marginTop: 30,
   },
-
 
   textdetectgestion: {
     textAlign: 'center',
@@ -311,12 +367,10 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
 
-
   colorSelectionContainer: {
     alignItems: 'center',
     marginTop: -20,
   },
-
 
   colorButtonsContainer: {
     flexDirection: 'row',
@@ -325,12 +379,10 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
 
-
   colorButton: {
     width: '20%',
     margin: 4,
   },
-
 
   selectedColorIndicator: {
     width: 60,

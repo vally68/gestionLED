@@ -13,12 +13,14 @@ import Dashboard from './gestionledi/Dashboard';
 import Event from './gestionledi/Event';
 import Config from './gestionledi/Config';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import firebase from '@react-native-firebase/app';
+import { AuthContext } from './gestionledi/AuthContext';
+import registerNNPushToken from 'native-notify';
 
 
 const AuthTab = createBottomTabNavigator();
 const AppTab = createBottomTabNavigator();
 
-import { AuthContext } from './gestionledi/AuthContext';
 
 
 

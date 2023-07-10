@@ -10,10 +10,11 @@ export default class MyButton extends React.Component
     render()
     {
         const {val} = this.props;
+        const {title} = this.props;
         return (
             <View>
                 <TouchableOpacity onPress={this.props.onPress} style={styles.button}>
-                    <Text style={styles.buttonText}>{val}</Text>
+                    <Text style={styles.buttonText}>{val}{title}</Text>
                 </TouchableOpacity>
             </View>
         )
@@ -25,7 +26,7 @@ const styles = StyleSheet.create({
 button: {
     backgroundColor: '#FFFFFF',
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 20,
     alignItems: 'center',
     marginBottom:10,
     width:150,
