@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef } from 'react';
+import React, {useState, useContext, useRef, useEffect} from 'react';
 import { Text, Button, SafeAreaView, StyleSheet, View, Switch, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { AuthContext } from './AuthContext';
@@ -13,6 +13,8 @@ function Dashboard({ dispatch, isLoggedIn }) {
   const [isEnabledDetection, setIsEnabledDetection] = useState(false);
   const [selectedColor, setSelectedColor] = useState('#FFFFFF');
   const sliderRef = useRef();
+  const [ledColor, setLedColor] = useState('#FFFFFF');
+  const [temp, setTemp] = useState('15');
 
   const handleLogout = () => {
     setIsLoggedin(false);
@@ -32,7 +34,44 @@ function Dashboard({ dispatch, isLoggedIn }) {
     setIsEnabledDetection(false);
     setSelectedColor('#FFFFFF');
     sliderRef.current.resetSliderValue();
+    setLedColor('#FFFFFF');
+    setTemp('15')
   };
+
+  useEffect(() => {
+    const fetchLedColorAndTemp = async () => {
+      try {
+        const response = await fetch('http://10.31.201.113/api/recupinfo.php');
+        const data = await response.json();
+
+        if (data.success) {
+          // Traiter les données de couleur
+          const colorData = data.dataColor[0];
+          const rgbColor = `rgb(${colorData.red},${colorData.green},${colorData.blue})`;
+          setLedColor(rgbColor);
+
+          // Traiter les données de température
+          const tempData = data.dataTemp[0];
+          setTemp(tempData.TemperatureValue);
+        } else {
+          // Gérer les erreurs si nécessaire
+        }
+      } catch (error) {
+        // Gérer les erreurs si nécessaire
+      }
+    };
+
+    // Appeler fetchLedColorAndTemp immédiatement
+    fetchLedColorAndTemp();
+
+    // Puis l'appeler toutes les 5 secondes
+    const intervalId = setInterval(fetchLedColorAndTemp, 5000);
+
+    // Clear l'intervalle quand le composant est démonté
+    return () => clearInterval(intervalId);
+  }, []); // <-- les crochets vides indiquent que cela ne dépend d'aucune variable et ne s'exécute qu'au montage et au démontage
+
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -43,6 +82,14 @@ function Dashboard({ dispatch, isLoggedIn }) {
           <Text style={styles.textdashboards}>
           Statut :
 
+        </Text>
+        <Text style={styles.textdashboards}>
+          couleur actuelle des leds:
+          <View style={{...styles.selectedColorIndicator, backgroundColor: ledColor}} />
+        </Text>
+        <Text style={styles.textdashboards}>
+          Température couloir:
+          <Text>{temp}°C</Text>
         </Text>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
           <Text style={styles.textdashboards}>
