@@ -97,133 +97,119 @@ function Dashboard({ dispatch, isLoggedIn }) {
 
             <View style={styles.colorButtonsContainer}>
 
-              <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#000080')}
-                  color="#000080"
-                />
+<View style={styles.colorButton}>
+                <Button title= "" color="#000080" onPress={() => handleColorButtonPress('#000080')} />
               </View>
 
               <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#0000FF')}
-                  color="#0000FF"
-                />
+                <Button title= "" color="#0000FF" onPress={() => handleColorButtonPress('#0000FF')} />
               </View>
 
               <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#00FFFF')}
-                  color="#00FFFF"
-                />
+                <Button title= "" color="#4169E1" onPress={() => handleColorButtonPress('#4169E1')} />
               </View>
 
               <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#008080')}
-                  color="#008080"
-                />
+                <Button title= "" color="#6495ED" onPress={() => handleColorButtonPress('#6495ED')} />
               </View>
 
               <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#008000')}
-                  color="#008000"
-                />
+                <Button title= "" color="#008000" onPress={() => handleColorButtonPress('#008000')} />
               </View>
 
               <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#00FF7F')}
-                  color="#00FF7F"
-                />
+                <Button title= "" color="#00FF00" onPress={() => handleColorButtonPress('#00FF00')} />
               </View>
 
               <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#32CD32')}
-                  color="#32CD32"
-                />
+                <Button title= "" color="#7CFC00" onPress={() => handleColorButtonPress('#7CFC00')} />
               </View>
 
               <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#00FF00')}
-                  color="#00FF00"
-                />
+                <Button title= "" color="#ADFF2F" onPress={() => handleColorButtonPress('#ADFF2F')} />
               </View>
 
               <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#800080')}
-                  color="#800080"
-                />
+                <Button title= "" color="#800080" onPress={() => handleColorButtonPress('#800080')} />
               </View>
 
               <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#FF00FF')}
-                  color="#FF00FF"
-                />
+                <Button title= "" color="#8A2BE2" onPress={() => handleColorButtonPress('#8A2BE2')} />
               </View>
 
               <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#FF1493')}
-                  color="#FF1493"
-                />
+                <Button title= "" color="#DA70D6" onPress={() => handleColorButtonPress('#DA70D6')} />
               </View>
 
               <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#FF69B4')}
-                  color="#FF69B4"
-                />
+                <Button title= "" color="#D8BFD8" onPress={() => handleColorButtonPress('#D8BFD8')} />
               </View>
 
               <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#FF0000')}
-                  color="#FF0000"
-                />
+                <Button title= "" color="#FF1493" onPress={() => handleColorButtonPress('#FF1493')} />
               </View>
 
               <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#FF6347')}
-                  color="#FF6347"
-                />
+                <Button title= "" color="#FF69B4" onPress={() => handleColorButtonPress('#FF69B4')} />
               </View>
 
               <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#FFA500')}
-                  color="#FFA500"
-                />
+                <Button title= "" color="#FFA07A" onPress={() => handleColorButtonPress('#FFA07A')} />
               </View>
 
               <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#FFFF00')}
-                  color="#FFFF00"
-                />
+                <Button title= "" color="#FFC0CB" onPress={() => handleColorButtonPress('#FFC0CB')} />
               </View>
+
+              <View style={styles.colorButton}>
+                <Button title= "" color="#DC143C" onPress={() => handleColorButtonPress('#DC143C')} />
+              </View>
+
+              <View style={styles.colorButton}>
+                <Button title= "" color="#FF0000" onPress={() => handleColorButtonPress('#FF0000')} />
+              </View>
+
+              <View style={styles.colorButton}>
+                <Button title= "" color="#FF4500" onPress={() => handleColorButtonPress('#FF4500')} />
+              </View>
+
+              <View style={styles.colorButton}>
+                <Button title= "" color="#FF6347" onPress={() => handleColorButtonPress('#FF6347')} />
+              </View>
+
+              <View style={styles.colorButton}>
+                <Button title= "" color="#FF7F50" onPress={() => handleColorButtonPress('#FF7F50')} />
+              </View>
+
+              <View style={styles.colorButton}>
+                <Button title= "" color="#FF8C00" onPress={() => handleColorButtonPress('#FF8C00')} />
+              </View>
+
+              <View style={styles.colorButton}>
+                <Button title= "" color="#FFA500" onPress={() => handleColorButtonPress('#FFA500')} />
+              </View>
+
+              <View style={styles.colorButton}>
+                <Button title= "" color="#FFD700" onPress={() => handleColorButtonPress('#FFD700')} />
+              </View>
+
+              <View style={styles.colorButton}>
+                <Button title= "" color="#FFFF00" onPress={() => handleColorButtonPress('#FFFF00')} />
+              </View>
+
+              <View style={styles.colorButton}>
+                <Button title= "" color="#FFEF00" onPress={() => handleColorButtonPress('#FFEF00')} />
+              </View>
+
+              <View style={styles.colorButton}>
+                <Button title= "" color="#F0E68C" onPress={() => handleColorButtonPress('#F0E68C')} />
+              </View>
+
+              <View style={styles.colorButton}>
+                <Button title= "" color="#FFFFFF" onPress={() => handleColorButtonPress('#FFFFFF')} />
+              </View>
+
+
 
             </View>
             <View style={[styles.selectedColorIndicator, { backgroundColor: selectedColor }]} />
