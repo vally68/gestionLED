@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Alert, Button, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from "react-native";
+import { Alert, Button, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, Image, ScrollView } from "react-native";
 import { validateForm, validateLoginForm } from "./fonction/outils";
 import { LOGIN_SUCCESS } from '../store/reducer/UserReducer';
 import { useDispatch } from 'react-redux';
@@ -20,15 +20,13 @@ export default function Connexion({ navigation }) {
 
     const { setIsLoggedin } = useContext(AuthContext);
 
-
     const handleSubmit = async () => {
-
         const { emailError, passwordError } = validateLoginForm(email, password);
         if (emailError || passwordError) {
             setEmailError(emailError);
             setPasswordError(passwordError);
         } else {
-            const response = await fetch('https://cramoisy-nature.000webhostapp.com/getusers.php', {
+            const response = await fetch('http://10.31.201.113/api/recup.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -52,109 +50,119 @@ export default function Connexion({ navigation }) {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Image
-                source={require('../assets/logo.png')}
-                style={styles.image}
-            />
-            <Text style={styles.texttitle}>Page Connexion</Text>
-            <TextInput
-                placeholder="Email"
-                returnKeyType="next"
-                value={email}
-                onChangeText={setEmail}
-                style={styles.textinfo}
-                autoCompleteType="email"
-                onBlur={() => {
-                    const { emailError } = validateLoginForm(email, '');
-                    setEmailError(emailError);
-                }}
-            />
-            <Text style={styles.errorText}>{emailError}</Text>
-            <TextInput
-                placeholder="Password"
-                returnKeyType="done"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-                style={styles.textinfo}
-                autoCompleteType="password"
-                onBlur={() => {
-                    const { passwordError } = validateLoginForm('', password);
-                    setPasswordError(passwordError);
-                }}
-            />
-            <Text style={styles.errorText}>{passwordError}</Text>
-            <MyButton
-                onPress={handleSubmit}
-                val="Connexion"
-            />
-            <View style={styles.row}>
-                <TouchableOpacity
-                    onPress={() =>
-                        navigation.navigate("Dashboard", {
-                            name: nom,
-                        })
-                    }
-                ></TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => navigation.navigate("Inscription")}
-                >
-                    <Text style={styles.link}>Mot de passe oublié?</Text>
-                </TouchableOpacity>
-            </View>
+            <ScrollView contentContainerStyle={styles.scrollContainer}>
+                <Image
+                    source={require('../assets/logo.png')}
+                    style={styles.image}
+                />
+
+                <Text style={styles.texttitle}>CONNEXION</Text>
+
+                <TextInput
+                    placeholder="Email"
+                    placeholderTextColor="#FFFFFF"
+                    returnKeyType="next"
+                    value={email}
+                    onChangeText={setEmail}
+                    style={styles.textinfo}
+                    autoCompleteType="email"
+                    onBlur={() => {
+                        const { emailError } = validateLoginForm(email, '');
+                        setEmailError(emailError);
+                    }}
+                />
+                <Text style={styles.errorText}>{emailError}</Text>
+
+                <TextInput
+                    placeholder="Password"
+                    placeholderTextColor="#FFFFFF"
+                    returnKeyType="done"
+                    value={password}
+                    onChangeText={setPassword}
+                    secureTextEntry
+                    style={styles.textinfo}
+                    autoCompleteType="password"
+                    onBlur={() => {
+                        const { passwordError } = validateLoginForm('', password);
+                        setPasswordError(passwordError);
+                    }}
+                />
+                <Text style={styles.errorText}>{passwordError}</Text>
+
+                <MyButton
+                    onPress={handleSubmit}
+                    val="Connexion"
+                />
+                <View style={styles.row}>
+                    <TouchableOpacity
+                        onPress={() =>
+                            navigation.navigate("Dashboard", {
+                                name: nom,
+                            })
+                        }
+                    ></TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate("Inscription")}
+                    >
+                        <Text style={styles.link}>Mot de passe oublié?</Text>
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
         </SafeAreaView>
     );
 }
 
 
 const styles = StyleSheet.create({
-    header: {
-        fontSize: 25,
-        color: "#337899",
-        fontWeight: "bold",
-        paddingVertical: 15,
-        textAlign: "center",
-    },
-    tinyLogo: {
-        width: 100,
-        height: 150,
-        position: "absolute",
-        margin: 155,
-    },
-    errorText: {
-        color: "red",
-        marginHorizontal: 10,
-    },
     container:
         {
             flex: 1,
             alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: '#1F1E42',
+            marginTop: 35,
         },
+
+    scrollContainer: {
+        flexGrow: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingLeft: 80,
+        paddingRight: 100,
+    },
+
+    errorText: {
+        color: "red",
+        marginHorizontal: 10,
+    },
+
+    image: {
+        width: 180,
+        height: 180,
+        marginBottom: 30,
+    },
 
     texttitle:
         {
             color: '#FFFFFF',
             fontWeight: 'bold',
             fontSize: 20,
-            marginBottom: 10,
+            marginBottom: 30,
         },
 
     textinfo:
         {
             height: 40,
             width: 200,
-            margin: 12,
             borderWidth: 1,
             borderColor: '#FFFFFF',
             color: '#FFFFFF',
             padding: 10,
         },
-    image: {
-        width: 200,
-        height: 200,
-        marginBottom: 20,
-    },
+
+    link:
+    {
+        color: '#FFFFFF',
+    }
 
 });
