@@ -1,39 +1,38 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Alert, Button, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, Image, ScrollView } from "react-native";
-import { validateForm, validateLoginForm } from "../fonction/outils";
-import { LOGIN_SUCCESS } from '../reducer/UserReducer';
-import { useDispatch } from 'react-redux';
-import MyButton from "../Components/MyButton";
+import React, { Component } from 'react';
+import { Alert, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, Image, ScrollView } from "react-native";
+import { validateLoginForm } from "../fonction/outils";
 import { AuthContext } from '../fonction/AuthContext';
+import MyButton from "../Components/MyButton";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+class Connexion extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            email: "",
+            password: "",
+            emailError: "",
+            passwordError: "",
+        };
+    }
 
-export default function Connexion({ navigation }) {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [emailError, setEmailError] = useState("");
-    const [passwordError, setPasswordError] = useState("");
-    const [nom, setNom] = useState("");
-    const [name, setName] = useState("");
-    const [current_user, setCurrentUser] = useState("");
-
-    const dispatch = useDispatch();
-
-    const { setIsLoggedin } = useContext(AuthContext);
-
-    const handleSubmit = async () => {
+    handleSubmit = async () => {
+        const { email, password } = this.state;
         const { emailError, passwordError } = validateLoginForm(email, password);
+
         if (emailError || passwordError) {
-            setEmailError(emailError);
-            setPasswordError(passwordError);
+            this.setState({
+                emailError: emailError,
+                passwordError: passwordError,
+            });
         } else {
             const response = await fetch('https://cramoisy-nature.000webhostapp.com/getusers.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({email, password}),
+                body: JSON.stringify({ email, password }),
             });
 
             const data = await response.json();
@@ -42,79 +41,81 @@ export default function Connexion({ navigation }) {
 
             if (response.ok && data.token) {
                 await AsyncStorage.setItem('userToken', data.token);
-                setIsLoggedin(true);
+                this.context.setIsLoggedin(true);
             } else {
                 Alert.alert('Erreur', data.message);
             }
         }
     };
 
+    render() {
+        return (
+            <SafeAreaView style={styles.container}>
+                <ScrollView contentContainerStyle={styles.scrollContainer}>
+                    <Image
+                        source={require('../assets/logo.png')}
+                        style={styles.image}
+                    />
 
-    return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView contentContainerStyle={styles.scrollContainer}>
-                <Image
-                    source={require('../assets/logo.png')}
-                    style={styles.image}
-                />
+                    <Text style={styles.texttitle}>CONNEXION</Text>
 
-                <Text style={styles.texttitle}>CONNEXION</Text>
+                    <TextInput
+                        placeholder="Email"
+                        placeholderTextColor="#FFFFFF"
+                        returnKeyType="next"
+                        value={this.state.email}
+                        onChangeText={(email) => this.setState({ email })}
+                        style={styles.textinfo}
+                        autoCompleteType="email"
+                        onBlur={() => {
+                            const { emailError } = validateLoginForm(this.state.email, '');
+                            this.setState({ emailError });
+                        }}
+                    />
+                    <Text style={styles.errorText}>{this.state.emailError}</Text>
 
-                <TextInput
-                    placeholder="Email"
-                    placeholderTextColor="#FFFFFF"
-                    returnKeyType="next"
-                    value={email}
-                    onChangeText={setEmail}
-                    style={styles.textinfo}
-                    autoCompleteType="email"
-                    onBlur={() => {
-                        const { emailError } = validateLoginForm(email, '');
-                        setEmailError(emailError);
-                    }}
-                />
-                <Text style={styles.errorText}>{emailError}</Text>
+                    <TextInput
+                        placeholder="Password"
+                        placeholderTextColor="#FFFFFF"
+                        returnKeyType="done"
+                        value={this.state.password}
+                        onChangeText={(password) => this.setState({ password })}
+                        secureTextEntry
+                        style={styles.textinfo}
+                        autoCompleteType="password"
+                        onBlur={() => {
+                            const { passwordError } = validateLoginForm('', this.state.password);
+                            this.setState({ passwordError });
+                        }}
+                    />
+                    <Text style={styles.errorText}>{this.state.passwordError}</Text>
 
-                <TextInput
-                    placeholder="Password"
-                    placeholderTextColor="#FFFFFF"
-                    returnKeyType="done"
-                    value={password}
-                    onChangeText={setPassword}
-                    secureTextEntry
-                    style={styles.textinfo}
-                    autoCompleteType="password"
-                    onBlur={() => {
-                        const { passwordError } = validateLoginForm('', password);
-                        setPasswordError(passwordError);
-                    }}
-                />
-                <Text style={styles.errorText}>{passwordError}</Text>
-
-                <MyButton
-                  onPress={handleSubmit}
-                  val="Connexion"
-                  icon={<Icon name="log-in-outline" size={20} color="black" />}
-                />
-                <View style={styles.row}>
-                    <TouchableOpacity
-                        onPress={() =>
-                            navigation.navigate("Dashboard", {
-                                name: nom,
-                            })
-                        }
-                    ></TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate("Inscription")}
-                    >
-                        <Text style={styles.link}>Mot de passe oublié?</Text>
-                    </TouchableOpacity>
-                </View>
-            </ScrollView>
-        </SafeAreaView>
-    );
+                    <MyButton
+                        onPress={this.handleSubmit}
+                        val="Connexion"
+                        icon={<Icon name="log-in-outline" size={20} color="black" />}
+                    />
+                    <View style={styles.row}>
+                        <TouchableOpacity
+                            onPress={() =>
+                                this.props.navigation.navigate("Dashboard", {
+                                    name: this.state.nom,
+                                })
+                            }
+                        ></TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => this.props.navigation.navigate("Inscription")}
+                        >
+                            <Text style={styles.link}>Mot de passe oublié?</Text>
+                        </TouchableOpacity>
+                    </View>
+                </ScrollView>
+            </SafeAreaView>
+        );
+    }
 }
 
+Connexion.contextType = AuthContext;
 
 const styles = StyleSheet.create({
     container:
@@ -167,3 +168,6 @@ const styles = StyleSheet.create({
     }
 
 });
+
+export default Connexion;
+

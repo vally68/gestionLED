@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react';
-import { Text, Button, SafeAreaView, StyleSheet, View, Switch, ScrollView, Dimensions } from 'react-native';
+import React, { Component } from 'react';
+import { Text, SafeAreaView, StyleSheet, View, Switch, ScrollView, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import { AuthContext } from '../fonction/AuthContext';
 import { logoutSuccess } from '../reducer/UserReducer';
@@ -7,41 +7,51 @@ import MySlider from '../Components/MySlider';
 import MyButton from "../Components/MyButton";
 import Icon from 'react-native-vector-icons/Ionicons';
 
-  const { width } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
-function Dashboard({ dispatch, isLoggedIn }) {
-  const { setIsLoggedin } = useContext(AuthContext);
-  const [isEnabledColor, setIsEnabledColor] = useState(false);
-  const [isEnabledDetection, setIsEnabledDetection] = useState(false);
-  const [isInstallationOn, setIsInstallationOn] = useState(false);
-  const [selectedColor, setSelectedColor] = useState('#FFFFFF');
-  const [peopleCount, setPeopleCount] = useState('1');
+class Dashboard extends Component {
+  static contextType = AuthContext;
 
-  const handleLogout = () => {
-    setIsLoggedin(false); 
-    dispatch(logoutSuccess(false));
+  constructor(props) {
+    super(props);
+    this.state = {
+      isEnabledColor: false,
+      isEnabledDetection: false,
+      isInstallationOn: false,
+      selectedColor: '#FFFFFF',
+      peopleCount: '1',
+    };
+  }
+
+  handleLogout = () => {
+    this.context.setIsLoggedin(false); 
+    this.props.dispatch(logoutSuccess(false));
   };
 
-  const handleColorButtonPress = (color) => {
-    setSelectedColor(color);
+  handleColorButtonPress = (color) => {
+    this.setState({ selectedColor: color });
   };
 
-  const handleResetColor = () => {
-    setSelectedColor('#FFFFFF');
+  handleResetColor = () => {
+    this.setState({ selectedColor: '#FFFFFF' });
   };
 
-  const handleResetAll = () => {
-    setIsEnabledColor(false);
-    setIsEnabledDetection(false);
-    setIsInstallationOn(false);
-    setSelectedColor('#FFFFFF');
+  handleResetAll = () => {
+    this.setState({
+      isEnabledColor: false,
+      isEnabledDetection: false,
+      isInstallationOn: false,
+      selectedColor: '#FFFFFF',
+    });
   };
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        
-        <Text style={styles.textdashboards}>
+  render() {
+    const { isEnabledColor, isEnabledDetection, isInstallationOn, selectedColor, peopleCount } = this.state;
+
+    return (
+      <SafeAreaView style={styles.container}>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+         <Text style={styles.textdashboards}>
         Installation
         </Text>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
@@ -250,27 +260,27 @@ function Dashboard({ dispatch, isLoggedIn }) {
             </View>
           )}
         </View>
-       <View style={styles.resetallButton}>
-        <MyButton
-          val="Réinitialiser"
-          onPress={handleResetAll}
-          icon={<Icon name="refresh-outline" size={20} color="black" />}
-        />
-      </View>
-      <View style={styles.logoutButton}>
-        <MyButton
-          val="Déconnexion"
-          onPress={handleLogout}
-          icon={<Icon name="log-out-outline" size={20} color="black" />}
-        />
-      </View>
-    </ScrollView>
-    </SafeAreaView>
-  );
+        <View style={styles.resetallButton}>
+            <MyButton
+              val="Réinitialiser"
+              onPress={this.handleResetAll}
+              icon={<Icon name="refresh-outline" size={20} color="black" />}
+            />
+          </View>
+          <View style={styles.logoutButton}>
+            <MyButton
+              val="Déconnexion"
+              onPress={this.handleLogout}
+              icon={<Icon name="log-out-outline" size={20} color="black" />}
+            />
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
 }
 
-
- const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',

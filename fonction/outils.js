@@ -1,67 +1,69 @@
-export function validateForm(nom, prenom, email, password) {
-    const validateName = (name) => {
-        if (name.length <= 0) {
-            return 'Veuillez entrer un nom';
-        }
-        return '';
-    };
-
-    const validatePrenom = (prenom) => {
-        if (prenom.length <= 0) {
-            return 'Veuillez entrer un prénom';
-        }
-        return '';
-    };
-
-    const validateEmail = (email) => {
-        const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if (!re.test(email)) {
-            return 'Adresse Mail invalide.';
-        }
-        return '';
-    };
-
-    const validatePassword = (password) => {
-        if (password.length <= 0) {
-            return 'Mot de passe invalide.';
-        }
-        return '';
-    };
-
-    const nomError = validateName(nom);
-    const prenomError = validatePrenom(prenom);
-    const emailError = validateEmail(email);
-    const passwordError = validatePassword(password);
-
-    return { nomError,prenomError, emailError, passwordError };
-}
-
-export function validateLoginForm(email, password) {
-
-
-    const validateEmail = (email) => {
-        const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if (!re.test(email)) {
-            return "Adresse Mail invalide.";
-        }
-        return "";
-    };
-
-    const validatePassword = (password) => {
-        if (password.length <= 0) {
-            return "Mot de passe invalide.";
-        }
-        return "";
-    };
-
-
-
-    {
-        const emailError = validateEmail(email);
-        const passwordError = validatePassword(password);
-
-        return { emailError, passwordError };
+class UserAction {
+    constructor(type, value) {
+        this.type = type;
+        this.value = value;
     }
-
-
 }
+
+export class AddUserAction extends UserAction {
+    constructor(user) {
+        super('ADD_USER', user);
+    }
+}
+
+export class LoginSuccessAction extends UserAction {
+    constructor(isLoggedIn) {
+        super('LOGIN_SUCCESS', isLoggedIn);
+    }
+}
+
+export class LogoutSuccessAction extends UserAction {
+    constructor() {
+        super('LOGOUT_SUCCESS');
+    }
+}
+
+class UserReducerState {
+    constructor(users = [], isLoggedIn = false, ide = 0) {
+        this.users = users;
+        this.isLoggedIn = isLoggedIn;
+        this.ide = ide;
+    }
+}
+
+function UserReducer(state = new UserReducerState(), action) {
+    switch (action.type) {
+        case 'ADD_USER':
+            return new UserReducerState(
+                [...state.users, action.value],
+                state.isLoggedIn,
+                state.ide
+            );
+
+        case 'LOGIN_SUCCESS':
+            return new UserReducerState(
+                state.users,
+                action.value,
+                state.ide
+            );
+
+        case 'LOGOUT_SUCCESS':
+            return new UserReducerState(
+                state.users,
+                false,
+                state.ide
+            );
+
+        case 'ADD_ID':
+            return new UserReducerState(
+                state.users,
+                state.isLoggedIn,
+                state.ide + 1
+            );
+
+        default:
+            return state;
+    }
+}
+
+export default UserReducer;

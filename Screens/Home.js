@@ -1,65 +1,75 @@
-import React, { useEffect, useState } from 'react';
+import React, { Component } from 'react';
 import { SafeAreaView, StyleSheet, Text, View, Image } from 'react-native';
 import MyButton from '../Components/MyButton';
 import NetInfo from "@react-native-community/netinfo";
 import { MaterialIcons } from '@expo/vector-icons'; 
 import * as Location from 'expo-location';
 
-const Home = ({ navigation }) => {
-    const [connectionInfo, setConnectionInfo] = useState(null);
+class Home extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            connectionInfo: null,
+        };
+    }
 
-    const handleConnexionButton = () => {
-        navigation.navigate("Connexion");
+    handleConnexionButton = () => {
+        this.props.navigation.navigate("Connexion");
     };
 
-    const handleInscriptionButton = () => {
-        navigation.navigate("Inscription");
+    handleInscriptionButton = () => {
+        this.props.navigation.navigate("Inscription");
     };
 
-    const checkWifiStatus = async () => {
+    checkWifiStatus = async () => {
         // Request location permission
         await Location.requestForegroundPermissionsAsync();
 
         NetInfo.fetch("wifi").then(state => {
             console.log("SSID", state.details.ssid);
             console.log("Is connected?", state.isConnected);
-            setConnectionInfo(state);
+            this.setState({ connectionInfo: state });
         });
     };
 
-    useEffect(() => {
-        const intervalId = setInterval(checkWifiStatus, 10000);  // 10000 milliseconds = 10 seconds
+    componentDidMount() {
+        this.intervalId = setInterval(this.checkWifiStatus, 10000);  // 10000 milliseconds = 10 seconds
+    }
 
-        return () => {
-            clearInterval(intervalId);
-        };
-    }, []);
+    componentWillUnmount() {
+        clearInterval(this.intervalId);
+    }
 
-    return (
-        <SafeAreaView style={styles.container}>
-             <Image
-            source={require('../assets/logo.png')}
-            style={styles.image}
-            resizeMode="cover"  // Ajout de cette ligne
-        />
-            {connectionInfo && (
-                <View style={styles.connectionInfoContainer}>
-                    <Text style={styles.connectionInfoText}>
-                        <MaterialIcons name="network-wifi" size={24} color="white" /> Nom du réseau (SSID) : {connectionInfo.details.ssid}
-                    </Text>
-                    <Text style={styles.connectionInfoText}>
-                        <MaterialIcons name="network-check" size={24} color="white" /> Type de connexion : {connectionInfo.type}
-                    </Text>
-                    {connectionInfo.type === 'wifi' && (
+    render() {
+        const { connectionInfo } = this.state;
+
+        return (
+            <SafeAreaView style={styles.container}>
+                <Image
+                    source={require('../assets/logo.png')}
+                    style={styles.image}
+                    resizeMode="cover"  // Ajout de cette ligne
+                />
+                {connectionInfo && (
+                    <View style={styles.connectionInfoContainer}>
                         <Text style={styles.connectionInfoText}>
-                            <MaterialIcons name="wifi-tethering" size={24} color={connectionInfo.isConnected ? 'green' : 'red'} /> Connecté : {connectionInfo.isConnected ? 'Oui' : 'Non'}
+                            <MaterialIcons name="network-wifi" size={24} color="white" /> Nom du réseau (SSID) : {connectionInfo.details.ssid}
                         </Text>
-                    )}
-                </View>
-            )}
-        </SafeAreaView>
-    );
-};
+                        <Text style={styles.connectionInfoText}>
+                            <MaterialIcons name="network-check" size={24} color="white" /> Type de connexion : {connectionInfo.type}
+                        </Text>
+                        {connectionInfo.type === 'wifi' && (
+                            <Text style={styles.connectionInfoText}>
+                                <MaterialIcons name="wifi-tethering" size={24} color={connectionInfo.isConnected ? 'green' : 'red'} /> Connecté : {connectionInfo.isConnected ? 'Oui' : 'Non'}
+                            </Text>
+                        )}
+                    </View>
+                )}
+            </SafeAreaView>
+        );
+    }
+}
+
 
 const styles = StyleSheet.create({
     container: {
