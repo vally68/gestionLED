@@ -1,9 +1,10 @@
 import React from 'react';
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, SafeAreaView, ScrollView } from 'react-native';
-import { validateForm } from './fonction/outils';
+import { validateForm } from '../fonction/outils';
 import { connect } from "react-redux";
-import { ADD_USER } from '../store/reducer/UserReducer';
+import { ADD_USER } from '../reducer/UserReducer';
 import MyButton from "../Components/MyButton";
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const mapStateToProps = (state) => {
   return {
@@ -32,7 +33,7 @@ class Inscription extends React.Component {
     formData.append("email", this.state.email);
     formData.append("password", this.state.password);
 
-    fetch('http://10.31.201.113/api/test.php', {
+    fetch('https://cramoisy-nature.000webhostapp.com/registeruser.php', {
       method: 'POST',
       body: formData,
       headers: {
@@ -44,8 +45,7 @@ class Inscription extends React.Component {
         if (json === false) {
           Alert.alert(
             'Erreur',
-            'L\'e-mail saisi existe déjà.',
-            ' Veuillez saisir une autre adresse mail ou récupérer votre mot de passe',
+            'L\'e-mail saisi existe déjà. Veuillez saisir une autre adresse mail ou récupérer votre mdp',
             [
               { text: 'OK', onPress: () => console.log('OK Pressed') },
             ],
@@ -70,7 +70,7 @@ class Inscription extends React.Component {
           />
 
           <View>
-            <Text style={styles.texttitle}>S'INSCRIRE</Text>
+            <Text style={styles.texttitle}>INSCRIPTION</Text>
 
             <TextInput
               placeholder="nom"
@@ -134,13 +134,13 @@ class Inscription extends React.Component {
             <Text style={styles.errorText}>{this.state.passwordError}</Text>
         </View>
 
-        <View style={styles.button}>
             <MyButton
               onPress={this.handleSubmit}
-              val="Valider l'inscription"
+              val="Valider"
+              icon={<Icon name="checkmark-outline" size={20} color="black" />}
             />
-        </View>
 
+          
         </ScrollView>
       </SafeAreaView>
     );
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#1F1E42',
+    backgroundColor: '#13043a',
     marginTop: 35,
   },
 
@@ -208,10 +208,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     textDecorationLine: 'underline',
   },
-
-button:{
-marginBottom: 20,
-}
 });
 
 const mapDispatchToProps = (dispatch) => ({

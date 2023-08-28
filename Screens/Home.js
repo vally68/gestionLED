@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, View, Image } from 'react-native';
 import MyButton from '../Components/MyButton';
 import NetInfo from "@react-native-community/netinfo";
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons'; 
 import * as Location from 'expo-location';
 
 const Home = ({ navigation }) => {
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#13043a',
         paddingTop: 35,
-        paddingHorizontal: 20,
+        paddingHorizontal: 20, 
         marginTop: 35,
     },
     image: {
@@ -81,12 +81,12 @@ const styles = StyleSheet.create({
         height: null, // Ajout de cette ligne
     },
     connectionInfoContainer: {
-        marginTop: -530,
+        marginTop: -530, 
         marginBottom: 0,
         backgroundColor: 'transparent', // Couleur de fond avec opacité
         padding: 0,  // Réduisez le padding ici
-        borderRadius: 15,
-        shadowColor: '#000',
+        borderRadius: 15, 
+        shadowColor: '#000', 
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.3,
         shadowRadius: 2,
@@ -95,10 +95,10 @@ const styles = StyleSheet.create({
     connectionInfoText: {
         color: '#FFFFFF',
         textAlign: 'center',
-        fontSize: 14,
+        fontSize: 14, 
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 10,
+        marginBottom: 10, 
         lineHeight: 25,
     },
 });
