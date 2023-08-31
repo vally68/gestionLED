@@ -5,6 +5,9 @@ import NetInfo from "@react-native-community/netinfo";
 import { MaterialIcons } from '@expo/vector-icons'; 
 import * as Location from 'expo-location';
 
+
+
+
 const Home = ({ navigation }) => {
     const [connectionInfo, setConnectionInfo] = useState(null);
 

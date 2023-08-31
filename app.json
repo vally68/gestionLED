@@ -41,6 +41,23 @@
       "eas": {
         "projectId": "4a7b4b6e-3bfb-46bb-82bb-cbdba37498b8"
       }
-    }
+    },
+    "packagerOpts": {
+	  "config": "metro.config.js",
+	  "sourceExts": [
+		"expo.ts",
+		"expo.tsx",
+		"expo.js",
+		"expo.jsx",
+		"ts",
+		"tsx",
+		"js",
+		"jsx",
+		"json",
+		"wasm",
+		"svg"
+	  ]
+	}	
+  	
   }
 }

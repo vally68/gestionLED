@@ -1,13 +1,20 @@
-import React, { useState, useContext } from 'react';
-import { Text, SafeAreaView, StyleSheet, View, Switch, ScrollView, Dimensions, Button,luminosityLevel, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { Text, SafeAreaView, StyleSheet, View, Switch, ScrollView, Dimensions, Button,luminosityLevel, TouchableOpacity, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { AuthContext } from '../fonction/AuthContext';
 import { logoutSuccess } from '../reducer/UserReducer';
 import MyButton from '../Components/MyButton';
 import MySlider from '../Components/MySlider';
 import Icon from 'react-native-vector-icons/Ionicons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import init from 'react_native_mqtt';
+import Logo from '../assets/logo.svg';
+import ColorPicker from 'react-native-wheel-color-picker';
+
 
 const { width } = Dimensions.get('window');
+const { height } = Dimensions.get('window');
+
 
 function Dashboard({ dispatch, isLoggedIn }) {
   const { setIsLoggedin } = useContext(AuthContext);
@@ -16,6 +23,12 @@ function Dashboard({ dispatch, isLoggedIn }) {
   const [isInstallationOn, setIsInstallationOn] = useState(false);
   const [selectedColor, setSelectedColor] = useState('#FFFFFF');
   const [peopleCount, setPeopleCount] = useState('1');
+  const [temperature, setTemperature] = useState(0);
+  const [brightness, setBrightness] = useState(0);
+  const [primaryColor, setPrimaryColor] = useState('white');
+  const [presence, setPresence] = useState(0);
+  const [buttonState, setButtonState] = useState(0);
+  const [luminosityLevel, setLuminosityLevel] = useState("éteint");
 
   const handleLogout = () => {
     setIsLoggedin(false); 
@@ -37,7 +50,67 @@ function Dashboard({ dispatch, isLoggedIn }) {
     setSelectedColor('#FFFFFF');
   };
 
-  const [luminosityLevel, setLuminosityLevel] = useState("éteint");
+  function onConnect(client) 
+  {
+    client.subscribe('TEMP/value');
+    client.subscribe('LUM/threshold');
+    client.subscribe('PIR1/presence')
+    client.subscribe('BOUTON/on_off');
+  }
+
+   function onMessageArrived(message) 
+  {
+    switch(message.topic) 
+    {
+      case 'TEMP/value':
+        setTemperature(message.payloadString);
+        if(temperature >= 10 && temperature <= 20)
+        {
+          setPrimaryColor('yellow');
+        }
+        else
+        {
+          if(temperature < 10)
+          {
+            setPrimaryColor('blue');
+          }
+          else
+          {
+            setPrimaryColor('red');
+          }
+        }
+        
+        break;
+      case 'LUM/threshold':
+        setBrightness(message.payloadString);
+        break;
+      case 'PIR1/presence':
+        setPresence(message.payloadString);
+        break;
+      case 'BOUTON/on_off':
+        setButtonState(message.payloadString);
+        break;
+    }
+  }
+
+  useEffect(() => 
+  {
+    init({
+      size: 10000,
+      storageBackend: AsyncStorage,
+      defaultExpires: 1000 * 3600 * 24,
+      enableCache: true,
+      reconnect: true,
+      sync : {}
+    });
+
+    const client = new Paho.MQTT.Client('10.31.251.144', 9002, 'username');
+    client.connect({ onSuccess: () => onConnect(client) });
+    client.onMessageArrived = onMessageArrived;
+
+  }, [])
+
+  
 
   return (
     <SafeAreaView style={styles.container}>
@@ -61,8 +134,10 @@ function Dashboard({ dispatch, isLoggedIn }) {
             {isInstallationOn ? 'Démarrer' : 'Arrêter'}
           </Text>
         </View>
-
-        <View style={styles.section}>
+        <View style={styles.cover}>
+                <Logo width={"100%"} height={"60%"} right={30} fill={primaryColor} viewBox= {`0 0 ${width} ${height}`} />
+              </View>
+               <View style={styles.section2}>
           <Text style={styles.sectionHeading}>Mode de Couleur</Text>
           <View style={styles.toggleContainer}>
             <Text style={styles.toggleLabel}>Température</Text>
@@ -74,135 +149,21 @@ function Dashboard({ dispatch, isLoggedIn }) {
             />
             <Text style={styles.toggleLabel}>Couleur</Text>
           </View>
+          {isEnabledColor && (
+            <ColorPicker
+              
+              onColorChange={(color) => setPrimaryColor(color)}
+              onColorChangeComplete={color => console.log(`ColorP selected: ${color}`)}
+              thumbSize={30}
+              sliderSize={30}
+              noSnap={true}
+              row={true}
+              swatches={false}
+            />
+          )}
         </View>
-        
-        {isEnabledColor && (
-          <View style={styles.section}>
-            <Text style={styles.sectionHeading}>Sélection de Couleur</Text>
-            <View style={styles.colorButtonsContainer}>
-              <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#000080')}
-                  color="#000080"
-                />
-              </View>
-              <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#0000FF')}
-                  color="#0000FF"
-                />
-              </View>
-              <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#00FFFF')}
-                  color="#00FFFF"
-                />
-              </View>
-              <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#008080')}
-                  color="#008080"
-                />
-              </View>
-              <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#008000')}
-                  color="#008000"
-                />
-              </View>
-              <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#00FF7F')}
-                  color="#00FF7F"
-                />
-              </View>
-              <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#32CD32')}
-                  color="#32CD32"
-                />
-            </View>
 
-              <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#00FF00')}
-                  color="#00FF00"
-                />
-              </View>
-              <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#800080')}
-                  color="#800080"
-                />
-              </View>
-              <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#FF00FF')}
-                  color="#FF00FF"
-                />
-              </View>
-              <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#FF1493')}
-                  color="#FF1493"
-                />
-              </View>
-              <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#FF69B4')}
-                  color="#FF69B4"
-                />
-              </View>
-              <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#FF0000')}
-                  color="#FF0000"
-                />
-              </View>
-              <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#FF6347')}
-                  color="#FF6347"
-                />
-              </View>
-              <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#FFA500')}
-                  color="#FFA500"
-                />
-              </View>
-              <View style={styles.colorButton}>
-                <Button
-                  title=""
-                  onPress={() => handleColorButtonPress('#FFFF00')}
-                  color="#FFFF00"
-                />
-              </View>
-            </View>
-            <View style={styles.selectedColorIndicator} />
-            <View style={styles.colorButton}>
-              <MyButton
-                val="Réinitialiser"
-                onPress={handleResetColor}
-              />
-            </View>
-          </View>
-        )}
+        
         <View style={styles.luminosityLevels}>
           <Text style={styles.textdeclanchlum}>
             Seuil de déclenchement de la luminosité
@@ -308,7 +269,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#13043a',
     marginTop: 35,
-    paddingHorizontal: 10,
+    paddingHorizontal: 0,
+  },
+  
+  logo: {
+      left:0,
+      
   },
 
   scrollContainer: {
@@ -329,7 +295,14 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     backgroundColor: '#1E1E3B',
     borderRadius: 10,
-    padding: 20,
+    padding: 10,
+  },
+  section2: {
+    marginBottom: 10,
+    backgroundColor: '#1E1E3B',
+    borderRadius: 10,
+    padding: 10,
+    top: -300,
   },
 
   sectionHeading: {

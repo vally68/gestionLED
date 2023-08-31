@@ -66,7 +66,7 @@ function AppNavigator() {
             <AppTab.Screen name="Connexion" component={Connexion} options={{
             tabBarLabel : 'Connexion',
             tabBarIcon: () => (
-                <Ionicons name="globe-outline" color={"black"} size={30} />
+                <Ionicons name="finger-print-outline" color={"black"} size={30} />
             )
         }}/>
          <AppTab.Screen name="Config" component={Config} options={{
