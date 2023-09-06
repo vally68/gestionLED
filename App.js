@@ -50,7 +50,7 @@ function AuthNavigator() {
 
 function AppNavigator() {
     return (
-        <AppTab.Navigator>
+        <AppTab.Navigator screenOptions={{ headerShown: false }}>
          <AppTab.Screen name="Config" component={Config} options={{
             tabBarLabel : 'Plages',
             tabBarIcon: () => (

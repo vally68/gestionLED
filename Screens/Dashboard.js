@@ -30,11 +30,11 @@ function Dashboard({ dispatch, isLoggedIn }) {
   const [buttonState, setButtonState] = useState(0);
   const [luminosityLevel, setLuminosityLevel] = useState("éteint");
 
-  const handleLogout = () => {
-    setIsLoggedin(false); 
-    dispatch(logoutSuccess(false));
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem('userToken'); // Supprime le token
+    setIsLoggedin(false); // Met à jour l'état local
+    dispatch(logoutSuccess(false)); // Met à jour l'état dans le store Redux
   };
-
   const handleColorButtonPress = (color) => {
     setSelectedColor(color);
   };
@@ -435,13 +435,14 @@ const styles = StyleSheet.create({
   },
 
   resetallButton: {
+
     marginBottom: 20,
     left: 75,
     width: '80%', 
   },
 
   logoutButton: {
-    marginBottom: 40,
+    marginBottom: 4000,
     left: 75,
     width: '80%',
   },
