@@ -50,42 +50,24 @@ function AuthNavigator() {
 
 function AppNavigator() {
     return (
-        <AppTab.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
-            <AppTab.Screen name="Home" component={Home} options={{
-            tabBarLabel : 'Home',
-            tabBarIcon: () => (
-              <Ionicons name="home-outline" color={"black"} size={30} />
-            )
-        }}/>
-            <AppTab.Screen name="Inscription" component={Inscription} options={{
-            tabBarLabel : 'Inscription',
-            tabBarIcon: () => (
-              <Ionicons name="reader-outline" color={"black"} size={30} />
-            )
-        }}/>
-            <AppTab.Screen name="Connexion" component={Connexion} options={{
-            tabBarLabel : 'Connexion',
-            tabBarIcon: () => (
-                <Ionicons name="finger-print-outline" color={"black"} size={30} />
-            )
-        }}/>
+        <AppTab.Navigator>
          <AppTab.Screen name="Config" component={Config} options={{
             tabBarLabel : 'Plages',
             tabBarIcon: () => (
                 <Ionicons name="alarm-outline" color={"black"} size={30} />
-            )
+            ),
         }}/>
         <AppTab.Screen name="Dashboard" component={Dashboard} options={{
             tabBarLabel : 'Gestion',
             tabBarIcon: () => (
                 <Ionicons name="build-outline" color={"black"} size={30} />
-            )
+            ),
         }}/>
         <AppTab.Screen name="Event" component={Event} options={{
             tabBarLabel : 'Evenement',
             tabBarIcon: () => (
                 <Ionicons name="eye-outline" color={"black"} size={30} />
-            )
+            ),
         }}/>
         </AppTab.Navigator>
     );

@@ -33,7 +33,7 @@ class Inscription extends React.Component {
     formData.append("email", this.state.email);
     formData.append("password", this.state.password);
 
-    fetch('https://cramoisy-nature.000webhostapp.com/registeruser.php', {
+    fetch('http://10.31.201.113/api/test.php', {
       method: 'POST',
       body: formData,
       headers: {

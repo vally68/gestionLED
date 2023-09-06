@@ -32,7 +32,15 @@ export default function Connexion({ navigation }) {
             setEmailError(emailError);
             setPasswordError(passwordError);
         } else {
-            // ... Your login logic ...
+            const response = await fetch('http://10.31.201.113/api/recup.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({email, password}),
+            });
+
+            const data = await response.json();
 
             if (response.ok && data.token) {
                 await AsyncStorage.setItem('userToken', data.token);
