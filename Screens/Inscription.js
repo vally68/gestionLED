@@ -52,8 +52,7 @@ class Inscription extends React.Component {
             { cancelable: false }
           );
         } else {
-          this.props.navigation.navigate('Connexion', { username: this.state.name });
-        }
+          this.props.navigation.navigate('Connexion', { email: this.state.email });        }
       })
       .catch(error => {
         console.error(error);

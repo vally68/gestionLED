@@ -16,6 +16,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import firebase from '@react-native-firebase/app';
 import { AuthContext } from './fonction/AuthContext';
 import registerNNPushToken from 'native-notify';
+import { AppState } from 'react-native';
 
 const AuthTab = createBottomTabNavigator();
 const AppTab = createBottomTabNavigator();
@@ -77,19 +78,49 @@ export default function App() {
     const [isLoggedin, setIsLoggedin] = useState(false);
 
     useEffect(() => {
+        // Fonction pour vérifier le token
         async function checkToken() {
-            const userToken = await AsyncStorage.getItem('userToken');
-            console.log("User Token:", userToken); // Ajout du log
-            if (userToken) {
-                console.log("User is logged in"); // Ajout du log
-                setIsLoggedin(true);
-            } else {
-                console.log("User is not logged in"); // Ajout du log
+            try {
+                const userToken = await AsyncStorage.getItem('userToken');
+                console.log("User Token:", userToken);
+                if (userToken) {
+                    setIsLoggedin(true);
+                }
+            } catch (e) {
+                console.log('Erreur lors de la récupération du token', e);
             }
         }
 
+        // Fonction pour gérer le changement d'état de l'application
+        const handleAppStateChange = async (nextAppState) => {
+            if (nextAppState === 'background' || nextAppState === 'inactive') {
+                console.log('L\'application est passée en arrière-plan. Déconnexion de l\'utilisateur.');
+                try {
+                    await AsyncStorage.removeItem('userToken');
+                    setIsLoggedin(false);
+                } catch (e) {
+                    console.log('Erreur lors de la suppression du token', e);
+                }
+            }
+        };
+
+        AppState.addEventListener('change', handleAppStateChange);
+
         checkToken();
+
+        return () => {
+            AppState.removeEventListener('change', handleAppStateChange);
+        };
     }, []);
+    const handleAppStateChange = (nextAppState) => {
+        if (nextAppState === 'background' || nextAppState === 'inactive') {
+            // Déconnectez l'utilisateur ici
+            console.log('L\'application est passée en arrière-plan. Déconnexion de l\'utilisateur.');
+            // Ajoutez votre logique de déconnexion, par exemple en supprimant le token d'authentification
+            AsyncStorage.removeItem('userToken');
+            setIsLoggedin(false);
+        }
+    };
 
     console.log("isLoggedin:", isLoggedin); // Ajout du log
 

@@ -13,7 +13,7 @@ const { width } = Dimensions.get('window');
 const { height } = Dimensions.get('window');
 
 
-export default function Connexion({ navigation }) {
+export default function Connexion({ navigation, route }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [emailError, setEmailError] = useState("");
@@ -25,6 +25,12 @@ export default function Connexion({ navigation }) {
 
     const dispatch = useDispatch();
     const { setIsLoggedin } = useContext(AuthContext);
+
+    useEffect(() => {
+        if (route.params && route.params.email) {
+            setEmail(route.params.email);
+        }
+    }, [route.params]);
 
     const handleSubmit = async () => {
         const { emailError, passwordError } = validateLoginForm(email, password);

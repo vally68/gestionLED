@@ -1,5 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Text, SafeAreaView, StyleSheet, View, Switch, ScrollView, Dimensions, Button,luminosityLevel, TouchableOpacity, Image } from 'react-native';
+import {
+  Text,
+  SafeAreaView,
+  StyleSheet,
+  View,
+  Switch,
+  ScrollView,
+  Dimensions,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
 import { connect } from 'react-redux';
 import { AuthContext } from '../fonction/AuthContext';
 import { logoutSuccess } from '../reducer/UserReducer';
@@ -11,10 +21,8 @@ import init from 'react_native_mqtt';
 import Logo from '../assets/logo.svg';
 import ColorPicker from 'react-native-wheel-color-picker';
 
-
 const { width } = Dimensions.get('window');
 const { height } = Dimensions.get('window');
-
 
 function Dashboard({ dispatch, isLoggedIn }) {
   const { setIsLoggedin } = useContext(AuthContext);
@@ -28,13 +36,14 @@ function Dashboard({ dispatch, isLoggedIn }) {
   const [primaryColor, setPrimaryColor] = useState('white');
   const [presence, setPresence] = useState(0);
   const [buttonState, setButtonState] = useState(0);
-  const [luminosityLevel, setLuminosityLevel] = useState("éteint");
+  const [luminosityLevel, setLuminosityLevel] = useState('éteint');
 
   const handleLogout = async () => {
     await AsyncStorage.removeItem('userToken'); // Supprime le token
     setIsLoggedin(false); // Met à jour l'état local
     dispatch(logoutSuccess(false)); // Met à jour l'état dans le store Redux
   };
+
   const handleColorButtonPress = (color) => {
     setSelectedColor(color);
   };
@@ -48,38 +57,29 @@ function Dashboard({ dispatch, isLoggedIn }) {
     setIsEnabledDetection(false);
     setIsInstallationOn(false);
     setSelectedColor('#FFFFFF');
+    setLuminosityLevel('éteint'); // Réinitialisez le seuil de luminosité à 'éteint'
   };
 
-  function onConnect(client) 
-  {
+  function onConnect(client) {
     client.subscribe('TEMP/value');
     client.subscribe('LUM/threshold');
-    client.subscribe('PIR1/presence')
+    client.subscribe('PIR1/presence');
     client.subscribe('BOUTON/on_off');
   }
 
-   function onMessageArrived(message) 
-  {
-    switch(message.topic) 
-    {
+  function onMessageArrived(message) {
+    switch (message.topic) {
       case 'TEMP/value':
         setTemperature(message.payloadString);
-        if(temperature >= 10 && temperature <= 20)
-        {
+        if (temperature >= 10 && temperature <= 20) {
           setPrimaryColor('yellow');
-        }
-        else
-        {
-          if(temperature < 10)
-          {
+        } else {
+          if (temperature < 10) {
             setPrimaryColor('blue');
-          }
-          else
-          {
+          } else {
             setPrimaryColor('red');
           }
         }
-        
         break;
       case 'LUM/threshold':
         setBrightness(message.payloadString);
@@ -93,174 +93,177 @@ function Dashboard({ dispatch, isLoggedIn }) {
     }
   }
 
-  useEffect(() => 
-  {
+  useEffect(() => {
     init({
       size: 10000,
       storageBackend: AsyncStorage,
       defaultExpires: 1000 * 3600 * 24,
       enableCache: true,
       reconnect: true,
-      sync : {}
+      sync: {},
     });
 
     const client = new Paho.MQTT.Client('10.31.251.144', 9002, 'username');
     client.connect({ onSuccess: () => onConnect(client) });
     client.onMessageArrived = onMessageArrived;
-
-  }, [])
-
-  
+  }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        
-        <Text style={styles.heading}>Gestion</Text>
-        
-        <View style={styles.section}>
-          <Text style={styles.sectionHeading}>Installation</Text>
-          <View style={styles.toggleContainer}>
-            <Text style={styles.toggleLabel}>OFF</Text>
-            <Switch
-              trackColor={{ false: '#767577', true: '#81b0ff' }}
-              thumbColor={isInstallationOn ? '#28B463' : '#EAFAF1'}
-              onValueChange={() => setIsInstallationOn(!isInstallationOn)}
-              value={isInstallationOn}
-            />
-            <Text style={styles.toggleLabel}>ON</Text>
-          </View>
-          <Text style={styles.toggleStatus}>
-            {isInstallationOn ? 'Démarrer' : 'Arrêter'}
-          </Text>
-        </View>
-        <View style={styles.cover}>
-                <Logo width={"100%"} height={"60%"} right={30} fill={primaryColor} viewBox= {`0 0 ${width} ${height}`} />
-              </View>
-               <View style={styles.section2}>
-          <Text style={styles.sectionHeading}>Mode de Couleur</Text>
-          <View style={styles.toggleContainer}>
-            <Text style={styles.toggleLabel}>Température</Text>
-            <Switch
-              trackColor={{ false: '#767577', true: '#FFFFFF' }}
-              thumbColor={isEnabledColor ? '#28B463' : '#EAFAF1'}
-              onValueChange={() => setIsEnabledColor(!isEnabledColor)}
-              value={isEnabledColor}
-            />
-            <Text style={styles.toggleLabel}>Couleur</Text>
-          </View>
-          {isEnabledColor && (
-            <ColorPicker
-              
-              onColorChange={(color) => setPrimaryColor(color)}
-              onColorChangeComplete={color => console.log(`ColorP selected: ${color}`)}
-              thumbSize={30}
-              sliderSize={30}
-              noSnap={true}
-              row={true}
-              swatches={false}
-            />
-          )}
-        </View>
+      <SafeAreaView style={styles.container}>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <Text style={styles.heading}> Gestion </Text>
 
-        
-        <View style={styles.luminosityLevels}>
-          <Text style={styles.textdeclanchlum}>
-            Seuil de déclenchement de la luminosité
-          </Text>
-          <View style={styles.luminosityButtonsContainer}>
-            <TouchableOpacity
-              style={[
-                styles.luminosityButton,
-                luminosityLevel === "éteint" && styles.selectedLuminosityButton,
-              ]}
-              onPress={() => setLuminosityLevel("éteint")}
-            >
-              <Text style={styles.luminosityButtonText}>Éteint</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.luminosityButton,
-                luminosityLevel === "faible" && styles.selectedLuminosityButton,
-              ]}
-              onPress={() => setLuminosityLevel("faible")}
-            >
-              <Text style={styles.luminosityButtonText}>Faible</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.luminosityButton,
-                luminosityLevel === "moyen" && styles.selectedLuminosityButton,
-              ]}
-              onPress={() => setLuminosityLevel("moyen")}
-            >
-              <Text style={styles.luminosityButtonText}>Moyen</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.luminosityButton,
-                luminosityLevel === "élevé" && styles.selectedLuminosityButton,
-              ]}
-              onPress={() => setLuminosityLevel("élevé")}
-            >
-              <Text style={styles.luminosityButtonText}>Élevé</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={styles.detectgestion}>
-          <Text style={styles.textdetectgestion}>
-            Détection
-          </Text>
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-            <Text style={styles.textdashboards}>
-              OFF
-            </Text>
-            <Switch
-              trackColor={{ false: '#767577', true: '#FFFFFF' }}
-              thumbColor={isEnabledDetection ? '#28B463' : '#EAFAF1'}
-              onValueChange={() => setIsEnabledDetection(!isEnabledDetection)}
-              value={isEnabledDetection}
-            />
-            <Text style={styles.textdashboards}>
-              ON
-            </Text>
-          </View>
-          {isEnabledDetection && (
-            <View style={styles.peopleSelectionContainer}>
-              <Icon
-                name='person-outline'
-                size={30}
-                color={peopleCount === '1' ? 'blue' : 'grey'}
-                onPress={() => setPeopleCount('1')}
+          <View style={styles.section}>
+            <Text style={styles.sectionHeading}> Installation </Text>
+            <View style={styles.toggleContainer}>
+              <Text style={styles.toggleLabel}> OFF </Text>
+              <Switch
+                  trackColor={{ false: '#767577', true: '#81b0ff' }}
+                  thumbColor={isInstallationOn ? '#28B463' : '#EAFAF1'}
+                  onValueChange={() => setIsInstallationOn(!isInstallationOn)}
+                  value={isInstallationOn}
               />
-              <Icon
-                name='people-outline'
-                size={30}
-                color={peopleCount === '2' ? 'blue' : 'grey'}
-                onPress={() => setPeopleCount('2')}
-              />
+              <Text style={styles.toggleLabel}> ON </Text>
             </View>
-          )}
-           </View>
-         
-        <View style={styles.resetallButton}>
-          <MyButton
-            val="Réinitialiser"
-            onPress={handleResetAll}
-            icon={<Icon name="refresh-outline" size={20} color="black" />}
-          />
-        </View>
+            <Text style={styles.toggleStatus}>
+              {isInstallationOn ? 'Démarrer' : 'Arrêter'}
+            </Text>
+          </View>
 
-        <View style={styles.logoutButton}>
-          <MyButton
-            val="Déconnexion"
-            onPress={handleLogout}
-            icon={<Icon name="log-out-outline" size={20} color="black" />}
-          />
-        </View>
-        
-      </ScrollView>
-    </SafeAreaView>
+          <View style={styles.cover}>
+            <Logo
+                width={'100%'}
+                height={height * 0.6}
+                right={30}
+                fill={primaryColor}
+                viewBox={`0 0 ${width} ${height}`}
+            />
+          </View>
+
+          <View style={styles.section2}>
+            <Text style={styles.sectionHeading}>Mode de Couleur</Text>
+            <View style={styles.toggleContainer}>
+              <Text style={styles.toggleLabel}>Température</Text>
+              <Switch
+                  trackColor={{ false: '#767577', true: '#FFFFFF' }}
+                  thumbColor={isEnabledColor ? '#28B463' : '#EAFAF1'}
+                  onValueChange={() => setIsEnabledColor(!isEnabledColor)}
+                  value={isEnabledColor}
+              />
+              <Text style={styles.toggleLabel}>Couleur</Text>
+            </View>
+            {isEnabledColor && (
+                <ColorPicker
+                    onColorChange={(color) => setPrimaryColor(color)}
+                    onColorChangeComplete={(color) =>
+                        console.log(`ColorP selected: ${color}`)
+                    }
+                    thumbSize={30}
+                    sliderSize={30}
+                    noSnap={true}
+                    row={true}
+                    swatches={false}
+                />
+            )}
+          </View>
+
+          <View style={styles.luminosityLevels}>
+            <Text style={styles.textdeclanchlum}>
+              Seuil de déclenchement de la luminosité
+            </Text>
+            <View style={styles.luminosityButtonsContainer}>
+              <TouchableOpacity
+                  style={[
+                    styles.luminosityButton,
+                    luminosityLevel === 'éteint' && styles.selectedLuminosityButton,
+                  ]}
+                  onPress={() => setLuminosityLevel('éteint')}
+              >
+                <Text style={styles.luminosityButtonText}>Éteint</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                  style={[
+                    styles.luminosityButton,
+                    luminosityLevel === 'faible' && styles.selectedLuminosityButton,
+                  ]}
+                  onPress={() => setLuminosityLevel('faible')}
+              >
+                <Text style={styles.luminosityButtonText}>Faible</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                  style={[
+                    styles.luminosityButton,
+                    luminosityLevel === 'moyen' && styles.selectedLuminosityButton,
+                  ]}
+                  onPress={() => setLuminosityLevel('moyen')}
+              >
+                <Text style={styles.luminosityButtonText}>Moyen</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                  style={[
+                    styles.luminosityButton,
+                    luminosityLevel === 'élevé' && styles.selectedLuminosityButton,
+                  ]}
+                  onPress={() => setLuminosityLevel('élevé')}
+              >
+                <Text style={styles.luminosityButtonText}>Élevé</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <View style={styles.detectgestion}>
+            <Text style={styles.textdetectgestion}>Détection</Text>
+            <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+            >
+              <Text style={styles.textdashboards}>OFF</Text>
+              <Switch
+                  trackColor={{ false: '#767577', true: '#FFFFFF' }}
+                  thumbColor={isEnabledDetection ? '#28B463' : '#EAFAF1'}
+                  onValueChange={() => setIsEnabledDetection(!isEnabledDetection)}
+                  value={isEnabledDetection}
+              />
+              <Text style={styles.textdashboards}>ON</Text>
+            </View>
+            {isEnabledDetection && (
+                <View style={styles.peopleSelectionContainer}>
+                  <Icon
+                      name="person-outline"
+                      size={30}
+                      color={peopleCount === '1' ? 'blue' : 'grey'}
+                      onPress={() => setPeopleCount('1')}
+                  />
+                  <Icon
+                      name="people-outline"
+                      size={30}
+                      color={peopleCount === '2' ? 'blue' : 'grey'}
+                      onPress={() => setPeopleCount('2')}
+                  />
+                </View>
+            )}
+          </View>
+
+          <View style={styles.resetallButton}>
+            <MyButton
+                val="Réinitialiser"
+                onPress={handleResetAll}
+                icon={<Icon name="refresh-outline" size={20} color="black" />}
+            />
+          </View>
+
+          <View style={styles.logoutButton}>
+            <MyButton
+                val="Déconnexion"
+                onPress={handleLogout}
+                icon={<Icon name="log-out-outline" size={20} color="black" />}
+            />
+          </View>
+        </ScrollView>
+      </SafeAreaView>
   );
 }
 
@@ -268,43 +271,33 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#13043a',
-    marginTop: 35,
     paddingHorizontal: 0,
   },
-  
-  logo: {
-      left:0,
-      
-  },
-
   scrollContainer: {
     flexGrow: 1,
     paddingHorizontal: 20,
     paddingTop: 20,
+    paddingBottom: 20, // Ajout de la marge inférieure pour éviter le chevauchement
   },
-
   heading: {
     textAlign: 'center',
     fontWeight: 'bold',
     fontSize: 20,
     color: '#FFFFFF',
-    marginVertical: 20,
+    marginVertical: 10,
   },
-
   section: {
-    marginBottom: 30,
+    marginBottom: 20,
     backgroundColor: '#1E1E3B',
     borderRadius: 10,
     padding: 10,
   },
   section2: {
-    marginBottom: 10,
+    marginBottom: 20,
     backgroundColor: '#1E1E3B',
     borderRadius: 10,
     padding: 10,
-    top: -300,
   },
-
   sectionHeading: {
     textAlign: 'center',
     fontWeight: 'bold',
@@ -312,19 +305,17 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 10,
   },
-
   toggleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: 10, // Espacement réduit entre les éléments
   },
-
   toggleLabel: {
     flex: 1,
     color: '#FFFFFF',
     textAlign: 'center',
   },
-
   toggleStatus: {
     textAlign: 'center',
     color: '#FFFFFF',
@@ -337,26 +328,18 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     color: '#FFFFFF',
   },
-
-
   colormode: {
-    marginBottom: 30,
-    marginTop: 30,
+    marginBottom: 20, // Espacement réduit
     fontSize: 15,
   },
-
-
   luminosityLevels: {
-  marginBottom: 30,
-  marginTop: 30,
+    marginBottom: 20, // Espacement réduit
   },
-
   luminosityButtonsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginTop: 10,
   },
-
   luminosityButton: {
     paddingVertical: 10,
     paddingHorizontal: 20,
@@ -364,18 +347,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'gray',
   },
-
   selectedLuminosityButton: {
-    backgroundColor: 'blue', // Ajoutez la couleur que vous préférez
+    backgroundColor: 'blue',
     borderColor: 'blue',
   },
-
   luminosityButtonText: {
     color: 'white',
     textAlign: 'center',
   },
-
-
   textdeclanchlum: {
     textAlign: 'center',
     fontWeight: 'bold',
@@ -383,48 +362,34 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 15,
   },
-
-
   detectgestion: {
-    marginBottom: 30,
-    marginTop: 30,
+    marginBottom: 20, // Espacement réduit
   },
-
-
   textdetectgestion: {
     textAlign: 'center',
     fontWeight: 'bold',
     color: 'white',
     fontSize: 15,
   },
-
-
   colorSelectionContainer: {
     alignItems: 'center',
     marginTop: -20,
   },
-
-
   colorButtonsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     marginVertical: 10,
   },
-
-
-   colorButton: {
-    width: width * 0.2, 
-    margin: width * 0.01, 
+  colorButton: {
+    width: width * 0.2,
+    margin: width * 0.01,
   },
-
   peopleSelectionContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginTop: 20,
   },
-
-
   selectedColorIndicator: {
     width: 60,
     height: 20,
@@ -433,21 +398,19 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'gray',
   },
-
   resetallButton: {
-
     marginBottom: 20,
-    left: 75,
-    width: '80%', 
-  },
-
-  logoutButton: {
-    marginBottom: 4000,
     left: 75,
     width: '80%',
   },
-  
+  logoutButton: {
+    marginBottom: 40,
+    paddingBottom: 40, // Espacement réduit
+    left: 75,
+    width: '80%',
+  },
 });
+
 const mapStateToProps = (state) => ({
   isLoggedIn: state.isLoggedIn,
 });
