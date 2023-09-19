@@ -25,17 +25,18 @@ export default class MyButton extends React.Component
 
 const styles = StyleSheet.create({
 button: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: "#321289",
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',
     marginBottom:10,
     width:150,
+    height:50,
     borderWidth:3
   },
 
   buttonText: {
-    color: '#615197',
+    color: '#FFFFFF',
     fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'center',

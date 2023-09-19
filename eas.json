@@ -3,6 +3,12 @@
     "version": ">= 0.47.0"
   },
   "build": {
+    "production": {
+      "android": {
+        "buildType": "apk",
+        "releaseChannel": "default"
+      }
+    },
     "preview": {
       "android": {
         "buildType": "apk"

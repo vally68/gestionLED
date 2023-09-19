@@ -10,7 +10,6 @@ import Home from './Screens/Home';
 import Inscription from './Screens/Inscription';
 import Connexion from './Screens/Connexion';
 import Dashboard from './Screens/Dashboard';
-import Event from './Screens/Event';
 import Config from './Screens/Config';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import firebase from '@react-native-firebase/app';
@@ -64,12 +63,7 @@ function AppNavigator() {
                 <Ionicons name="build-outline" color={"black"} size={30} />
             ),
         }}/>
-        <AppTab.Screen name="Event" component={Event} options={{
-            tabBarLabel : 'Evenement',
-            tabBarIcon: () => (
-                <Ionicons name="eye-outline" color={"black"} size={30} />
-            ),
-        }}/>
+        
         </AppTab.Navigator>
     );
 }
@@ -114,7 +108,7 @@ export default function App() {
     }, []);
     const handleAppStateChange = (nextAppState) => {
         if (nextAppState === 'background' || nextAppState === 'inactive') {
-            // Déconnectez l'utilisateur ici
+            // Déconnectez utilisateur ici
             console.log('L\'application est passée en arrière-plan. Déconnexion de l\'utilisateur.');
             // Ajoutez votre logique de déconnexion, par exemple en supprimant le token d'authentification
             AsyncStorage.removeItem('userToken');

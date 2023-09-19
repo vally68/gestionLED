@@ -33,7 +33,7 @@ class Inscription extends React.Component {
     formData.append("email", this.state.email);
     formData.append("password", this.state.password);
 
-    fetch('http://10.31.201.113/api/test.php', {
+    fetch('http://10.31.251.58/api/test.php', {
       method: 'POST',
       body: formData,
       headers: {
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#13043a',
-    marginTop: 35,
+    marginTop: 30,
   },
 
   scrollContainer: {

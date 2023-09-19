@@ -14,7 +14,7 @@ const sendCommand = (microcontrollerUrl, commandData, priority) => {
 const HIGH_PRIORITY = 'high';
 const MEDIUM_PRIORITY = 'medium';
 const LOW_PRIORITY = 'low';
-const MONITORING_PRIORITY = 'monitoring';
+
 
 // Allumer ou éteindre l'installation avec priorité haute
 sendCommand(rasberryApiUrl, { command: 'power', data: 'on' }, HIGH_PRIORITY)
@@ -52,11 +52,4 @@ sendCommand(rasberryApiUrl, { command: 'color', data: 'FF0000' }, LOW_PRIORITY) 
     console.error('Erreur avec Rasberry Pi (changer couleur LED) :', error);
   });
 
-// Gérer les erreurs avec priorité de surveillance
-sendCommand(rasberryApiUrl, { command: 'error', data: 'connection' }, MONITORING_PRIORITY)
-  .then(response => {
-    console.log('Réponse de Rasberry Pi (gestion erreur) :', response.data);
-  })
-  .catch(error => {
-    console.error('Erreur avec Rasberry Pi (gestion erreur) :', error);
-  });
+

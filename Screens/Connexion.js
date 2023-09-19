@@ -6,14 +6,16 @@ import { AuthContext } from '../fonction/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Logo from '../assets/logo.svg';
-import Biometrics from 'react-native-biometrics';
+//import Biometrics from 'react-native-biometrics';
 import init from 'react_native_mqtt';
+import Paho from 'paho-mqtt'; 
+
 
 const { width } = Dimensions.get('window');
 const { height } = Dimensions.get('window');
 
 
-export default function Connexion({ navigation, route }) {
+const Connexion = ({ navigation, route }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [emailError, setEmailError] = useState("");
@@ -21,7 +23,7 @@ export default function Connexion({ navigation, route }) {
     const [nom, setNom] = useState("");
     const [availableSensor, setAvailableSensor] = useState(false);
     const [primaryColor, setPrimaryColor] = useState('red');
-
+    const [mqttClient, setMqttClient] = useState(null);
 
     const dispatch = useDispatch();
     const { setIsLoggedin } = useContext(AuthContext);
@@ -32,13 +34,62 @@ export default function Connexion({ navigation, route }) {
         }
     }, [route.params]);
 
+    const initializeMQTTClient = () => 
+  {
+    const client = new Paho.Client('ws://10.31.251.58:9003/mqtt', 'Mobile Client');
+   
+    
+    return client;
+  };
+
+  const onConnect = (client) => 
+  {
+    console.log('Connected to MQTT broker');
+    client.subscribe('COUCOU/Test');
+    //message = new Paho.Message("HI");
+    message.destinationName = 'COUCOU/Test';
+    client.send(message);
+
+    client.subscribe('TEMP/value');
+    client.subscribe('LUM/threshold');
+    client.subscribe('PIR1/presence');
+    client.subscribe('BOUTON/on_off');
+    client.subscribe('ETATS/BoutonApp');
+    client.subscribe('ETATS/BoutonPresenceApp');
+    client.subscribe('ETATS/ConnectionStatus');
+  }
+
+     useEffect(() => 
+      {
+        const client = initializeMQTTClient()
+        client.connect({ onSuccess: () => onConnect(client) });
+        setMqttClient(client)
+      }, [])
+
+     const publishMessage = (messageText, topic) => 
+  {
+    if (!mqttClient) 
+    {
+      console.error('MQTT client not initialized');
+      return;
+    }
+
+    console.log('Envoi message');
+    mqttClient.subscribe(topic);
+    const message = new Paho.Message(messageText);
+    message.destinationName = topic;
+
+    mqttClient.send(message);
+  };
+
+
     const handleSubmit = async () => {
         const { emailError, passwordError } = validateLoginForm(email, password);
         if (emailError || passwordError) {
             setEmailError(emailError);
             setPasswordError(passwordError);
         } else {
-            const response = await fetch('http://10.31.201.113/api/recup.php', {
+            const response = await fetch('http://10.31.251.58/api/recup.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -51,6 +102,8 @@ export default function Connexion({ navigation, route }) {
             if (response.ok && data.token) {
                 await AsyncStorage.setItem('userToken', data.token);
                 setIsLoggedin(true);
+                console.log("bouton connection appui")
+                publishMessage("client connecter","ETATS/ConnectionStatus")
                 navigation.navigate("Dashboard", {
                     name: nom,
                 });
@@ -60,8 +113,8 @@ export default function Connexion({ navigation, route }) {
         }
     };
 
-    const handleBiometricLogin = async () => {
-    try {
+  /*  const handleBiometricLogin = async () => {
+       try {
         const { available, biometryType } = await Biometrics.isSensorAvailable();
 
         setAvailableSensor(available);
@@ -71,7 +124,7 @@ export default function Connexion({ navigation, route }) {
             if (success) {
                 // Authentification réussie avec empreinte digitale
                 console.log('Authentification par empreinte digitale réussie');
-                
+                publishMessage("client connecter","ETATS/ConnectionStatus")
                 // Rediriger vers le tableau de bord après la connexion réussie
                 navigation.navigate("Dashboard", {
                     name: nom,
@@ -85,66 +138,15 @@ export default function Connexion({ navigation, route }) {
     } catch (error) {
         console.error("Erreur lors de la vérification de l'empreinte digitale", error);
     }
-    };
+    };*/
 
-     function onMessageArrived(message) 
-  {
-    switch(message.topic) 
-    {
-      case 'TEMP/value':
-        setTemperature(message.payloadString);
-        if(temperature >= 10 && temperature <= 20)
-        {
-          setPrimaryColor('yellow');
-        }
-        else
-        {
-          if(temperature < 10)
-          {
-            setPrimaryColor('blue');
-          }
-          else
-          {
-            setPrimaryColor('red');
-          }
-        }
-        
-        break;
-      case 'LUM/threshold':
-        setBrightness(message.payloadString);
-        break;
-      case 'PIR1/presence':
-        setPresence(message.payloadString);
-        break;
-      case 'BOUTON/on_off':
-        setButtonState(message.payloadString);
-        break;
-    }
-  }
-
-        useEffect(() => 
-      {
-        init({
-          size: 10000,
-          storageBackend: AsyncStorage,
-          defaultExpires: 1000 * 3600 * 24,
-          enableCache: true,
-          reconnect: true,
-          sync : {}
-        });
-
-        const client = new Paho.MQTT.Client('10.31.251.144', 9002, 'username');
-        client.connect({ onSuccess: () => onConnect(client) });
-        client.onMessageArrived = onMessageArrived;
-
-      }, [])
-
-
+   
+       
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 
-                <Logo width={"100%"} height={"30%"} right={20} fill={primaryColor} viewBox= {`0 0 ${width} ${height}`} />
+              { /* <Logo width={"100%"} height={"30%"} right={20} fill={primaryColor} viewBox= {`0 0 ${width} ${height}`} />*/}
               
 
                 <Text style={styles.texttitle}>CONNEXION</Text>
@@ -187,11 +189,11 @@ export default function Connexion({ navigation, route }) {
                 <View style={styles.row}>
                     <TouchableOpacity onPress={() => navigation.navigate("AppNavigator", { screen: "Dashboard", params: { name: nom } })} />
 
-                   <TouchableOpacity onPress={handleBiometricLogin}>
+                   {/*<TouchableOpacity onPress={handleBiometricLogin}>
                         {availableSensor ? (
                             <Text style={styles.biometricText}>Se connecter avec l'empreinte digitale</Text>
                         ) : null}
-                    </TouchableOpacity>
+                    </TouchableOpacity>   */}
 
 
                     <TouchableOpacity onPress={() => navigation.navigate("Inscription")}>
@@ -209,7 +211,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#13043a',
-        marginTop: 35,
+        marginTop: 30,
     },
 
     biometricText: {
@@ -268,3 +270,5 @@ const styles = StyleSheet.create({
         left: 0,
     },
 });
+
+export default Connexion;

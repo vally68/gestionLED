@@ -9,10 +9,10 @@
       ]
     ],
     "name": "gestionLED",
-    "slug": "gestionLED",
+    "slug": "detectled-test",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/logo.png",
@@ -23,41 +23,39 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.yourcompany.yourappname",
+      "buildNumber": "1.0.0"
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
+      "package": "com.vally068.gestionLED",
+      "versionCode": 1,
       "permissions": [],
-      "googleServicesFile":"./google-services.json",
-      "package": "com.vally068.gestionLED"
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "4a7b4b6e-3bfb-46bb-82bb-cbdba37498b8"
+        "projectId": "66dc6dee-9820-4b83-8af6-bf6ce3ab7715"
       }
     },
     "packagerOpts": {
-	  "config": "metro.config.js",
-	  "sourceExts": [
-		"expo.ts",
-		"expo.tsx",
-		"expo.js",
-		"expo.jsx",
-		"ts",
-		"tsx",
-		"js",
-		"jsx",
-		"json",
-		"wasm",
-		"svg"
-	  ]
-	}	
-  	
+      "config": "metro.config.js",
+      "sourceExts": [
+        "expo.ts",
+        "expo.tsx",
+        "expo.js",
+        "expo.jsx",
+        "ts",
+        "tsx",
+        "js",
+        "jsx",
+        "json",
+        "wasm",
+        "svg"
+      ]
+    },
+    "owner": "killuminator68"
   }
 }
