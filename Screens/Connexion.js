@@ -10,12 +10,12 @@ import Logo from '../assets/logo.svg';
 import init from 'react_native_mqtt';
 import Paho from 'paho-mqtt'; 
 
-
 const { width } = Dimensions.get('window');
 const { height } = Dimensions.get('window');
 
 
 const Connexion = ({ navigation, route }) => {
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [emailError, setEmailError] = useState("");
@@ -24,9 +24,12 @@ const Connexion = ({ navigation, route }) => {
     const [availableSensor, setAvailableSensor] = useState(false);
     const [primaryColor, setPrimaryColor] = useState('red');
     const [mqttClient, setMqttClient] = useState(null);
-
     const dispatch = useDispatch();
     const { setIsLoggedin } = useContext(AuthContext);
+/////////
+    // MQTT
+
+/////////
 
     useEffect(() => {
         if (route.params && route.params.email) {
@@ -37,18 +40,14 @@ const Connexion = ({ navigation, route }) => {
     const initializeMQTTClient = () => 
   {
     const client = new Paho.Client('ws://10.31.251.58:9003/mqtt', 'Mobile Client');
-   
-    
     return client;
   };
 
   const onConnect = (client) => 
   {
     console.log('Connected to MQTT broker');
-    client.subscribe('COUCOU/Test');
-    //message = new Paho.Message("HI");
-    message.destinationName = 'COUCOU/Test';
-    client.send(message);
+
+    // température
 
     client.subscribe('TEMP/value');
     client.subscribe('LUM/threshold');
@@ -66,8 +65,9 @@ const Connexion = ({ navigation, route }) => {
         setMqttClient(client)
       }, [])
 
-     const publishMessage = (messageText, topic) => 
+     const publishMessage = (messageText, topic) =>
   {
+
     if (!mqttClient) 
     {
       console.error('MQTT client not initialized');
@@ -78,10 +78,14 @@ const Connexion = ({ navigation, route }) => {
     mqttClient.subscribe(topic);
     const message = new Paho.Message(messageText);
     message.destinationName = topic;
-
     mqttClient.send(message);
   };
 
+
+///////
+  ///////// CONNEXION
+
+/////////
 
     const handleSubmit = async () => {
         const { emailError, passwordError } = validateLoginForm(email, password);
@@ -96,9 +100,7 @@ const Connexion = ({ navigation, route }) => {
                 },
                 body: JSON.stringify({email, password}),
             });
-
             const data = await response.json();
-
             if (response.ok && data.token) {
                 await AsyncStorage.setItem('userToken', data.token);
                 setIsLoggedin(true);
@@ -116,9 +118,7 @@ const Connexion = ({ navigation, route }) => {
   /*  const handleBiometricLogin = async () => {
        try {
         const { available, biometryType } = await Biometrics.isSensorAvailable();
-
         setAvailableSensor(available);
-
         if (available && biometryType === Biometrics.TouchID) {
             const { success } = await Biometrics.simplePrompt('Connectez-vous avec votre empreinte digitale');
             if (success) {
@@ -137,19 +137,23 @@ const Connexion = ({ navigation, route }) => {
         }
     } catch (error) {
         console.error("Erreur lors de la vérification de l'empreinte digitale", error);
-    }
+    
     };*/
 
-   
-       
+ 
+////////
+ //////////  RENDER
+
+//////////// 
+
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollContainer}>
-                
+             <Image
+                    source={require('../assets/logo.png')}
+                    style={styles.image}
+                  />        
               { /* <Logo width={"100%"} height={"30%"} right={20} fill={primaryColor} viewBox= {`0 0 ${width} ${height}`} />*/}
-              
-
-                <Text style={styles.texttitle}>CONNEXION</Text>
 
                 <TextInput
                     placeholder="Email"
@@ -159,13 +163,14 @@ const Connexion = ({ navigation, route }) => {
                     onChangeText={setEmail}
                     style={styles.textinfo}
                     autoCompleteType="email"
+
                     onBlur={() => {
                         const { emailError } = validateLoginForm(email, '');
                         setEmailError(emailError);
                     }}
                 />
-                <Text style={styles.errorText}>{emailError}</Text>
 
+                <Text style={styles.errorText}>{emailError}</Text>
                 <TextInput
                     placeholder="Password"
                     placeholderTextColor="#FFFFFF"
@@ -180,21 +185,19 @@ const Connexion = ({ navigation, route }) => {
                         setPasswordError(passwordError);
                     }}
                 />
-                <Text style={styles.errorText}>{passwordError}</Text>
 
+                <Text style={styles.errorText}>{passwordError}</Text>
                 <TouchableOpacity style={styles.loginButton} onPress={handleSubmit}>
                     <Text style={styles.loginButtonText}>Connexion</Text>
                 </TouchableOpacity>
 
                 <View style={styles.row}>
                     <TouchableOpacity onPress={() => navigation.navigate("AppNavigator", { screen: "Dashboard", params: { name: nom } })} />
-
                    {/*<TouchableOpacity onPress={handleBiometricLogin}>
                         {availableSensor ? (
                             <Text style={styles.biometricText}>Se connecter avec l'empreinte digitale</Text>
                         ) : null}
                     </TouchableOpacity>   */}
-
 
                     <TouchableOpacity onPress={() => navigation.navigate("Inscription")}>
                         <Text style={styles.link}>Mot de passe oublié?</Text>
@@ -205,7 +208,15 @@ const Connexion = ({ navigation, route }) => {
     );
 }
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////  STYLESHEET   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 const styles = StyleSheet.create({
+
     container: {
         flex: 1,
         alignItems: 'center',
@@ -213,62 +224,58 @@ const styles = StyleSheet.create({
         backgroundColor: '#13043a',
         marginTop: 30,
     },
-
     biometricText: {
         color: '#FFFFFF',
         marginTop: 10,
         textDecorationLine: 'underline',
     },
-
     scrollContainer: {
         flexGrow: 1,
         alignItems: 'center',
         justifyContent: 'center',
     },
-
     errorText: {
         color: "red",
         marginHorizontal: 10,
     },
-
     image: {
-        width: 180,
-        height: 180,
-        marginBottom: 30,
-    },
-
+    width: 180,
+    height: 180,
+    marginBottom: 20,
+    marginTop: 30,
+  },
     texttitle: {
         color: '#FFFFFF',
         fontWeight: 'bold',
         fontSize: 20,
         marginBottom: 30,
     },
-
     textinfo: {
         height: 40,
         width: 200,
         borderWidth: 1,
-        borderColor: '#FFFFFF',
+        borderColor: 'purple',
         color: '#FFFFFF',
         padding: 10,
     },
-
     loginButton: {
-        backgroundColor: 'black',
+        backgroundColor: 'purple',
         padding: 10,
         borderRadius: 5,
         marginTop: 10,
+        borderWidth: 1,
+        borderColor: "gray"
     },
-
     loginButtonText: {
         color: 'white',
         textAlign: 'center',
     },
-
     link: {
         color: 'red',
         left: 0,
+        top: 20,
     },
+
 });
 
 export default Connexion;

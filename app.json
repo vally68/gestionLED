@@ -9,7 +9,7 @@
       ]
     ],
     "name": "gestionLED",
-    "slug": "gestionLED",
+    "slug": "detectled-test",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
@@ -37,7 +37,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "4a7b4b6e-3bfb-46bb-82bb-cbdba37498b8"
+        "projectId": "66dc6dee-9820-4b83-8af6-bf6ce3ab7715"
       }
     },
     "packagerOpts": {

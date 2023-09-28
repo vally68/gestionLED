@@ -1,43 +1,32 @@
-
 import React, { useEffect, useState } from 'react'; // Import des fonctionnalités de React et du hook useState
 import { SafeAreaView, StyleSheet, Text, View, Image } from 'react-native'; // Import des composants de React Native
 import MyButton from '../Components/MyButton'; // Import d'un composant personnalisé
 import NetInfo from "@react-native-community/netinfo"; // Import du module NetInfo pour la gestion de la connectivité réseau
 import { MaterialIcons } from '@expo/vector-icons'; // Import des icônes MaterialIcons depuis Expo
 import * as Location from 'expo-location'; // Import du module Location depuis Expo pour la gestion de la localisation
-
-
-
-
 const Home = ({ navigation }) => {
     const [connectionInfo, setConnectionInfo] = useState(null);
-
     // Fonction pour gérer le bouton de connexion
     const handleConnexionButton = () => {
         navigation.navigate("Connexion");
     };
-
     // Fonction pour gérer le bouton d'inscription
     const handleInscriptionButton = () => {
         navigation.navigate("Inscription");
     };
-
     // Fonction pour vérifier l'état du réseau Wi-Fi
     const checkWifiStatus = async () => {
         // Demande de la permission de localisation
         await Location.requestForegroundPermissionsAsync();
-
         NetInfo.fetch("wifi").then(state => {
             console.log("SSID", state.details.ssid);
             console.log("Is connected?", state.isConnected);
             setConnectionInfo(state);
         });
     };
-
     useEffect(() => {
     // Crée un intervalle qui appelle la fonction checkWifiStatus toutes les 10 secondes (10000 millisecondes)
-    const intervalId = setInterval(checkWifiStatus, 10000);  // 10000 millisecondes = 10 secondes
-
+    const intervalId = setInterval(checkWifiStatus, 100000);  // 10000 millisecondes = 10 secondes
     // La fonction de retour sera exécutée lorsque le composant sera démonté
     return () => {
         // Nettoie l'intervalle en le supprimant pour éviter les fuites de mémoire
@@ -45,8 +34,10 @@ const Home = ({ navigation }) => {
     };
 }, []);
 
-
-// Rendu du composant
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////     RENDER
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
 return (
     <SafeAreaView style={styles.container}>
     {/* Affiche l'image du logo avec une couverture */}
@@ -77,7 +68,6 @@ return (
     </SafeAreaView>
     );
 }
-
 // Définition des styles en tant que objets
 const styles = StyleSheet.create({
     container: {
@@ -120,6 +110,4 @@ const styles = StyleSheet.create({
         lineHeight: 25,                // Hauteur de ligne de 25 pixels
     },
 });
-
-
 export default Home;

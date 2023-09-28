@@ -2,17 +2,15 @@ import React from 'react';
 import { View, Text, StyleSheet, Button, Alert, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Switch } from 'react-native-paper';
+//import { Switch } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { FlatList } from 'react-native';
 import Paho from 'paho-mqtt';
-
 class Config extends React.Component
 {
   constructor(props)
   {
     super(props);
-
     this.state = {
       selectedDay: 'Lundi',
       startTime: new Date(),
@@ -29,27 +27,29 @@ class Config extends React.Component
       dbPlages: [],
       mqttClient: null,
       buttonStartStatus: false
-
     };
   }
+
+  /////////////////////////////////////////////////////////////////////////////////////////////
+
+  /// MQTT
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////
 
   initializeMQTTClient = () =>
   {
     const client = new Paho.Client('ws://10.31.251.58:9003/mqtt', 'Mobile Client');
     // Add any additional event handlers or configurations as needed
     //client.onMessageArrived = onMessageArrived;
-
     return client;
   };
-
   onConnect = (client) =>
   {
     console.log('Connected to MQTT broker');
     client.subscribe('COUCOU/Test');
-    // message = new Paho.Message("HI");
+    //message = new Paho.Message("CONFIG");
     message.destinationName = 'COUCOU/Test';
     client.send(message);
-
     client.subscribe('TEMP/value');
     client.subscribe('LUM/threshold');
     client.subscribe('PIR1/presence');
@@ -59,12 +59,31 @@ class Config extends React.Component
   //  client.subscribe('ETATS/ModeAbsence');
   }
 
+  publishMessage = (messageText, topic) =>
+  {
+    if (!this.state.mqttClient)
+    {
+      console.error('MQTT client not initialized');
+      return;
+    }
+    console.log('Envoi message');
+    this.state.mqttClient.subscribe(topic);
+    const message = new Paho.Message(messageText);
+    message.destinationName = topic;
+    this.state.mqttClient.send(message);
+  };
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////
+
+  /// COMPONENTDIDMOUNT
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////
+
   componentDidMount()
   {
     const client = this.initializeMQTTClient();
     client.connect({ onSuccess: () => this.onConnect(client) });
     this.setState({ mqttClient: client })
-
    /* fetch('http://10.31.251.58/api/testAbsentModeCheck.php',
     {
       method: 'POST',
@@ -113,8 +132,11 @@ class Config extends React.Component
         }
         }) */
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/// FETCH PLAGES
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     fetch('http://10.31.251.58/api/timeslot.php',
     {
@@ -133,34 +155,38 @@ class Config extends React.Component
           {
             arr.push({id: json[i].id, day: json[i].day, startTime: json[i].start, endTime: json[i].end});
           }
-
           this.setState({ dbPlages: arr });
-
         }
         })
   }
 
-  publishMessage = (messageText, topic) =>
+  componentDidUpdate()
   {
-    if (!this.state.mqttClient)
+    fetch('http://10.31.251.58/api/timeslot.php',
     {
-      console.error('MQTT client not initialized');
-      return;
-    }
-
-    console.log('Envoi message');
-    this.state.mqttClient.subscribe(topic);
-    const message = new Paho.Message(messageText);
-    message.destinationName = topic;
-
-    this.state.mqttClient.send(message);
-  };
-
+      method: 'POST',
+      headers:
+      {
+        "Content-Type": "multipart/form-data"
+      }
+      }).then((response) => response.json())
+      .then((json) =>
+      {
+        if(json != false)
+        {
+          let arr = []
+          for(let i=0;i<json.length;i++)
+          {
+            arr.push({id: json[i].id, day: json[i].day, startTime: json[i].start, endTime: json[i].end});
+          }
+          this.setState({ dbPlages: arr });
+        }
+        })  
+  }
   formatTime = (date) =>
   {
     const hours = ("0" + date.getHours()).slice(-2);
     const minutes = ("0" + date.getMinutes()).slice(-2);
-
     return `${hours}:${minutes}`;
   };
 
@@ -183,14 +209,17 @@ class Config extends React.Component
     const currentDate = selectedDate;
     this.setState({ endAbsentDate: currentDate, showEndAbsentPicker: false });
   };
-
-  addPlage = () => {
-    if (this.state.endTime.getTime() <= this.state.startTime.getTime()) {
+  addPlage = () => 
+  {
+    if (this.state.endTime.getTime() <= this.state.startTime.getTime()) 
+    {
       Alert.alert("Erreur", "L'heure de fin doit être après l'heure de début !");
       return;
     }
 
-    const a = this.state.plages;
+    //const a = this.state.plages;
+    /*
+    const a = this.state.dbPlages;
     const isStartTimeExists = a.some(s => (
       s.startTime.getHours() === this.state.startTime.getHours() &&
       s.startTime.getMinutes() === this.state.startTime.getMinutes()
@@ -200,24 +229,22 @@ class Config extends React.Component
       s.endTime.getMinutes() === this.state.endTime.getMinutes()
     ));
     const isDayExists = a.some(d => d.day === this.state.selectedDay);
-
     if (isDayExists && isStartTimeExists && isEndTimeExists)
     {
       Alert.alert("Erreur", "Les données existent déjà dans la plage de fonctionnement !");
       return;
     }
-
     if (isDayExists && a.some(s => (this.state.startTime <= s.endTime)))
     {
       Alert.alert("Erreur", "L'heure de début est comprise entre 2 plages existantes !");
+
       return;
     }
-
+*/
     const formdata = new FormData;
     formdata.append("day", this.state.selectedDay);
     formdata.append("start", this.state.startTime.toLocaleTimeString('fr-FR'));
     formdata.append("end", this.state.endTime.toLocaleTimeString('fr-FR'));
-
     fetch('http://10.31.251.58/api/timeslotInsert.php',
     {
         method: 'POST',
@@ -234,38 +261,37 @@ class Config extends React.Component
                 console.log("Données insérées dans la BDD !");
             }
         });
-
     this.setState(prevState => ({
-      plages: [
-        ...prevState.plages,
+      dbPlages: [
+        ...prevState.dbPlages,
         {
           id: Math.random().toString(),
           day: prevState.selectedDay,
-          startTime: prevState.startTime,
-          endTime: prevState.endTime,
+          startTime: prevState.startTime.toLocaleTimeString('fr-FR'),
+          endTime: prevState.endTime.toLocaleTimeString('fr-FR'),
           isFavorite: false
         }
       ],
       startTime: new Date(),
+
       endTime: new Date(),
     }));
   };
 
-  deletePlage = (item) => {
+  deletePlage = (item) => 
+  {
     Alert.alert(
       "Effacer",
       `Êtes-vous sûr ?`,
       [
         {
           text: "Oui",
-          onPress: () => {
-
-            const formdata = new FormData;
-            formdata.append("day", item.day);
-            formdata.append("start", item.startTime.toLocaleTimeString('fr-FR'));
-            formdata.append("end", item.endTime.toLocaleTimeString('fr-FR'));
-
-            fetch('http://10.31.251.58/api/timeslotDelete.php',
+          onPress: () => 
+          {
+            console.log(item)
+            const formdata = new FormData();
+            formdata.append("id", item.id);
+            fetch(`http://10.31.251.58/api/timeslotDelete.php`,
             {
               method: 'POST',
               body: formdata,
@@ -273,16 +299,9 @@ class Config extends React.Component
               {
                 "Content-Type": "multipart/form-data"
               }
-            }).then((response) => response.json())
-            .then((json) =>
-            {
-            if(json != false)
-            {
-                console.log("Données effacées dans la BDD !");
-            }
-            });
-
-            this.setState({ plages: this.state.plages.filter(i => i.id !== item.id) })
+            })
+            //this.setState({ plages: this.state.plages.filter(i => i.id !== item.id) })
+            this.setState({ dbPlages: this.state.dbPlages.filter(i => i.id !== item.id) })
           }
         },
         {
@@ -307,11 +326,18 @@ class Config extends React.Component
     >
       <View style={styles.plageInfo}>
         <Text style={styles.plageText}>
-          {`${item.day} ${this.formatTime(item.startTime)} - ${this.formatTime(item.endTime)}`}
+          {/*`${item.day} ${this.formatTime(item.startTime)} - ${this.formatTime(item.endTime)}`*/
+          `${item.day} ${item.startTime} - ${item.endTime}`
+          }
         </Text>
         <View style={styles.plageButtons}>
           <TouchableOpacity
-            onPress={() => this.deletePlage(item)}
+            onPress={() => 
+              {
+                console.log(item)
+                this.deletePlage(item)
+              }
+            }
             style={[styles.plageButton, { backgroundColor: 'red' }]}
           >
             <Text style={styles.plageButtonText}>Supprimer</Text>
@@ -320,7 +346,6 @@ class Config extends React.Component
       </View>
     </TouchableOpacity>
   );
-
 /*  handleAbsentModeToggle = async () =>
   {
     if (!this.state.mqttClient)
@@ -328,7 +353,6 @@ class Config extends React.Component
       console.error('MQTT client not initialized');
       return;
     }
-
     if (!this.state.isSwitchOn)
     {
     Alert.alert(
@@ -345,14 +369,13 @@ class Config extends React.Component
         {
           text: 'Oui',
           onPress: async () => {
-
             this.setState({ isSwitchOn: true });
-
             const formData = new FormData();
             formData.append('test', '1')
             try
             {
               return fetch('http://10.31.251.58/api/testAbsentModeUpdate.php', {
+
                 method: 'POST',
                 body: formData,
               })
@@ -364,12 +387,10 @@ class Config extends React.Component
                 this.publishMessage("ACTIVATION DU MODE ABSENCE PAR LE CLIENT !", "ETATS/ModeAbsence")
               } else {
                 console.error('Échec de la mise à jour dans la base de données');
-
                 this.setState({ isSwitchOn: false });
               }})
             } catch (error) {
               console.error('Erreur lors de la requête vers la base de données:', error);
-
               this.setState({ isSwitchOn: false });
             }
           },
@@ -379,7 +400,6 @@ class Config extends React.Component
     );
   } else
   {
-
     Alert.alert(
       'Confirmation',
       'Êtes-vous sûr de vouloir arrêter le mode absent ?',
@@ -395,16 +415,13 @@ class Config extends React.Component
           text: 'Oui',
           onPress: async () =>
           {
-
             this.setState({ isSwitchOn: false });
-
             const formData = new FormData();
             formData.append('test', '0')
             try {
               // Envoyer la requête de mise à jour à la base de données
               return fetch('http://10.31.251.58/api/testAbsentModeUpdate.php', {
                 method: 'POST',
-
                 body: formData,
               })
               .then(response => response.json())
@@ -413,8 +430,6 @@ class Config extends React.Component
               {
                 console.log('Mise à jour réussie dans la base de données');
                 this.publishMessage("DÉSACTIVATION DU MODE ABSENCE PAR LE CLIENT !", 'ETATS/ModeAbsence')
-
-
               } else {
                 console.error('Échec de la mise à jour dans la base de données');
                 this.setState({ isSwitchOn: true });
@@ -429,10 +444,9 @@ class Config extends React.Component
       ],
       { cancelable: false }
     );
-
   }
   }
-
+*/
   startButton = () =>
   {
     if(!this.state.buttonStartStatus)
@@ -499,15 +513,12 @@ class Config extends React.Component
         ]
       )
     }
-  }*/
+  }
 
   render() {
   const daysOfWeek = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
-
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Configuration</Text>
-
       <View style={styles.pickerContainer}>
         <Text style={styles.label}>Jour :</Text>
         <Picker
@@ -521,14 +532,13 @@ class Config extends React.Component
           )}
         </Picker>
       </View>
-
       <View style={styles.timePickerContainer}>
         <Text style={styles.label}>Heure de début :</Text>
         <Button
           onPress={() => this.setState({ showStartPicker: true })}
           title={this.formatTime(this.state.startTime)}
           icon={<Icon name="time-outline" size={20} color="black" />}
-          color="#321289"
+          color="purple"
         />
         {this.state.showStartPicker && (
           <DateTimePicker
@@ -540,14 +550,13 @@ class Config extends React.Component
           />
         )}
       </View>
-
       <View style={styles.timePickerContainer}>
         <Text style={styles.label}>Heure de fin :</Text>
         <Button
           onPress={() => this.setState({ showEndPicker: true })}
           title={this.formatTime(this.state.endTime)}
           icon={<Icon name="time-outline" size={20} color="black" />}
-          color="#321289"
+          color="purple"
         />
         {this.state.showEndPicker && (
           <DateTimePicker
@@ -559,21 +568,22 @@ class Config extends React.Component
           />
         )}
       </View>
-
-      <Button
-        title="Ajouter plage"
-        onPress={this.addPlage}
-        color="#321289"
-        icon={<Icon name="add-outline" size={20} color="black" />}
-      />
-
+      <View style={{ borderWidth: 1, borderColor: "white", borderRadius: 5 }}>
+        <Button
+          title="Ajouter plage"
+          onPress={this.addPlage}
+          color="purple"
+          icon={<Icon name="add-outline" size={20} color="white" />}
+        />
+      </View>
       <Text style={styles.sectionTitle}>Plages de fonctionnement :</Text>
       <FlatList
-        data={this.state.plages}
+        data={this.state.dbPlages}
         renderItem={this.renderPlage}
         keyExtractor={item => item.id}
+        onRefresh={() => console.log("REFRESHING")}
+        refreshing={false} 
       />
-
 {/*   <Text style={[styles.sectionTitle, { color: '#FFFFFF' }]}>Mode absent :</Text>
       <Switch
         value={this.state.isSwitchOn}
@@ -584,7 +594,6 @@ class Config extends React.Component
         }
         }
       />
-
       {this.state.isSwitchOn && (
         <View style={[styles.absentModeDetails, { color: '#FFFFFF' }]}>
            <TouchableOpacity
@@ -601,7 +610,6 @@ class Config extends React.Component
                 formdata.append("start", this.state.startAbsentDate.toLocaleTimeString('fr-FR'));
                 formdata.append("day_end", this.state.endAbsentDate.getDay());
                 formdata.append("end", this.state.endAbsentDate.toLocaleTimeString('fr-FR'));
-
               fetch('http://10.31.251.58/api/testAbsentModeDetails.php',
               {
               method: 'POST',
@@ -621,7 +629,6 @@ class Config extends React.Component
               }
             },
             {
-
                 text: 'Modifier date de fin',
                 onPress: () => {
                   if (this.state.endAbsentDate.getTime() <= this.state.startAbsentDate.getTime())
@@ -680,7 +687,6 @@ class Config extends React.Component
        <Text style={[styles.infoButtonText, { color: 'white' }]}>BOUTON(CLIC ICI !!!) Informations</Text>
       <Icon name="information-circle-outline" size={20} color="black" />
     </TouchableOpacity>
-
           {this.state.showStartAbsentPicker && (
             <DateTimePicker
               value={this.state.startAbsentDate}
@@ -690,7 +696,6 @@ class Config extends React.Component
               onChange={this.setStartAbsentDate}
             />
           )}
-
           {this.state.showEndAbsentPicker && (
             <DateTimePicker
               value={this.state.endAbsentDate}
@@ -700,7 +705,6 @@ class Config extends React.Component
               onChange={this.setEndAbsentDate}
             />
           )}
-
           <Text style={styles.selectedDate}>
             Vous avez sélectionné les dates suivantes :
           </Text>
@@ -712,7 +716,6 @@ class Config extends React.Component
           </Text>
         </View>
       )} */}
-
       <TouchableOpacity
         style={styles.startButton}
         onPress={this.startButton}
@@ -726,8 +729,11 @@ class Config extends React.Component
         }
       </TouchableOpacity>
     </View>
+
   );
+
 }
+
 }
 
 const styles = StyleSheet.create({
@@ -735,6 +741,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#13043a',
     padding: 16,
+    marginTop: 30,
   },
   title: {
     fontSize: 24,
@@ -759,12 +766,12 @@ const styles = StyleSheet.create({
   },
   picker: {
     color: 'white',
-    backgroundColor:'#321289',
+    backgroundColor:'purple',
     flex: 2,
     fontSize: 14,
     height: 20,
   },
-  pickerItem: {
+  pickerItem: { 
     height: 20, // Ajoutez cette ligne et ajustez la hauteur selon vos besoins
     color: 'white',
     backgroundColor: '#321289',
@@ -805,12 +812,15 @@ const styles = StyleSheet.create({
   plageButtons: {
     flexDirection: 'row',
     alignItems: 'center',
+    borderWidth:1,
+    borderColor: "white",
   },
   plageButton: {
     padding: 5,
     borderRadius: 5,
     marginLeft: 5,
-
+    borderWidth:1,
+    borderColor: "white",
   },
   plageButtonText: {
     color: 'black',
@@ -841,6 +851,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#321289',
     borderRadius: 10,
     paddingVertical: 12,
+    borderWidth:1,
+    borderColor: "white",
   },
   startButtonLabel: {
     color: 'white',

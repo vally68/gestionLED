@@ -1,10 +1,11 @@
 import React from 'react';
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, SafeAreaView, ScrollView } from 'react-native';
+import { FlatList, Button, Image, StyleSheet, Text, TextInput, TouchableOpacity, View, SafeAreaView, ScrollView } from 'react-native';
 import { validateForm } from '../fonction/outils';
 import { connect } from "react-redux";
 import { ADD_USER } from '../reducer/UserReducer';
 import MyButton from "../Components/MyButton";
 import Icon from 'react-native-vector-icons/Ionicons';
+import MyNotification from "../Components/MyNotification";
 
 const mapStateToProps = (state) => {
   return {
@@ -13,6 +14,7 @@ const mapStateToProps = (state) => {
 };
 
 class Inscription extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -22,11 +24,65 @@ class Inscription extends React.Component {
       password: '',
       nomError: '',
       emailError: '',
-      passwordError: ''
+      passwordError: '',
+      notificationArr: [],
+      showNotification: false
     };
   }
 
-  handleSubmit = () => {
+  componentDidMount(){
+    fetch('http://10.31.251.58/api/testNotifications.php',
+        {
+            method: 'POST',
+            headers:
+            {
+                "Content-Type": "multipart/form-data"
+            }
+        }).then((response) => response.json())
+
+        .then((json) =>
+        {
+        if(json != false)
+        {
+          let arr = []
+          for(let i=0;i<json.length;i++)
+          {
+            arr.push({id: json[i].id, date_insertion: json[i].date_insertion, nom: json[i].nom, prenom: json[i].prenom, msg: json[i].msg, vue: json[i].vue});
+            //console.log(arr[i].id)
+          }
+          this.setState({ notificationArr: arr })
+        }
+        })
+  }
+
+  componentDidUpdate()
+  {
+    fetch('http://10.31.251.58/api/testNotifications.php',
+        {
+            method: 'POST',
+            headers:
+            {
+                "Content-Type": "multipart/form-data"
+            }
+        }).then((response) => response.json())
+
+        .then((json) =>
+        {
+        if(json != false)
+        {
+          let arr = []
+          for(let i=0;i<json.length;i++)
+          {
+            arr.push({id: json[i].id, date_insertion: json[i].date_insertion, nom: json[i].nom, prenom: json[i].prenom, msg: json[i].msg, vue: json[i].vue});
+            //console.log(arr[i].id)
+          }
+          this.setState({ notificationArr: arr })
+        }
+        })
+  }
+
+  handleSubmit = () => 
+  {
     const formData = new FormData();
     formData.append("nom", this.state.nom);
     formData.append("prenom", this.state.prenom);
@@ -42,6 +98,7 @@ class Inscription extends React.Component {
     })
       .then(response => response.json())
       .then(json => {
+
         if (json === false) {
           Alert.alert(
             'Erreur',
@@ -52,25 +109,105 @@ class Inscription extends React.Component {
             { cancelable: false }
           );
         } else {
-          this.props.navigation.navigate('Connexion', { email: this.state.email });        }
-      })
+          this.setState({ showNotification: true })
+          setTimeout(() => {
+            this.setState({ showNotification: false });
+            this.props.navigation.navigate('Connexion', { email: this.state.email });  
+          }, 3000);
+          //this.props.navigation.navigate('Connexion', { email: this.state.email });      
+        }
+        })
+
       .catch(error => {
         console.error(error);
       });
   }
 
+  handleCloseNotification = () => 
+  {
+    this.setState({ showNotification: false });
+  };
+
+  renderPlage = ({ item }) => (
+    <View>
+
+      <Text style={{color: "red"}}>
+        {item.prenom} {item.nom} s'est connecté à {item.date_insertion} !
+      </Text>
+
+      {item.vue === 0 && (
+          <Button
+              title="Marquer comme lu"
+              onPress={() => this.markAsRead(item.id)}
+          />
+      )}
+      
+    </View>
+);
+
+markAsRead = (notificationId) => 
+{
+  const formData = new FormData();
+  formData.append('test', notificationId)
+      try {
+        // Envoyer la requête de mise à jour à la base de données
+        return fetch('http://10.31.251.58/api/testNotificationsSeen.php', {
+          method: 'POST',
+          body: formData,
+        })
+        .then(response => response.json())
+        .then(json => {
+        if (json != false) 
+        {
+          console.log('Mise à jour réussie dans la base de données');
+          const updatedNotifications = this.state.notificationArr.map(n => {
+              if(n.id === notificationId)
+              {
+                  return { ...this.state.notificationArr, vue: 1}
+              }
+              return n;
+          })
+          this.setState({ notificationArr : updatedNotifications})
+        } 
+        else 
+        {
+          console.error('Échec de la mise à jour dans la base de données');
+        }})
+      } 
+
+      catch (error) 
+      {
+        console.error('Erreur lors de la requête vers la base de données:', error);
+      }
+}  
+
   render() {
     return (
+
       <SafeAreaView style={styles.container}>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
+          {this.state.showNotification && (
+            <MyNotification
+              message={"Bienvenue  " + this.state.nom + "  " + this.state.prenom}
+              onClose={this.handleCloseNotification}
+            />
+          )}
+
+        {/*  <Text>Notifications :</Text>
+          <FlatList
+            data={this.state.notificationArr}
+            renderItem={this.renderPlage}
+            keyExtractor={item => item.id} 
+          />
+              */}
+
           <Image
             source={require('../assets/logo.png')}
             style={styles.image}
           />
 
           <View>
-            <Text style={styles.texttitle}>INSCRIPTION</Text>
-
+            
             <TextInput
               placeholder="nom"
               placeholderTextColor="#FFFFFF"
@@ -84,6 +221,7 @@ class Inscription extends React.Component {
                 this.setState({ nomError });
               }}
             />
+
             <Text style={styles.errorText}>{this.state.nomError}</Text>
 
             <TextInput
@@ -99,6 +237,7 @@ class Inscription extends React.Component {
                 this.setState({ prenomError });
               }}
             />
+
             <Text style={styles.errorText}>{this.state.prenomError}</Text>
 
             <TextInput
@@ -114,6 +253,7 @@ class Inscription extends React.Component {
                 this.setState({ emailError });
               }}
             />
+
             <Text style={styles.errorText}>{this.state.emailError}</Text>
 
             <TextInput
@@ -130,23 +270,26 @@ class Inscription extends React.Component {
                 this.setState({ passwordError });
               }}
             />
+
             <Text style={styles.errorText}>{this.state.passwordError}</Text>
+
         </View>
 
             <MyButton
               onPress={this.handleSubmit}
               val="Valider"
-              icon={<Icon name="checkmark-outline" size={20} color="black" />}
+              icon={<Icon name="checkmark-outline" size={15} color="white" />}
             />
-
-          
+            
         </ScrollView>
       </SafeAreaView>
     );
   }
+
 }
 
 const styles = StyleSheet.create({
+
   container: {
     flex: 1,
     alignItems: 'center',
@@ -161,7 +304,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingLeft: 80,
     paddingRight: 100,
-
   },
 
   errorText: {
@@ -196,7 +338,7 @@ const styles = StyleSheet.create({
     height: 40,
     width: 200,
     borderWidth: 1,
-    borderColor: '#FFFFFF',
+    borderColor: 'purple',
     color: '#FFFFFF',
     padding: 5,
     marginBottom: 10,
@@ -207,10 +349,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     textDecorationLine: 'underline',
   },
+
 });
 
 const mapDispatchToProps = (dispatch) => ({
   addUser: (user) => dispatch({ type: ADD_USER, value: user }),
+
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Inscription);
